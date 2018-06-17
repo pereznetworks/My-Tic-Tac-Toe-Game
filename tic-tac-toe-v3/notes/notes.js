@@ -37,7 +37,7 @@
 /*  draft to detect a winner
 
             // passed to detect winner function
-            game.winner:[]
+            game (this passed as argument, assigned to const game)
             Ofilled:[]
             Xfilled:[]
             boxesFilled:[]
@@ -139,6 +139,8 @@
           // iterate each item of possible winning rows
           if (winRowItem[4] === 'pX-winner')
               return winRowItem;
+              or
+              game.winner.push(winRowItem);
            }
         });
       } else if (game.isTurn === 'playerO'){
@@ -146,6 +148,8 @@
           // iterate each item of possible winning rows
           if (winRowItem[4] === 'pO-winner')
               return winRowItem;
+              or
+              game.winner.push(winRowItem);
         });
       } else if (what condition to test for ???){
         //  that means a draw ???
