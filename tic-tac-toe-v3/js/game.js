@@ -4,7 +4,16 @@ $(document).ready(function() {
       constructor (playerO, playerX, $liPlayerX, $liPlayerO, $boardElmnt, $startElmnt, $finishElmnt){
           this.playerO = playerO;
           this.playerX = playerX;
-          this.winner = {X:[], O:[]};
+          this.winRows = [  // possible winning rows
+              [0,1,2,'none'],
+              [3,4,5,'none'],
+              [6,7,8,'none'],
+              [0,3,6,'none'],
+              [1,4,7,'none'],
+              [2,5,8,'none'],
+              [0,4,8,'none'],
+              [2,4,6,'none'],
+            ];
           this.$liPlayerX = $liPlayerX;
           this.$liPlayerO = $liPlayerO;
           this.$boardElmnt = $boardElmnt;
@@ -39,17 +48,18 @@ $(document).ready(function() {
         return this._isTurn;
       }
 
-      set gameWinner(gameWinner){
-        this._gameWinner = gameWinner;
+      set winner(winner){
+        this._winner = winner;
       }
 
-      get gameWinner(){
-        return this._gameWinner;
+      get winner(){
+        return this._winner;
       }
 
       set gameFinished(gameFinished){
         this._gameFinised = gameFinished;
       }
+
 
       get gameFinished(){
         return this._gameFinished;
@@ -57,58 +67,112 @@ $(document).ready(function() {
 
       finishGame(){
 
-        $('.message')[0].textContent=this.gameWinner;
+        $('.message')[0].textContent=this.winner;
         this.$boardElmnt.hide();
         this.$finishElmnt.show();
       }
 
-      detectIfWinner(game, Ofilled, Xfilled, filledBoxes){
+      // 2nd draft of detectIfWinner() function
 
-        const winRows = [
-            [0,1,2],
-            [3,4,5],
-            [6,7,8],
-            [0,3,6],
-            [1,4,7],
-            [2,5,8],
-            [0,4,8],
-            [2,4,6]
-        ];
+      detectIfWinner(game, Ofilled, Xfilled, boxesFilled){
 
-        Ofilled.forEach(function(OfilledItem, OfilledIndex){
-          // for each OfilledItem
-          winRows.forEach(function(winRowItem, winRowIndex){
-            // iterate each item of possible winning rows
-            winRowItem.forEach(function(rowItem, rowIndex){
-              if (rowItem == OfilledItem){
-                game.winner.O.push(OfilledItem);
-              } // if any match, store that box's number
+        let blockedRows = 0;
+
+        if (game.isTurn === game.playerO){
+          Ofilled.forEach(function(OfilledItem, OfilledIndex){
+            // for each OfilledItem
+            game.winRows.forEach(function(winRowItem, winRowIndex){
+              // iterate each item of possible winning rows
+              let currentWinRowIndex = winRowIndex;
+              winRowItem.forEach(function(rowItem, rowIndex){
+                if (rowItem === OfilledItem && winRowItem[3] === 'p0-w2'){
+
+                    game.winRows[currentWinRowIndex][3] = 'pO-winner';
+
+                } else if ( rowItem === OfilledItem && winRowItem[3] === 'pO-w1'){
+
+                     game.winRows[currentWinRowIndex][3] = 'pO-w2';
+
+                } else if (rowItem === OfilledItem
+                    && winRowItem[3] === 'none'){
+
+                     game.winRows[currentWinRowIndex][3] = 'pO-w1';
+
+                } else if (rowItem === OfilledItem){
+
+                     game.winRows[currentWinRowIndex][3] = 'blocked';
+
+                }
+              });
             });
           });
-        });
-         Xfilled.forEach(function(XfilledItem, XfilledIndex){
-           // for each XfilledItem
-           winRows.forEach(function(winRowItem, winRowIndex){
-             // iterate each item of possible winning rows
-             winRowItem.forEach(function(rowItem, rowIndex){
-               if (rowItem == XfilledItem){
-                 game.winner.X.push(XfilledItem);
-               } // if any match, store that box's number
+        } else {
+           Xfilled.forEach(function(XfilledItem, XfilledIndex){
+             // for each XfilledItem
+             game.winRows.forEach(function(winRowItem, winRowIndex){
+               // iterate each item of possible winning rows
+               let currentWinRowIndex = winRowIndex;
+               winRowItem.forEach(function(rowItem, rowIndex){
+                 if (rowItem === XfilledItem
+                     && winRowItem[3] === 'pX-w2'){
+
+                     game.winRows[currentWinRowIndex][3] = 'pX-winner';
+
+                 } else if ( rowItem === XfilledItem
+                     && winRowItem[3] === 'pX-w1'){
+
+                     game.winRows[currentWinRowIndex][3] = 'pX-w2';
+
+                 } else if (rowItem === XfilledItem
+                     && winRowItem[3] === 'none'){
+
+                    game.winRows[currentWinRowIndex][3] = 'pX-w1';
+
+                 } else if (rowItem === XfilledItem){
+
+                    game.winRows[currentWinRowIndex][3] = 'blocked';
+
+                 }
+               });
              });
            });
-         });
-
-        if (game.winner.X.length === 3){
-          return "playerX";
-        } else if (game.winner.O.length === 3){
-          return "playerO";
-        } else if (filledBoxes.length === 9){
-          return "draw";
-        } else {
-          return "keep playing"
         }
 
-      } // end detectIfWinner()
+        // at end of each players turn
+          // test if any player has a winning row
+        if (game.isTurn === 'playerX') {
+
+          game.winRows.forEach(function(winRowItem, winRowIndex){
+            // iterate each item of possible winning rows
+            if (winRowItem[3] === 'pX-winner'){
+                game.isWinner = 'playerX';
+             }
+           });
+        } else if (game.isTurn === 'playerO'){
+
+          game.winRows.forEach(function(winRowItem, winRowIndex){
+            // iterate each item of possible winning rows
+            if (winRowItem[3] === 'pO-winner')
+                game.isWinner = 'playerO';
+          });
+        }
+
+        // test for how many blocked rows
+          game.winRows.forEach(function(winRowItem, winRowIndex){
+            // iterate each item of possible winning rows
+            if (winRowItem[3] === 'blocked') {
+                blockedRows += 1;
+              }
+          });
+
+          if (blockedRows == 8){
+              // if all rows blocked, then game is a draw
+            game.isWinner = "draw";
+          } else {
+            game.isWinner = "keep playing";
+          }
+
+      } // end detectIfWinner() function
 
       playGame($boxes, game){
 
@@ -123,26 +187,26 @@ $(document).ready(function() {
                 if (game.isTurn === game.playerO) {
                   Ofilled.push(index);
                   item.setAttribute('class', 'box box-filled-1');
-                  game.$liPlayerO.attr('class', 'players');
+                  game.winner = game.detectIfWinner(game, Ofilled, Xfilled, filledBoxes);
                   game.isTurn = game.playerX;
+                  game.$liPlayerO.attr('class', 'players');
                   game.$liPlayerX.attr('class', 'players active');
                 } else {
                   Xfilled.push(index);
                   item.setAttribute('class', 'box box-filled-2');
-                  game.$liPlayerX.attr('class', 'players');
+                  game.winner = game.detectIfWinner(game, Ofilled, Xfilled, filledBoxes);
                   game.isTurn = game.playerO;
+                  game.$liPlayerX.attr('class', 'players');
                   game.$liPlayerO.attr('class', 'players active');
                 } // end if active player
 
-              game.gameWinner = game.detectIfWinner(game, Ofilled, Xfilled, filledBoxes);
+              if (game.winner === 'playerX' || game.winner === 'playerO' || game.winner === 'draw' ) {
+                finishGame();
+              }
             }
           }); // end click event handler
 
         }); // end each function for boxes
-
-        if (game.gameWinner === 'playerX' || game.gameWinner === 'playerO' || game.gameWinner === 'draw' ) {
-          return gameFinished;
-        }
 
       }
 
