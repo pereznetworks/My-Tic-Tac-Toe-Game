@@ -58,7 +58,17 @@ $(document).ready(function() {
       }
 
       finishGame(game){
-        const finishGameText = `The winner is ${game.isWinner}`;
+        let finishGameText = '';
+        if (game.isWinner === 'playerX'){
+          finishGameText = `The winner is ${game.isWinner}!`;
+          game.$finishElmnt.attr('class', "screen screen-win-two");
+        } else if ( game.isWinner === 'playerO' ){
+          finishGameText = `The winner is ${game.isWinner}!`;
+          game.$finishElmnt.attr('class', "screen screen-win-one");
+        } else {
+          finishGameText = `OOOH! and it's draw folks!`;
+          game.$finishElmnt.attr('class', "screen screen-win-tie");
+        }
         $('.message')[0].textContent=finishGameText;
         this.$boardElmnt.hide();
         this.$finishElmnt.show();
