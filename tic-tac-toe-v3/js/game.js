@@ -22,12 +22,6 @@ $(document).ready(function() {
 
       }
 
-      runGame(startButtonElement){
-        startButtonElement.addEventListener('click', function(){
-            tictactoe.startGame();
-        });
-      }
-
       startGame(){
           // hide start div and show game board
           this.$startElmnt.hide();
@@ -72,9 +66,6 @@ $(document).ready(function() {
         $('.message')[0].textContent=finishGameText;
         this.$boardElmnt.hide();
         this.$finishElmnt.show();
-        $('#finish .button').click(function(){
-          game.startGame();
-        });
       }
 
       // 3rd draft of detectIfWinner() function
@@ -242,9 +233,23 @@ $(document).ready(function() {
 
   } // end class declaration
 
-  // new Game 'tictactoe'
-  const tictactoe = new Game( 'O', 'X', $('#player2'), $('#player1'), $('#board'), $('#start'), $('#finish') );
 
-  tictactoe.runGame(document.getElementsByClassName('button')[0]);
+
+  $('#start .button').click(function(){
+    // new Game 'tictactoe'
+    const tictactoe = new Game( 'O', 'X', $('#player2'), $('#player1'), $('#board'), $('#start'), $('#finish') );
+
+    tictactoe.startGame(document.getElementsByClassName('button')[0]);
+
+    $('#finish .button').click(function(){
+      // new Game 'tictactoe'
+      $('.boxes li').attr('class', 'box');
+
+      const tictactoe = new Game( 'O', 'X', $('#player2'), $('#player1'), $('#board'), $('#start'), $('#finish') );
+
+      tictactoe.startGame(document.getElementsByClassName('button')[0]);
+    });
+
+  });
 
 });
