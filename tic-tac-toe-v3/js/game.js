@@ -48,11 +48,11 @@ $(document).ready(function() {
         return this._isTurn;
       }
 
-      set winner(winner){
+      set isWinner(winner){
         this._winner = winner;
       }
 
-      get winner(){
+      get isWinner(){
         return this._winner;
       }
 
@@ -67,7 +67,7 @@ $(document).ready(function() {
 
       finishGame(){
 
-        $('.message')[0].textContent=this.winner;
+        $('.message')[0].textContent=this.isWinner;
         this.$boardElmnt.hide();
         this.$finishElmnt.show();
       }
@@ -144,7 +144,7 @@ $(document).ready(function() {
 
         // at end of each players turn
           // test if any player has a winning row
-        if (game.isTurn === 'playerX') {
+        if (game.isTurn === 'X') {
 
           game.winRows.forEach(function(winRowItem, winRowIndex){
             // iterate each item of possible winning rows
@@ -152,7 +152,7 @@ $(document).ready(function() {
                 game.isWinner = 'playerX';
              }
            });
-        } else if (game.isTurn === 'playerO'){
+        } else if (game.isTurn === 'O'){
 
           game.winRows.forEach(function(winRowItem, winRowIndex){
             // iterate each item of possible winning rows
@@ -172,9 +172,7 @@ $(document).ready(function() {
           if (blockedRows == 8){
               // if all rows blocked, then game is a draw
             game.isWinner = "draw";
-          } else {
-            game.isWinner = "keep playing";
-          }
+          } 
 
       } // end detectIfWinner() function
 
