@@ -72,19 +72,21 @@ $(document).ready(function() {
         this.$finishElmnt.show();
       }
 
-      // 2nd draft of detectIfWinner() function
+      // 3rd draft of detectIfWinner() function
 
       detectIfWinner(game, Ofilled, Xfilled, boxesFilled){
 
         let blockedRows = 0;
 
         if (game.isTurn === game.playerO){
-          Ofilled.forEach(function(OfilledItem, OfilledIndex){
-            // for each OfilledItem
+          const OfilledItem = Ofilled[(Ofilled.length - 1)];
+            // for current box selection, last element in Ofilled array
             game.winRows.forEach(function(winRowItem, winRowIndex){
-              // iterate each item of possible winning rows
+              // iterate each item of each set of possible winning rows
               let currentWinRowIndex = winRowIndex;
               winRowItem.forEach(function(rowItem, rowIndex){
+                // if any match, test for row blocked,
+                  // if is still a possible win or if row is a winner
                 if (rowItem === OfilledItem && winRowItem[3] === 'p0-w2'){
 
                     game.winRows[currentWinRowIndex][3] = 'pO-winner';
@@ -105,14 +107,16 @@ $(document).ready(function() {
                 }
               });
             });
-          });
+
         } else {
-           Xfilled.forEach(function(XfilledItem, XfilledIndex){
-             // for each XfilledItem
+           const XfilledItem = Xfilled[(Xfilled.length - 1)];
+             // for current box selection, last element in Ofilled array
              game.winRows.forEach(function(winRowItem, winRowIndex){
-               // iterate each item of possible winning rows
+               // iterate each item of each set of possible winning rows
                let currentWinRowIndex = winRowIndex;
                winRowItem.forEach(function(rowItem, rowIndex){
+                 // if any match, test for row blocked,
+                   // if is still a possible win or if row is a winner
                  if (rowItem === XfilledItem
                      && winRowItem[3] === 'pX-w2'){
 
@@ -135,7 +139,7 @@ $(document).ready(function() {
                  }
                });
              });
-           });
+
         }
 
         // at end of each players turn
@@ -200,8 +204,8 @@ $(document).ready(function() {
                   game.$liPlayerO.attr('class', 'players active');
                 } // end if active player
 
-              if (game.winner === 'playerX' || game.winner === 'playerO' || game.winner === 'draw' ) {
-                finishGame();
+              if (game.isWinner === 'playerX' || game.isWinner === 'playerO' || game.isWinner === 'draw' ) {
+                game.finishGame();
               }
             }
           }); // end click event handler

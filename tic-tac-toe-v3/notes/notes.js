@@ -61,6 +61,13 @@
 */
 
 // 1st draft of detectIfWinner() function
+  // expected: # of box selection is pushed onto O/Xfilled array
+    // bug: written again for each time matched
+  // broken : cant write to property, winner,
+    // declared in constructor
+  // broken : no need to test a  fourth time in row
+      // to set winner, just need to test 3 times
+  // syntax problems
 
 detectIfWinner(game, Ofilled, Xfilled, filledBoxes){
 
@@ -102,6 +109,13 @@ detectIfWinner(game, Ofilled, Xfilled, filledBoxes){
 } // end detectIfWinner()
 
 // 2nd draft of detectIfWinner() function
+// expected: # of box selection is pushed onto O/Xfilled array
+  // bug: written again for each time matched
+// broken : cant write to property, winner,
+  // declared in constructor
+// broken : no need to test a  fourth time in row
+  // to set winner, just need to test 3 times
+// bug: winner being set on possible win row to soon
 
 const detectIfWinner = function(game, Ofilled, Xfilled, boxesFilled){
 
@@ -211,6 +225,114 @@ const detectIfWinner = function(game, Ofilled, Xfilled, boxesFilled){
 
 };
 
+// 3rd draft, working version 1, of detectIfWinner() function
+// expected: # of box selection is pushed onto O/Xfilled array
+  // bug: written again for each time matched
+  // bug: winner being set on possible win row to soon
+
+detectIfWinner(game, Ofilled, Xfilled, boxesFilled){
+
+  let blockedRows = 0;
+
+  if (game.isTurn === game.playerO){
+    const XfilledItem = Xfilled[(Xfilled.length - 1)];
+      // for current box selection, last element in Ofilled array
+      game.winRows.forEach(function(winRowItem, winRowIndex){
+        // iterate each item of each set of possible winning rows
+        let currentWinRowIndex = winRowIndex;
+        winRowItem.forEach(function(rowItem, rowIndex){
+          // if any match, test for row blocked,
+            // if is still a possible win or if row is a winner
+          if (rowItem === OfilledItem && winRowItem[3] === 'p0-w2'){
+
+              game.winRows[currentWinRowIndex][3] = 'pO-winner';
+
+          } else if ( rowItem === OfilledItem && winRowItem[3] === 'pO-w1'){
+
+               game.winRows[currentWinRowIndex][3] = 'pO-w2';
+
+          } else if (rowItem === OfilledItem
+              && winRowItem[3] === 'none'){
+
+               game.winRows[currentWinRowIndex][3] = 'pO-w1';
+
+          } else if (rowItem === OfilledItem){
+
+               game.winRows[currentWinRowIndex][3] = 'blocked';
+
+          }
+        });
+      });
+
+  } else {
+     const XfilledItem = Xfilled[(Xfilled.length - 1)];
+       // for current box selection, last element in Ofilled array
+       game.winRows.forEach(function(winRowItem, winRowIndex){
+         // iterate each item of each set of possible winning rows
+         let currentWinRowIndex = winRowIndex;
+         winRowItem.forEach(function(rowItem, rowIndex){
+           // if any match, test for row blocked,
+             // if is still a possible win or if row is a winner
+           if (rowItem === XfilledItem
+               && winRowItem[3] === 'pX-w2'){
+
+               game.winRows[currentWinRowIndex][3] = 'pX-winner';
+
+           } else if ( rowItem === XfilledItem
+               && winRowItem[3] === 'pX-w1'){
+
+               game.winRows[currentWinRowIndex][3] = 'pX-w2';
+
+           } else if (rowItem === XfilledItem
+               && winRowItem[3] === 'none'){
+
+              game.winRows[currentWinRowIndex][3] = 'pX-w1';
+
+           } else if (rowItem === XfilledItem){
+
+              game.winRows[currentWinRowIndex][3] = 'blocked';
+
+           }
+         });
+       });
+
+  }
+
+  // at end of each players turn
+    // test if any player has a winning row
+  if (game.isTurn === 'playerX') {
+
+    game.winRows.forEach(function(winRowItem, winRowIndex){
+      // iterate each item of possible winning rows
+      if (winRowItem[3] === 'pX-winner'){
+          game.isWinner = 'playerX';
+       }
+     });
+  } else if (game.isTurn === 'playerO'){
+
+    game.winRows.forEach(function(winRowItem, winRowIndex){
+      // iterate each item of possible winning rows
+      if (winRowItem[3] === 'pO-winner')
+          game.isWinner = 'playerO';
+    });
+  }
+
+  // test for how many blocked rows
+    game.winRows.forEach(function(winRowItem, winRowIndex){
+      // iterate each item of possible winning rows
+      if (winRowItem[3] === 'blocked') {
+          blockedRows += 1;
+        }
+    });
+
+    if (blockedRows == 8){
+        // if all rows blocked, then game is a draw
+      game.isWinner = "draw";
+    } else {
+      game.isWinner = "keep playing";
+    }
+
+} // end detectIfWinner() function
 
 
 // strategy test :
