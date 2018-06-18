@@ -31,6 +31,7 @@ $(document).ready(function() {
       startGame(){
           // hide start div and show game board
           this.$startElmnt.hide();
+          this.$finishElmnt.hide();
           this.$boardElmnt.show();
           // set isTurn to X player
           this.isTurn = this.playerX;
@@ -56,20 +57,14 @@ $(document).ready(function() {
         return this._winner;
       }
 
-      set gameFinished(gameFinished){
-        this._gameFinised = gameFinished;
-      }
-
-
-      get gameFinished(){
-        return this._gameFinished;
-      }
-
-      finishGame(){
-
-        $('.message')[0].textContent=this.isWinner;
+      finishGame(game){
+        const finishGameText = `The winner is ${game.isWinner}`;
+        $('.message')[0].textContent=finishGameText;
         this.$boardElmnt.hide();
         this.$finishElmnt.show();
+        $('#finish .button').click(function(){
+          game.startGame();
+        });
       }
 
       // 3rd draft of detectIfWinner() function
@@ -87,7 +82,7 @@ $(document).ready(function() {
               winRowItem.forEach(function(rowItem, rowIndex){
                 // if any match, test for row blocked,
                   // if is still a possible win or if row is a winner
-                if (rowItem === OfilledItem && winRowItem[3] === 'p0-w2'){
+                if (rowItem === OfilledItem && winRowItem[3] === 'pO-w2'){
 
                     game.winRows[currentWinRowIndex][3] = 'pO-winner';
 
@@ -172,7 +167,7 @@ $(document).ready(function() {
           if (blockedRows == 8){
               // if all rows blocked, then game is a draw
             game.isWinner = "draw";
-          } 
+          }
 
       } // end detectIfWinner() function
 
@@ -203,7 +198,7 @@ $(document).ready(function() {
                 } // end if active player
 
               if (game.isWinner === 'playerX' || game.isWinner === 'playerO' || game.isWinner === 'draw' ) {
-                game.finishGame();
+                game.finishGame(game);
               }
             }
           }); // end click event handler
