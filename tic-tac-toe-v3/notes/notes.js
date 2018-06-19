@@ -378,3 +378,17 @@ detectIfWinner(game, Ofilled, Xfilled, boxesFilled){
 //     diagonal:[0,4,8,blocked],
 //     diagonal:[2,4,6,blocked]
 //   };
+
+
+// finish event handler to start a new game
+$('#finish .button').click(function(){
+
+  // clear selected boxes in board
+  $('.boxes li').attr('class', 'box');
+
+  // new Game 'tictactoe'
+  const tictactoe = new Game( 'O', 'X', $('#player2'), $('#player1'), $('#board'), $('#start'), $('#finish') );
+
+  // start new game
+  tictactoe.startGame(document.getElementsByClassName('button')[0]);
+});
