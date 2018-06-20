@@ -287,25 +287,25 @@ var tictactoe = (function (exports){
               // finish div will show winner's name
           */
 
+          $(document).ready(function() {
+
+            $('#start .button').click(function(){
+              // new Game
+              exports.playerO = 'O';
+              exports.playerX = 'X';
+              exports.$liPlayerO = $('#player1');
+              exports.$liPlayerX = $('#player2');
+              exports.$boxes = $('li.box');
+              exports.$boardElmnt = $('#board');
+              exports.$startElmnt = $('#start');
+              exports.$finishElmnt = $('#finish');
+
+              exports.startGame();
+
+            });
+
+          });
+
           return exports
 
 }(tictactoe || { }) );
-
-$(document).ready(function() {
-
-        $('#start .button').click(function(){
-          // new Game 'tictactoe'
-          tictactoe.playerO = 'O';
-          tictactoe.playerX = 'X';
-          tictactoe.$liPlayerO = $('#player1');
-          tictactoe.$liPlayerX = $('#player2');
-          tictactoe.$boxes = $('li.box');
-          tictactoe.$boardElmnt = $('#board');
-          tictactoe.$startElmnt = $('#start');
-          tictactoe.$finishElmnt = $('#finish');
-
-          tictactoe.startGame();
-
-        });
-
-});
