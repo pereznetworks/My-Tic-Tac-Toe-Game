@@ -114,8 +114,6 @@ var tictactoe = (function (exports){
 
           };
 
-          // 3rd draft of detectIfWinner() function
-
           exports.detectIfWinner = function(game){
 
             let blockedRows = 0;
