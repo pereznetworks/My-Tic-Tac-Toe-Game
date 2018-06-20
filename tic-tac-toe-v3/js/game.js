@@ -2,9 +2,14 @@
 var tictactoe = (function (exports){
 
           var exports = {
+              needReset: false,
               playerO: 'O',
               playerX: 'X',
               isTurn: 'X',
+              isWinner: 'keep playing',
+              Ofilled: [],
+              Xfilled: [],
+              filledBoxes: [],
               winRows: [  // possible winning rows
                   [0,1,2,'none'],
                   [3,4,5,'none'],
@@ -17,6 +22,7 @@ var tictactoe = (function (exports){
                 ],
               $liPlayerX: '',
               $liPlayerO: '',
+              $boxes: '',
               $boardElmnt: '',
               $startElmnt: '',
               $finishElmnt: '',
@@ -25,15 +31,12 @@ var tictactoe = (function (exports){
 
           exports.startGame = function(){
               // hide start div and show game board
-              this.$startElmnt.hide();
-              this.$finishElmnt.hide();
-              this.$boardElmnt.show();
-              // set isTurn to X player
-              this.isTurn = this.playerX;
-              this.$liPlayerX.attr('class', 'players active');
+              this.needReset = false;
 
+              //setup a new game
+              this.setupNewGame(this);
               // with-in playGame, toggle isTurn, place appropriate X or O's
-              this.playGame($('li.box'), this)
+              this.playGame(this)
           }; // end startGame() method
 
           exports.finishGame = function(game){
@@ -49,13 +52,71 @@ var tictactoe = (function (exports){
               game.$finishElmnt.attr('class', "screen screen-win-tie");
             }
             $('.message')[0].textContent=finishGameText;
-            this.$boardElmnt.hide();
-            this.$finishElmnt.show();
+            game.$boardElmnt.hide();
+            game.$finishElmnt.show();
+            game.needReset = true;
+
+            $('#finish .button').click(function(){
+              // new Game 'tictactoe'
+              // tictactoe.playerO = 'O';
+              // tictactoe.playerX = 'X';
+              // tictactoe.$liPlayerO = $('#player2');
+              // tictactoe.$liPlayerX = $('#player1');
+              // tictactoe.$startElmnt = $('#start');
+              // tictactoe.$finishElmnt = $('#finish');
+
+              game.setupNewGame(game);
+              game.playGame(game);
+
+            });
           }; // end finishGame() method
+
+          exports.emptyArray = function(arrayToEmpty){
+
+              // doing this inorder to keep a 'clean' environment
+              var origArrayLength = arrayToEmpty.length;
+              for (var i = origArrayLength; i > 0; i--){
+                var bucket = arrayToEmpty.pop();
+              }
+              return arrayToEmpty;
+
+              // seems there should be a better way to do this...
+          };
+
+          exports.setupNewGame = function(game){
+
+            game.$startElmnt.hide();
+            game.$finishElmnt.hide();
+            game.$boardElmnt.show();
+            game.isWinner = 'keep playing';
+
+            if (game.needReset) {
+              // make sure board is cleared for new game
+              $('.boxes').children().attr('class', 'box');
+              game.winRows.forEach(function(item, index){
+                item[3] = 'none';
+              });
+              // reselecting empty $boardElmnt
+              game.$boardElmnt = $('#board');
+              // make sure array for O and X filled are empty
+              game.Ofilled = game.emptyArray(game.Ofilled);
+              game.Xfilled = game.emptyArray(game.Xfilled);
+              game.filledBoxes = game.emptyArray(game.filledBoxes);
+
+              game.needReset = false;
+            }
+
+            // make sure isTurn to X player
+            game.isTurn = this.playerX;
+            // 'visually activate player X' button
+            game.$liPlayerX.attr('class', 'players active');
+            // now that game is reset, set new game to false
+
+          };
 
           // 3rd draft of detectIfWinner() function
 
-          exports.detectIfWinner = function(game, Ofilled, Xfilled, boxesFilled){
+          exports.detectIfWinner = function(game){
 
             let blockedRows = 0;
 
@@ -66,7 +127,7 @@ var tictactoe = (function (exports){
                   // mark with player's name
                   // else mark row as blocked
             if (game.isTurn === game.playerO){
-              const OfilledItem = Ofilled[(Ofilled.length - 1)];
+              const OfilledItem = game.Ofilled[(game.Ofilled.length - 1)];
                 // for current box selection, last element in Ofilled array
                 game.winRows.forEach(function(winRowItem, winRowIndex){
                   // iterate each item of each set of possible winning rows
@@ -96,7 +157,7 @@ var tictactoe = (function (exports){
                 });
 
             } else {
-               const XfilledItem = Xfilled[(Xfilled.length - 1)];
+               const XfilledItem = game.Xfilled[(game.Xfilled.length - 1)];
                  // for current box selection, last element in Ofilled array
                  game.winRows.forEach(function(winRowItem, winRowIndex){
                    // iterate each item of each set of possible winning rows
@@ -165,32 +226,28 @@ var tictactoe = (function (exports){
 
           }; // end detectIfWinner() method
 
-          exports.playGame = function($boxes, game){
-
-            const Ofilled = [];
-            const Xfilled = [];
-            const filledBoxes = [];
+          exports.playGame = function(game){
 
             // for each box in boxes
               // create an event handler
                 // fill box with O or X
                 // detect if part or completes winning row, or blocked
                 // set X or O as current player
-            $boxes.each(function(index, item){
+            game.$boxes.each(function(index, item){
               $(this).click(function(){
                 if (item.attributes[0].value === "box"){
-                    filledBoxes.push(item);
+                    game.filledBoxes.push(index);
                     if (game.isTurn === game.playerO) {
-                      Ofilled.push(index);
+                      game.Ofilled.push(index);
                       item.setAttribute('class', 'box box-filled-1');
-                      game.winner = game.detectIfWinner(game, Ofilled, Xfilled, filledBoxes);
+                      game.winner = game.detectIfWinner(game);
                       game.isTurn = game.playerX;
                       game.$liPlayerO.attr('class', 'players');
                       game.$liPlayerX.attr('class', 'players active');
                     } else {
-                      Xfilled.push(index);
+                      game.Xfilled.push(index);
                       item.setAttribute('class', 'box box-filled-2');
-                      game.winner = game.detectIfWinner(game, Ofilled, Xfilled, filledBoxes);
+                      game.winner = game.detectIfWinner(game);
                       game.isTurn = game.playerO;
                       game.$liPlayerX.attr('class', 'players');
                       game.$liPlayerO.attr('class', 'players active');
@@ -207,12 +264,8 @@ var tictactoe = (function (exports){
           }; // end playGame() method
 
           /* TODO: convert to IIFE
-          */
-
-          /* TODO: after completion of first, start new game
-              rest game object values
-              or
-              create new game object
+              // need to make that can run an IIFE module...
+                // then set and use methods from that IIFE module
           */
 
           /* TODO: play against the computer
@@ -246,8 +299,9 @@ $(document).ready(function() {
           // new Game 'tictactoe'
           tictactoe.playerO = 'O';
           tictactoe.playerX = 'X';
-          tictactoe.$liPlayerO = $('#player2');
-          tictactoe.$liPlayerX = $('#player1');
+          tictactoe.$liPlayerO = $('#player1');
+          tictactoe.$liPlayerX = $('#player2');
+          tictactoe.$boxes = $('li.box');
           tictactoe.$boardElmnt = $('#board');
           tictactoe.$startElmnt = $('#start');
           tictactoe.$finishElmnt = $('#finish');
