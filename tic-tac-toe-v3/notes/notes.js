@@ -1,17 +1,17 @@
 
  /* game rules
 
-       //TODO: detect when a box is filled and by O or X
+       //TODO: DONE: detect when a box is filled and by O or X
        // $('.boxes')[0].children[index].attributes[0].value
           // == "box box-filled-1" or "box box-filled-2"
 
        // -- OR --
 
-       //TODO: track which item/index of $boxes are filled
+       //TODO: DONE: track which item/index of $boxes are filled
        // if true
           // O-filled.push(index) or  X-filled.push(index)
 
-       //TODO: track and respond to game state
+       //TODO: DONE: track and respond to game state
          // detect a win
            // when one player filles in 3rd box in a row
            // each player must have taken more than 2 turns to win
@@ -23,18 +23,18 @@
               // the 3rd box, to complete the row of 3 boxes
 
 
-        //TODO: detect a block
+        //TODO: DONE: detect and track which winning row are blocked
           // when a possible winning row is no longer possible
             // when player1 has
                // chosen 1 or 2 out of a winning row
                   // player2 choses 1 or 2 of same winning row
 
-       //TODO: detect a draw
+       //TODO: DONE: detect a draw
           // when all boxes are filled and there is no winner
             // when all possible winning rows are no longer possible
                 // first player can only take 5 turns, 2nd can only take 4
 
-       //TODO: show game finish
+       //TODO: DONE: show game finish
          // finish div will show either who won or that there was a draw
 */
 
@@ -227,8 +227,8 @@ const detectIfWinner = function(game, Ofilled, Xfilled, boxesFilled){
 
 // 3rd draft, working version 1, of detectIfWinner() function
 // expected: # of box selection is pushed onto O/Xfilled array
-  // bug: written again for each time matched
-  // bug: winner being set on possible win row to soon
+  // bug: box #, written again for each time matched : fixed in game.js
+  // bug: winner being set on possible win row to soon: fixed in game.js
 
 detectIfWinner(game, Ofilled, Xfilled, boxesFilled){
 
@@ -334,53 +334,7 @@ detectIfWinner(game, Ofilled, Xfilled, boxesFilled){
 
 } // end detectIfWinner() function
 
-
-// strategy test :
-// as the game progresses,
-//  possible winning rows can be excluded
-//    add excluded, blocked or X, O to winRows arrays
-//
-// game play senario 1: draw detectable before last box filled
-//
-// track boxes chosen by player
-//   Xfilled:[4,2,7,3]
-//   Ofilled:[8,6,1]
-// keeps order that boxes are chosen
-//    boxesFilled:[4,8,3,6,7,1,3,5]
-//
-// const winRows {  // possible winning rows
-//     across1:[0,1,2,blocked],
-//     across2:[3,4,5,blocked],
-//     across3:[6,7,8,blocked],
-//     down1:[0,3,6,blocked],
-//     down2:[1,4,7,blocked],
-//     down3:[2,5,8,blocked],
-//     diagonal:[0,4,8,blocked],
-//     diagonal:[2,4,6,blocked],
-//   };
-//
-// game play senario 2: playerO wins with across2
-//    add excluded, blocked or X, O to winRows arrays
-//
-// track boxes chosen by player
-//   Xfilled:[0,2,7,6]
-//   Ofilled:[4,1,5,3]
-// keeps order that boxes are chosen
-//    boxesFilled:[0,4,1,7,5,6,3]
-//
-// const winRows {  // possible winning rows
-//     across1:[0,1,2,blocked],
-//     across2:[3,4,5,playerO],
-//     across3:[6,7,8,],
-//     down1:[0,3,6,],
-//     down2:[1,4,7,blocked],
-//     down3:[2,5,8,blocked],
-//     diagonal:[0,4,8,blocked],
-//     diagonal:[2,4,6,blocked]
-//   };
-
-
-// finish event handler to start a new game
+// 1st version of finish event handler to start a new game
 $('#finish .button').click(function(){
 
   // clear selected boxes in board
@@ -392,3 +346,62 @@ $('#finish .button').click(function(){
   // start new game
   tictactoe.startGame(document.getElementsByClassName('button')[0]);
 });
+
+/* testing game-play: tracking selection of boxes by player X or O
+  // as the game progresses,
+  //  possible winning rows can be excluded
+  //    add excluded, blocked or X, O to winRows arrays
+  //
+  //   change; not using 'excluded'
+  //      just using blocked,
+  //   change; pX-w1 or w2, pO-w1 or w2, or pX or pO-winner
+  //
+  //   draw: detecting a draw separated into different if/else
+  //
+  // game play senario 1: draw detectable before last box filled
+  //
+  // track boxes chosen by player
+  //   Xfilled:[4,2,7,3]
+  //   Ofilled:[8,6,1]
+  // keeps order that boxes are chosen
+  //    boxesFilled:[4,8,3,6,7,1,3,5]
+  //
+  // const winRows {  // possible winning rows
+  //     across1:[0,1,2,blocked],
+  //     across2:[3,4,5,blocked],
+  //     across3:[6,7,8,blocked],
+  //     down1:[0,3,6,blocked],
+  //     down2:[1,4,7,blocked],
+  //     down3:[2,5,8,blocked],
+  //     diagonal:[0,4,8,blocked],
+  //     diagonal:[2,4,6,blocked],
+  //   };
+  //
+  // game play senario 2: playerO wins with across2
+  //    add excluded, blocked or X, O to winRows arrays
+  //
+  // track boxes chosen by player
+  //   Xfilled:[0,2,7,6]
+  //   Ofilled:[4,1,5,3]
+  // keeps order that boxes are chosen
+  //    boxesFilled:[0,4,1,7,5,6,3]
+  //
+  // const winRows {  // possible winning rows
+  //     across1:[0,1,2,blocked],
+  //     across2:[3,4,5,playerO],
+  //     across3:[6,7,8,],
+  //     down1:[0,3,6,],
+  //     down2:[1,4,7,blocked],
+  //     down3:[2,5,8,blocked],
+  //     diagonal:[0,4,8,blocked],
+  //     diagonal:[2,4,6,blocked]
+  //   };
+*/
+
+/*  testing: need to test dectection of draw
+    current bug as of beta.v06192018
+      actual : draw only detected when all boxes filled and no winner
+      should: detect draw when all possible winning rows are blocked
+            this should occur before last box filled,
+              but there are no possible wins 
+*/

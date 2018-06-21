@@ -42,13 +42,13 @@ var tictactoe = (function (exports){
           exports.finishGame = function(game){
             let finishGameText = '';
             if (game.isWinner === 'playerX'){
-              finishGameText = `The winner is ${game.isWinner}!`;
+              finishGameText = `Winner!`;
               game.$finishElmnt.attr('class', "screen screen-win-two");
             } else if ( game.isWinner === 'playerO' ){
-              finishGameText = `The winner is ${game.isWinner}!`;
+              finishGameText = `Winner!`;
               game.$finishElmnt.attr('class', "screen screen-win-one");
             } else {
-              finishGameText = `OOOH! and it's draw folks!`;
+              finishGameText = `It's a tie!`;
               game.$finishElmnt.attr('class', "screen screen-win-tie");
             }
             $('.message')[0].textContent=finishGameText;
@@ -225,6 +225,37 @@ var tictactoe = (function (exports){
           }; // end detectIfWinner() method
 
           exports.playGame = function(game){
+
+            game.$boxes.each(function(index, item){
+
+              $(this).hover(
+
+                function(){
+
+                  if (this.attributes[0].value === "box"){
+
+                    if (game.isTurn === game.playerO) {
+                      this.style.backgroundImage = "url('img/o.svg')";
+                      this.style.backgroundColor = '#FFA000';
+                    } else {
+                      this.style.backgroundImage = "url('img/x.svg')";
+                      this.style.backgroundColor = '#3688C3';
+                    } // end if active player
+
+                  } // end if class 'box', (is not yet selected)
+
+                }, function(){
+
+                  if (this.attributes[0].value === "box"){
+                      this.style.backgroundImage = "";
+                      this.style.backgroundColor = "";
+                    } // end if active player
+                }
+              );
+              }
+            );
+
+
 
             // for each box in boxes
               // create an event handler
