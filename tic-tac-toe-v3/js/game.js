@@ -54,7 +54,6 @@ var tictactoe = (function (exports){
             $('.message')[0].textContent=finishGameText;
             game.$boardElmnt.hide();
             game.$finishElmnt.show();
-            game.needReset = true;
 
             $('#finish .button').click(function(){
               // new Game 'tictactoe'
@@ -65,6 +64,7 @@ var tictactoe = (function (exports){
               // tictactoe.$startElmnt = $('#start');
               // tictactoe.$finishElmnt = $('#finish');
 
+              game.needReset = true;
               game.setupNewGame(game);
               game.playGame(game);
 
@@ -87,24 +87,36 @@ var tictactoe = (function (exports){
 
             game.$startElmnt.hide();
             game.$finishElmnt.hide();
-            game.$boardElmnt.show();
             game.isWinner = 'keep playing';
 
             if (game.needReset) {
               // make sure board is cleared for new game
               $('.boxes').children().attr('class', 'box');
+
+              game.$boxes.each(function(){
+                this.style.backgroundColor = '';
+                this.style.backgroundImage = '';
+              });
+
               game.winRows.forEach(function(item, index){
                 item[3] = 'none';
               });
-              // reselecting empty $boardElmnt
-              game.$boardElmnt = $('#board');
+
               // make sure array for O and X filled are empty
               game.Ofilled = game.emptyArray(game.Ofilled);
               game.Xfilled = game.emptyArray(game.Xfilled);
               game.filledBoxes = game.emptyArray(game.filledBoxes);
 
+              // reselecting empty $boardElmnt
+              game.$boardElmnt = $('#board');
+              game.$boardElmnt.show();
+              // reset flag
               game.needReset = false;
+            } else {
+              game.$boardElmnt.show();
+              game.$boardElmnt = $('#board');
             }
+
 
             // make sure isTurn to X player
             game.isTurn = this.playerX;
@@ -228,32 +240,32 @@ var tictactoe = (function (exports){
 
             game.$boxes.each(function(index, item){
 
-              $(this).hover(
+                $(this).hover(
 
-                function(){
+                  function(){
 
-                  if (this.attributes[0].value === "box"){
+                    if (this.attributes[0].value === "box"){
 
-                    if (game.isTurn === game.playerO) {
-                      this.style.backgroundImage = "url('img/o.svg')";
-                      this.style.backgroundColor = '#FFA000';
-                    } else {
-                      this.style.backgroundImage = "url('img/x.svg')";
-                      this.style.backgroundColor = '#3688C3';
-                    } // end if active player
+                      if (game.isTurn === game.playerO) {
+                        this.style.backgroundImage = "url('img/o.svg')";
+                        this.style.backgroundColor = '#FFA000';
+                      } else {
+                        this.style.backgroundImage = "url('img/x.svg')";
+                        this.style.backgroundColor = '#3688C3';
+                      } // end if active player
 
-                  } // end if class 'box', (is not yet selected)
+                    } // end if class 'box', (is not yet selected)
 
-                }, function(){
+                  }, function(){
 
-                  if (this.attributes[0].value === "box"){
-                      this.style.backgroundImage = "";
-                      this.style.backgroundColor = "";
-                    } // end if active player
-                }
-              );
-              }
-            );
+                    if (this.attributes[0].value === "box"){
+                        this.style.backgroundImage = "";
+                        this.style.backgroundColor = "";
+                      } // end if active player
+                  }
+                );
+
+            });
 
 
 

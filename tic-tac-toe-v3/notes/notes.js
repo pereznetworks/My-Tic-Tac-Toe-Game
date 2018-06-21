@@ -398,10 +398,9 @@ $('#finish .button').click(function(){
   //   };
 */
 
-/*  testing: need to test dectection of draw
-    current bug as of beta.v06192018
-      actual : draw only detected when all boxes filled and no winner
-      should: detect draw when all possible winning rows are blocked
-            this should occur before last box filled,
-              but there are no possible wins 
+/* bugs and issues....
+  suspect: draw detection needs testing : tested, works!
+  bugs: boxes do not clear after reset : fixed!
+  requirement: add background X or O svg as player hovers over box: done!
+
 */
