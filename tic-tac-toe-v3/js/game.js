@@ -267,8 +267,6 @@ var tictactoe = (function (exports){
 
             });
 
-
-
             // for each box in boxes
               // create an event handler
                 // fill box with O or X
