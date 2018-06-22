@@ -2,10 +2,106 @@
   display:none;
 }
 
-#start {
-
+#playerNames{
+  width: 100%;
+  margin-top: 3em;
+  margin-bottom: 3em;
+  align-items: center;
 }
+#start #pghO {
+  margin-left: .5em;
+  margin-right: 4em;
+  display:inline;
+  width: 50%;
+  height: 50px;
+}
+    #start #labelO{
+      font-size: .8em;
+      padding: .5em;
+      color: green;
+      background-color: #FFF;
+      width: 20px;
+      height: 10px;
+      border-radius: 2px;
+    }
+
+    #start #playerO  {
+      padding: .5em;
+      width: 150px;
+      height: 10px;
+      border-radius: 2px;
+    }
+
+#start #pghX {
+  margin-right: .5em;
+  display:inline;
+  width: 50%;
+  height: 50px;
+}
+
+  #start #labelX{
+    font-size: .8em;
+    padding: .5em;
+    color: green;
+    background-color: #FFF;
+    width: 20px;
+    height: 10px;
+    border-radius: 2px;
+  }
+
+    #playerX {
+      padding: .5em;
+      width: 150px;
+      height: 10px;
+      border-radius: 2px;
+    }
 
 #finish {
 
+}
+
+@media only screen and (max-width: 720px ) {
+
+  #playerNames{
+    width: 100%;
+    margin-top: .5em;
+    margin-bottom: .5em;
+  }
+
+  #start #pghO {
+    margin: 0;
+    display:list-item;
+    width: 100%;
+  }
+  #start #pghX {
+    margin: 0;
+    display:list-item;
+    width: 100%;
+  }
+  #start #labelO{
+    font-size: .8em;
+    padding: .5em;
+    color: green;
+    background-color: #FFF;
+    width: auto;
+    height: 10px:
+  }
+  #start #labelX{
+    font-size: .8em;
+    padding: .5em;
+    color: green;
+    background-color: #FFF;
+    width: auto;
+    height: 10px:
+  }
+
+  #playerX {
+    width: 150px;
+    height: 10px:
+  }
+
+  #playerO  {
+    width: 150px;
+    height: 10px:
+  }
 }
