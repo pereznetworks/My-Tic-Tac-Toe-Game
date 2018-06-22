@@ -71,14 +71,14 @@ h1 {
     .screen-win-one .button {
       color: #3688C3; }
     .screen-win-one p:before {
-      content: "o";
+      content: "O ";
       top: 1.75rem; }
   .screen-win-two {
     background: #3688C3; }
     .screen-win-two .button {
       color: #FFA000; }
     .screen-win-two p:before {
-      content: "×";
+      content: "X ";
       top: 4.5rem; }
 
 .board {
@@ -111,6 +111,18 @@ h1 {
    }
   #player2.active {
     background: #3688C3; }
+
+    .players.active .playerName {
+      color: #fff;
+      margin-top: .5em;
+      display:inherit;
+    }
+
+    .players .playerName{
+      color: #999;
+      margin-top: .5em;
+      display:inherit;
+    }
 
 .boxes {
   width: 480px;

@@ -3,6 +3,14 @@
   // tictactoe() tests for submit of name for 2nd player,
   //   or submit of selection 2 players
 
+    // READY: Start Screen HTML and CSS Styling
+      // for label and inputs for player names added
+    // READY: Game Board Screen HTML and CSS Styling
+      // for span for player names ready
+        // cmd to set player name
+        // $('#player1Name')[0].textContent = "John Doe"
+        // $('#player2Name')[0].textContent = "John Doe"
+
   // tictactoe() calls module, method or function in computerPlayer()
   // computerPlayer() imports module tictactoe as 'game'
 

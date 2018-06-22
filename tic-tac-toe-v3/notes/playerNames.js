@@ -8,7 +8,23 @@
     // on click of start button
       // player name's read into game.playerOName and game.playerXName
 
-  // setupNewGame()
+  // setupNewGame(game)
+
+      const playerONameInput = $('#playerO');
+      const playerXNameInput = $('#playerX');
+
+      playerONameInput.change(function(){
+
+        game.playerOName = $(this)[0].value
+
+      });
+
+      player2NameInput.change(function(){
+
+        game.playerXName = $(this)[0].value
+
+      });
+
       // if game.playerOName and game.playerXName exits
         // then display game board with Player X's name
            // display game board with Player O's name

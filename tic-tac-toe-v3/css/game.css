@@ -18,18 +18,20 @@
     #start #labelO{
       font-size: .8em;
       padding: .5em;
-      color: green;
       background-color: #FFF;
+      color: #54D17A;
+      transition: 0.25s ease;
       width: 20px;
       height: 10px;
-      border-radius: 2px;
+      border-radius: 4px;
     }
 
     #start #playerO  {
+      color: #54D17A;
       padding: .5em;
       width: 150px;
       height: 10px;
-      border-radius: 2px;
+      border-radius: 4px;
     }
 
 #start #pghX {
@@ -42,18 +44,20 @@
   #start #labelX{
     font-size: .8em;
     padding: .5em;
-    color: green;
     background-color: #FFF;
+    color: #54D17A;
+    transition: 0.25s ease;
     width: 20px;
     height: 10px;
-    border-radius: 2px;
+    border-radius: 4px;
   }
 
     #playerX {
+      color: #54D17A;
       padding: .5em;
       width: 150px;
       height: 10px;
-      border-radius: 2px;
+      border-radius: 4px;
     }
 
 #finish {

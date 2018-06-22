@@ -5,6 +5,8 @@ var tictactoe = (function (exports){
               needReset: false,
               playerO: 'O',
               playerX: 'X',
+              playerOname: '',
+              playerXname: '',
               isTurn: 'X',
               isWinner: 'keep playing',
               Ofilled: [],
@@ -26,11 +28,17 @@ var tictactoe = (function (exports){
               $boardElmnt: '',
               $startElmnt: '',
               $finishElmnt: '',
+              $playerONameInput: '',
+              $playerXNameInput: '',
+              $playerONameLabel: '',
+              $playerXNameLabel: '',
 
           }; // end exports object
 
           exports.startGame = function(){
-              // hide start div and show game board
+              // startGame called by start screen 'start' button
+                // so this is the first game with new players
+                // so needReset can be set to false
               this.needReset = false;
 
               //setup a new game
@@ -42,10 +50,10 @@ var tictactoe = (function (exports){
           exports.finishGame = function(game){
             let finishGameText = '';
             if (game.isWinner === 'playerX'){
-              finishGameText = `Winner!`;
+              finishGameText = ` Winner! ${game.playerXName}!`;
               game.$finishElmnt.attr('class', "screen screen-win-two");
             } else if ( game.isWinner === 'playerO' ){
-              finishGameText = `Winner!`;
+              finishGameText = ` Winner! ${game.playerOName}!`;
               game.$finishElmnt.attr('class', "screen screen-win-one");
             } else {
               finishGameText = `It's a tie!`;
@@ -115,6 +123,7 @@ var tictactoe = (function (exports){
             } else {
               game.$boardElmnt.show();
               game.$boardElmnt = $('#board');
+              // get name for player O
             }
 
 
@@ -330,6 +339,17 @@ var tictactoe = (function (exports){
 
           $(document).ready(function() {
 
+            $('#playerO').change(function(){
+              exports.playerOName = $(this)[0].value;
+              $('#player1Name')[0].textContent = exports.playerOName;
+            });
+
+            // get name for player O
+            $('#playerX').change(function(){
+              exports.playerXName = $(this)[0].value;
+              $('#player2Name')[0].textContent = exports.playerXName;
+            });
+
             $('#start .button').click(function(){
               // new Game
               exports.playerO = 'O';
@@ -340,6 +360,10 @@ var tictactoe = (function (exports){
               exports.$boardElmnt = $('#board');
               exports.$startElmnt = $('#start');
               exports.$finishElmnt = $('#finish');
+              exports.$playerONameInput = $('#playerO');
+              exports.$playerXNameInput = $('#playerX');
+              exports.$playerONameLabel = $('#player1Name');
+              exports.$playerXNameLabel = $('#player2Name');
 
               exports.startGame();
 
