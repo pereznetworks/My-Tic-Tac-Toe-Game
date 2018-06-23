@@ -5,8 +5,10 @@ var tictactoe = (function (exports){
               needReset: false,
               playerO: 'O',
               playerX: 'X',
-              playerOname: '',
-              playerXname: '',
+              playerOName: '',
+              playerXName: '',
+              playerOComputer: false,
+              playerXComputer: false,
               isTurn: 'X',
               isWinner: 'keep playing',
               Ofilled: [],
@@ -46,38 +48,6 @@ var tictactoe = (function (exports){
               // with-in playGame, toggle isTurn, place appropriate X or O's
               this.playGame(this)
           }; // end startGame() method
-
-          exports.finishGame = function(game){
-            let finishGameText = '';
-            if (game.isWinner === 'playerX'){
-              finishGameText = ` Winner! ${game.playerXName}!`;
-              game.$finishElmnt.attr('class', "screen screen-win-two");
-            } else if ( game.isWinner === 'playerO' ){
-              finishGameText = ` Winner! ${game.playerOName}!`;
-              game.$finishElmnt.attr('class', "screen screen-win-one");
-            } else {
-              finishGameText = `It's a tie!`;
-              game.$finishElmnt.attr('class', "screen screen-win-tie");
-            }
-            $('.message')[0].textContent=finishGameText;
-            game.$boardElmnt.hide();
-            game.$finishElmnt.show();
-
-            $('#finish .button').click(function(){
-              // new Game 'tictactoe'
-              // tictactoe.playerO = 'O';
-              // tictactoe.playerX = 'X';
-              // tictactoe.$liPlayerO = $('#player2');
-              // tictactoe.$liPlayerX = $('#player1');
-              // tictactoe.$startElmnt = $('#start');
-              // tictactoe.$finishElmnt = $('#finish');
-
-              game.needReset = true;
-              game.setupNewGame(game);
-              game.playGame(game);
-
-            });
-          }; // end finishGame() method
 
           exports.emptyArray = function(arrayToEmpty){
 
@@ -120,12 +90,17 @@ var tictactoe = (function (exports){
               game.$boardElmnt.show();
               // reset flag
               game.needReset = false;
+
             } else {
 
-              if (!game.playerOname) {
-                game.$playerONameLabel[0].textContent = 'computer';
-              } else if (!game.playerXname) {
-                game.$playerXNameLabel[0].textContent = 'computer';
+              if (!game.playerOName) {
+                game.$playerONameLabel[0].textContent = 'the computer';
+                game.playerOName = 'the computer';
+                game.playerOComputer = true;
+              } else if (!game.playerXName) {
+                game.$playerXNameLabel[0].textContent = 'the computer';
+                game.playerXName = 'the computer';
+                game.playerXComputer = true;
               }
 
               game.$boardElmnt.show();
@@ -318,10 +293,32 @@ var tictactoe = (function (exports){
 
           }; // end playGame() method
 
-          /* TODO: convert to IIFE
-              // need to make that can run an IIFE module...
-                // then set and use methods from that IIFE module
-          */
+          // show winner, or draw
+            // setup event handler for new game
+          exports.finishGame = function(game){
+            let finishGameText = '';
+            if (game.isWinner === 'playerX'){
+              finishGameText = ` Winner! ${game.playerXName}!`;
+              game.$finishElmnt.attr('class', "screen screen-win-two");
+            } else if ( game.isWinner === 'playerO' ){
+              finishGameText = ` Winner! ${game.playerOName}!`;
+              game.$finishElmnt.attr('class', "screen screen-win-one");
+            } else {
+              finishGameText = `It's a tie!`;
+              game.$finishElmnt.attr('class', "screen screen-win-tie");
+            }
+            $('.message')[0].textContent=finishGameText;
+            game.$boardElmnt.hide();
+            game.$finishElmnt.show();
+
+            $('#finish .button').click(function(){
+
+              game.needReset = true;
+              game.setupNewGame(game);
+              game.playGame(game);
+
+            });
+          }; // end finishGame() method
 
           /* TODO: play against the computer
               // computer plays O, player is X and goes first
@@ -337,11 +334,6 @@ var tictactoe = (function (exports){
               // else
               //      place sqaure in row for winning row
 
-          */
-
-          /* TODO: player's name
-              // allow player's to type in a name
-              // finish div will show winner's name
           */
 
           $(document).ready(function() {

@@ -1,4 +1,4 @@
-//TODO: modify for us in TicTacToe game 
+//TODO: modify for us in TicTacToe game
 
 // random number vars and array to track last qoute and color displayed
 let randomQuoteNumber;
