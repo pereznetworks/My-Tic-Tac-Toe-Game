@@ -27,9 +27,10 @@
     }
 
     #start #playerO  {
+      font-size: .8em;
       color: #54D17A;
-      padding: .5em;
-      width: 150px;
+      padding: .6em;
+      width: 200px;
       height: 10px;
       border-radius: 4px;
     }
@@ -53,9 +54,10 @@
   }
 
     #playerX {
+      font-size: .8em;
       color: #54D17A;
-      padding: .5em;
-      width: 150px;
+      padding: .6em;
+      width: 200px;
       height: 10px;
       border-radius: 4px;
     }

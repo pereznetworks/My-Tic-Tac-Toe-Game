@@ -121,6 +121,13 @@ var tictactoe = (function (exports){
               // reset flag
               game.needReset = false;
             } else {
+
+              if (!game.playerOname) {
+                game.$playerONameLabel[0].textContent = 'computer';
+              } else if (!game.playerXname) {
+                game.$playerXNameLabel[0].textContent = 'computer';
+              }
+
               game.$boardElmnt.show();
               game.$boardElmnt = $('#board');
               // get name for player O
@@ -339,33 +346,45 @@ var tictactoe = (function (exports){
 
           $(document).ready(function() {
 
+            // labels and input allow for players to enter names
+            // computer plays player input that is blank
+            // game will not start unless one name is entered
+
             $('#playerO').change(function(){
               exports.playerOName = $(this)[0].value;
               $('#player1Name')[0].textContent = exports.playerOName;
             });
 
             // get name for player O
-            $('#playerX').change(function(){
+            $('#playerX').focus().change(function(){
               exports.playerXName = $(this)[0].value;
               $('#player2Name')[0].textContent = exports.playerXName;
             });
 
-            $('#start .button').click(function(){
-              // new Game
-              exports.playerO = 'O';
-              exports.playerX = 'X';
-              exports.$liPlayerO = $('#player1');
-              exports.$liPlayerX = $('#player2');
-              exports.$boxes = $('li.box');
-              exports.$boardElmnt = $('#board');
-              exports.$startElmnt = $('#start');
-              exports.$finishElmnt = $('#finish');
-              exports.$playerONameInput = $('#playerO');
-              exports.$playerXNameInput = $('#playerX');
-              exports.$playerONameLabel = $('#player1Name');
-              exports.$playerXNameLabel = $('#player2Name');
 
-              exports.startGame();
+            $('#start .button').click(function(){
+
+              if (!exports.playerOName && !exports.playerXName) {
+                // require at least one name entered
+                $('#playerX')[0].placeholder = "enter your name for X or O";
+                $('#playerX').focus()
+              } else if (exports.playerOName || exports.playerXName){
+                // new Game
+                exports.playerO = 'O';
+                exports.playerX = 'X';
+                exports.$liPlayerO = $('#player1');
+                exports.$liPlayerX = $('#player2');
+                exports.$boxes = $('li.box');
+                exports.$boardElmnt = $('#board');
+                exports.$startElmnt = $('#start');
+                exports.$finishElmnt = $('#finish');
+                exports.$playerONameInput = $('#playerO');
+                exports.$playerXNameInput = $('#playerX');
+                exports.$playerONameLabel = $('#player1Name');
+                exports.$playerXNameLabel = $('#player2Name');
+
+                exports.startGame();
+              }
 
             });
 
