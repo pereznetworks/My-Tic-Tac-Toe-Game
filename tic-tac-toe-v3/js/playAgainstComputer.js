@@ -12,9 +12,9 @@
     // if choosing to play against computer
       // execute computerPlayer()
 
-var playComputer = (function(computer){
+var playAgainstComputer = (function(computer){
 
-    var exports = {
+    var playComputer = {
       turnComplete: false;
       player: '',
       opponent: '',
@@ -32,30 +32,30 @@ var playComputer = (function(computer){
       // get selected arrays and values for X or O
         // set opponent player values so computer can 'see' the game board
      if (game.playerXComputer == true) {
-          exports.player = playerX;
-          exports.cpBoxFilledClass = 'box box-filled-2';
-          exports.opponent = playerO;
-          exports.playerFilled.push(game.Xfilled[(game.Xfilled.length - 1));
+          playComputer.player = playerX;
+          playComputer.cpBoxFilledClass = 'box box-filled-2';
+          playComputer.opponent = playerO;
+          playComputer.playerFilled.push(game.Xfilled[(game.Xfilled.length - 1));
         } else if (game.playerOComputer == true) {
-          exports.player = playerO;
-          exports.cpBoxFilledClass = 'box box-filled-1';
-          exports.opponent = playerX;
-          exports.playerFilled.push(game.Ofilled[(game.Ofilled.length - 1));
+          playComputer.player = playerO;
+          playComputer.cpBoxFilledClass = 'box box-filled-1';
+          playComputer.opponent = playerX;
+          playComputer.playerFilled.push(game.Ofilled[(game.Ofilled.length - 1));
         }
 
-      if (game.isTurn === exports.player) {
+      if (game.isTurn === playComputer.player) {
         computerTakeTurn(game, computer);
       } // condition if true, to trigger computer to takeTurn()
 
 
-      exports.turnComplete = function(game){
+      playComputer.turnComplete = function(game){
 
         if (game.computerTurnComplete) {
-          game.isTurn = exports.opponent;
+          game.isTurn = playComputer.opponent;
         }
       };
 
-      exports.hoverAffect = function(game, computer){
+      playComputer.hoverAffect = function(game, computer){
         // to make it appear that computer player is thinking
           // x-svg or o-svg appears to hover (appear and disappear )
             // over several of the empty boxes,
@@ -85,7 +85,7 @@ var playComputer = (function(computer){
 
       }
 
-      exports.computerTakeTurn = function(game, computer){
+      playComputer.computerTakeTurn = function(game, computer){
 
         // use a mouse-over hover-event
           // so it appears that computer is 'thinking'
@@ -141,7 +141,7 @@ var playComputer = (function(computer){
 
   }; // end computerPlayer() function
 
-}(playComputer || { }) );
+}(playAgainstComputer || { }) );
 
     //TODO: implement following rules in code
       // TODO: do not use forever nested if/else and array.forEach functions

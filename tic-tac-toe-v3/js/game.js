@@ -1,5 +1,10 @@
 
-var tictactoe = (function (exports){
+var tictactoe = (function (exports, playComputer){
+
+          // importing playComputer module form playAgainstComputer.js
+             // implements a computer player
+               // in case of 1 name for player name input entered
+                 // current implementation requires at least one "named" player
 
           var exports = {
               needReset: false,
@@ -9,20 +14,31 @@ var tictactoe = (function (exports){
               playerXName: '',
               playerOComputer: false,
               playerXComputer: false,
+              computerTurnComplete: false,
               isTurn: 'X',
               isWinner: 'keep playing',
               Ofilled: [],
               Xfilled: [],
               filledBoxes: [],
               winRows: [  // possible winning rows
-                  [0,1,2,'none'],
-                  [3,4,5,'none'],
-                  [6,7,8,'none'],
-                  [0,3,6,'none'],
-                  [1,4,7,'none'],
-                  [2,5,8,'none'],
-                  [0,4,8,'none'],
-                  [2,4,6,'none'],
+                  [0,1,2,'none'],  // 0
+                  [3,4,5,'none'],  // 1
+                  [6,7,8,'none'],  // 2
+                  [0,3,6,'none'],  // 3
+                  [1,4,7,'none'],  // 4
+                  [2,5,8,'none'],  // 5
+                  [0,4,8,'none'],  // 6
+                  [2,4,6,'none'],  // 7
+                ],
+              winRowsProgress: [  // possible winning rows
+                  [[0,'E'],[1,'E'],[2,'E'],'none'],  // 0
+                  [[3,'E'],[4,'E'],[5,'E'],'none'],  // 1
+                  [[6,'E'],[7,'E'],[8,'E'],'none'],  // 2
+                  [[0,'E'],[3,'E'],[6,'E'],'none'],  // 3
+                  [[1,'E'],[4,'E'],[7,'E'],'none'],  // 4
+                  [[2,'E'],[5,'E'],[8,'E'],'none'],  // 5
+                  [[0,'E'],[4,'E'],[8,'E'],'none'],  // 6
+                  [[2,'E'],[4,'E'],[6,'E'],'none'],  // 7
                 ],
               $liPlayerX: '',
               $liPlayerO: '',
@@ -227,36 +243,97 @@ var tictactoe = (function (exports){
 
           }; // end detectIfWinner() method
 
+          exports.trackFilledBoxes = function(game, selectedBoxNumber, selectedBy){
+
+              // as the game progresses, track who fills each box
+              game.winRowsProgress.forEach(function(itemArray, itemArrayIndex){
+                  // each item is an itemArray has 4 items,
+                  // 0,1 and 2 are arrays,
+                  // item 3 is a string, which player 1 or 2 boxes selected
+                  itemArray.forEach(function(rowItem, indexofRowItem){
+                       // skip condition test for indexofRowItem 3,
+                       // which is not an array
+                    if (indexofRowItem < 3) {
+                      // each rowItem is an array
+                       // has a 2 elements, a box# and a char; E, X, or O
+                      if (rowItem[0] == selectedBoxNumber) {
+                        // if  this items[box #] = selected boxNumber
+                        rowItem[1] == selectedBy;
+                        if( itemArray[3] !== `p${playComputer.player}-w2` || itemArray[3] !== `p${playComputer.opponent}-w2`){
+                            itemArray[3] = `${selectedBy}-winner`;
+                            // then mark element 3, (string)
+                            // as playerX or O-winner
+                          } else if( itemArray[3] !== `p${playComputer.player}-w1` || itemArray[3] !== `p${playComputer.opponent}-w1`){
+                          itemArray[3] = `p${selectedBy}-w2`;
+                          // then mark element 3, (string)
+                          // as playerX or O-w2
+                        } else {
+                          itemArray[3] = `p${selectedBy}-w1`;
+                          // then mark element 3, (string)
+                          // as playerX or O-w1
+                        }
+                      }
+                    }
+
+                  });
+              });
+
+
+          };// end trackFilledBoxes() method
+
+          exports.takeTurn = function(indexNoOfSelectedBox, itemNoOfSelectedBox, game){
+
+            // simplifies playGame() function
+            // can then use in playAgainstComputer()
+            if (game.isTurn === game.playerO) {
+              game.trackFilledBoxes(game, indexNoOfSelectedBox, game.isTurn);
+              game.Ofilled.push(indexNoOfSelectedBox);
+              itemNoOfSelectedBox.setAttribute('class', 'box box-filled-1');
+              game.winner = game.detectIfWinner(game);
+              game.isTurn = game.playerX;
+              game.$liPlayerO.attr('class', 'players');
+              game.$liPlayerX.attr('class', 'players active');
+            } else {
+              game.trackFilledBoxes(game, indexNoOfSelectedBox, game.isTurn);
+              game.Xfilled.push(indexNoOfSelectedBox);
+              itemNoOfSelectedBox.setAttribute('class', 'box box-filled-2');
+              game.winner = game.detectIfWinner(game);
+              game.isTurn = game.playerO;
+              game.$liPlayerX.attr('class', 'players');
+              game.$liPlayerO.attr('class', 'players active');
+            } // end if game.isTurn
+
+          };
+
           exports.playGame = function(game){
-
+            // 'O' or 'X' appears
+              // to follow player's mouse around tictactoe game board
             game.$boxes.each(function(index, item){
-
-                $(this).hover(
-
-                  function(){
-
+                $(this).hover(  // when the mouse hovers over a box...
+                  function(){ // execute this function
+                    // if box is not selected, (or is empty)
                     if (this.attributes[0].value === "box"){
-
+                      // if it's playerO's turn ..
                       if (game.isTurn === game.playerO) {
+                        // playerO's symbol appears...
                         this.style.backgroundImage = "url('img/o.svg')";
                         this.style.backgroundColor = '#FFA000';
                       } else {
+                        // else playerX's symbol appears...
                         this.style.backgroundImage = "url('img/x.svg')";
                         this.style.backgroundColor = '#3688C3';
-                      } // end if active player
-
-                    } // end if class 'box', (is not yet selected)
-
-                  }, function(){
-
+                      } // end if game.isTurn
+                    } // end if this.attributes[0].value === "box"
+                  },// end hover if class 'box', (is not yet selected)
+                   function(){
+                    // "X" or "O" disappears when mouse moves away from box
                     if (this.attributes[0].value === "box"){
                         this.style.backgroundImage = "";
                         this.style.backgroundColor = "";
                       } // end if active player
                   }
                 );
-
-            });
+            }); // end mouse hover event
 
             // for each box in boxes
               // create an event handler
@@ -267,28 +344,14 @@ var tictactoe = (function (exports){
               $(this).click(function(){
                 if (item.attributes[0].value === "box"){
                     game.filledBoxes.push(index);
-                    if (game.isTurn === game.playerO) {
-                      game.Ofilled.push(index);
-                      item.setAttribute('class', 'box box-filled-1');
-                      game.winner = game.detectIfWinner(game);
-                      game.isTurn = game.playerX;
-                      game.$liPlayerO.attr('class', 'players');
-                      game.$liPlayerX.attr('class', 'players active');
-                    } else {
-                      game.Xfilled.push(index);
-                      item.setAttribute('class', 'box box-filled-2');
-                      game.winner = game.detectIfWinner(game);
-                      game.isTurn = game.playerO;
-                      game.$liPlayerX.attr('class', 'players');
-                      game.$liPlayerO.attr('class', 'players active');
-                    } // end if active player
-
-                  if (game.isWinner === 'playerX' || game.isWinner === 'playerO' || game.isWinner === 'draw' ) {
-                    game.finishGame(game);
-                  }
+                    // fill in box with X or O depending on game.isTurn ...
+                    game.takeTurn(index, item, game);
+                    // after each turn is taken, do we have a winner ...
+                    if (game.isWinner === 'playerX' || game.isWinner === 'playerO' || game.isWinner === 'draw' ) {
+                      game.finishGame(game);
+                    }
                 }
               }); // end box click event handler
-
             }); // end each function for boxes
 
           }; // end playGame() method
@@ -320,21 +383,37 @@ var tictactoe = (function (exports){
             });
           }; // end finishGame() method
 
-          /* TODO: play against the computer
-              // computer plays O, player is X and goes first
-              // use a random Number generator
-              // track filled boxes
-              // compare against sets of winning row's box numbers
-              // filter for randon numbers that :
-              //     block winning row by player
-              //     place box in row for winning row
-              // use random number as index in boxes.each function
-              // if player does have a potential winning row
-              //      block winning row by other player
-              // else
-              //      place sqaure in row for winning row
+          // TODO: play against the computer
+          // computer plays O, user plays X and goes first
+          // use a random Number generator for hover affect
+          // since computer by default goes 2nd, defensive first
+              // O = computer, X = player
+              //
+          exports.findTargetBox = function(game, computerORplayer, noBoxesInRow){
 
-          */
+            // called by computerPlayer() as part of choosing best move,
+            // find empty box in computer or players's winning row
+
+            // required paramters
+            // game object
+            // computerORplayer; string for 'O' or 'X'
+            // noBoxesInRow; string for '-w2' or '-w1'
+            // isTargetBox; string for 'empty'
+
+              game.winRowsProgress.forEach(function(rowIndex, rowItem){
+                  // does computer or player have 1 or 2 boxes in any row
+                   if (rowItem[3] == `p${computerORplayer}${noBoxesInRow}`){
+                     // iterate through that row,
+                      rowItem.forEach(function(rowItemIndex, rowItemArray){
+                      // find empty box
+                        if (rowItemArray[1] == isTargetBox){
+                           // choose box represented by rowItemArray[0]
+                           return rowItemArray[0];
+                         }  // end if == isTargetBox
+                    }); // end forEach rowItem
+                  } // if computer or player has winning row
+              }); // end for winRowsProgress
+            }; // end findTargetBox() function
 
           $(document).ready(function() {
 
