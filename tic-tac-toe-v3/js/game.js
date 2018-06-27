@@ -70,94 +70,94 @@ var tictactoe = (function (exports){
               };
 
           exports.playComputer.turnComplete = function(game){
-
-                    if (game.computerTurnComplete) {
-                      game.isTurn = game.playComputer.opponent;
-                    }
-                  };
+            if (game.computerTurnComplete) {
+              game.isTurn = game.playComputer.opponent;
+            }
+          };
 
           exports.playComputer.hoverAffect = function(game){
-                    // to make it appear that computer player is thinking
-                      // x-svg or o-svg appears to hover (appear and disappear )
-                        // over several of the empty boxes,
-                          // with 1000 millisecond time intervals
 
-                          // get a random numbert to use for "hovering" affect
-                          let randomBoxNumber = Math.floor(Math.random() * 9);
+           // to make it appear that computer player is thinking
+            // x-svg or o-svg appears to hover (appear and disappear )
+              // over several of the empty boxes,
+                // with 1000 millisecond time intervals
 
-                            // for each function to hover X or O over random empty boxes
-                              // so computer appears to be 'thinking' inorder 'taking turn'
-                            game.filledBoxes.forEach(function (index, item){
-                              if (index !== randomBoxNumber) {
-                                  if (computerPlayer.isTurn === game.playerO) {
-                                    game.$boxes[randomBoxNumber].style.backgroundImage = "url('img/o.svg')";
-                                    game.$boxes[randomBoxNumber].style.backgroundColor = '#FFA000';
-                                  } else {
-                                    game.$boxes[randomBoxNumber].style.backgroundImage = "url('img/x.svg')";
-                                    game.$boxes[randomBoxNumber].style.backgroundColor = '#3688C3';
-                                  } // end if active player
-                                  setTimeout(function(game, lastRandomBoxNumber){
-                                    game.$boxes[randomBoxNumber].style.backgroundImage = "";
-                                    game.$boxes[randomBoxNumber].style.backgroundColor = "";
-                                  }, 1000);
-                              } // end if box is not yet selected
+            // get a random numbert to use for "hovering" affect
+            let randomBoxNumber = Math.floor(Math.random() * 9);
 
-                            }); // each forEach filledBoxes
+            // for each function to hover X or O over random empty boxes
+              // so computer appears to be 'thinking' inorder 'taking turn'
+            game.filledBoxes.forEach(function (index, item){
+              if (index !== randomBoxNumber) {
+                  if (computerPlayer.isTurn === game.playerO) {
+                    game.$boxes[randomBoxNumber].style.backgroundImage = "url('img/o.svg')";
+                    game.$boxes[randomBoxNumber].style.backgroundColor = '#FFA000';
+                  } else {
+                    game.$boxes[randomBoxNumber].style.backgroundImage = "url('img/x.svg')";
+                    game.$boxes[randomBoxNumber].style.backgroundColor = '#3688C3';
+                  } // end if active player
+                  setTimeout(function(game, lastRandomBoxNumber){
+                    game.$boxes[randomBoxNumber].style.backgroundImage = "";
+                    game.$boxes[randomBoxNumber].style.backgroundColor = "";
+                  }, 1000);
+              } // end if box is not yet selected
 
-                  }
+            }); // each forEach filledBoxes
 
-                  // function to 'analyze' game board
+          };
+
           exports.playComputer.analyzeGameBoard = function(game, playerWno, computerWno){
 
-                    // new set of possibleTargets each time computer 'analyzes' gameBoard
-                    const possibleTargets = {};
+            // function to 'analyze' game board
+            // new set of possibleTargets each time computer 'analyzes' gameBoard
+            const possibleTargets = {};
 
-                      // checking for computer's and player's possible winning rows
-                        // and which emoty boxes are 'targets' for best move
+              // checking for computer's and player's possible winning rows
+                // and which emoty boxes are 'targets' for best move
 
-                    if(playerWno) {
-                      emptyBoxes.possibleBlocks = game.emptyArray(emptyBoxes.possibleBlocks);
-                      emptyBoxes.possibleBlocks.push(game.findTargetBox(game, "player", playerWno));
-                    }
-                    if (computerWno){
-                      emptyBoxes.possibleWins = game.emptyArray(emptyBoxes.possibleWins);
-                      emptyBoxes.possibleWins.push(game.findTargetBox(game, "computer", computerWno));
-                    }
+            if(playerWno) {
+              emptyBoxes.possibleBlocks = game.emptyArray(emptyBoxes.possibleBlocks);
+              emptyBoxes.possibleBlocks.push(game.findTargetBox(game, "player", playerWno));
+            }
+            if (computerWno){
+              emptyBoxes.possibleWins = game.emptyArray(emptyBoxes.possibleWins);
+              emptyBoxes.possibleWins.push(game.findTargetBox(game, "computer", computerWno));
+            }
 
-                    return possibleTargets;
-                  }; // end analyzeGameBoard() function
+            return possibleTargets;
+          }; // end analyzeGameBoard() function
 
           exports.playComputer.computerTakeTurn = function(game){
 
-                    // use a mouse-over hover-event
-                      // so it appears that computer is 'thinking'
-                    game.playComputer.hoverAffect(game);
+              // use a mouse-over hover-event
+                // so it appears that computer is 'thinking'
+              game.playComputer.hoverAffect(game);
 
-                    // based on which move number,
-                      // get target empty boxes using analyzeGameBoard()
-                        // TODO: of possible targets
-                          // test for best move to block or win
-                    if (game.playComputer.moveNo == 'firstMove') {
+              // based on which move number,
+                // get target empty boxes using analyzeGameBoard()
+                  // TODO: of possible targets
+                    // test for best move to block or win
+              if (game.playComputer.moveNo == 'firstMove') {
 
-                      const possibleTargetsM1 = analyzeGameBoard(game, 'w1');
+                const possibleTargetsM1 = analyzeGameBoard(game, 'w1');
 
-                    } else if (game.playComputer.moveNo == 'secondMove'){
+              } else if (game.playComputer.moveNo == 'secondMove'){
 
-                      const possibleTargetsM2 = analyzeGameBoard(game, 'w2', 'w1');
+                const possibleTargetsM2 = analyzeGameBoard(game, 'w2', 'w1');
 
-                    } else if (game.playComputer.moveNo == 'thirdMove'){
+              } else if (game.playComputer.moveNo == 'thirdMove'){
 
-                      const possibleTargetsM3 = analyzeGameBoard(game, 'w2', 'w1');
+                const possibleTargetsM3 = analyzeGameBoard(game, 'w2', 'w1');
 
-                    } else if (game.playComputer.moveNo == 'fourthMove'){
+              } else if (game.playComputer.moveNo == 'fourthMove'){
 
-                      const possibleTargetsM4 = analyzeGameBoard(game, 'w2', 'w2');
+                const possibleTargetsM4 = analyzeGameBoard(game, 'w2', 'w2');
 
-                    }
+              }
 
-                    // at some point call turnComplete()
+              // at some point call turnComplete()
 
-                }; //end computerTakeTurn()
+          }; //end computerTakeTurn()
 
           exports.startGame = function(){
               // startGame called by start screen 'start' button
@@ -508,12 +508,6 @@ var tictactoe = (function (exports){
             });
           }; // end finishGame() method
 
-          // TODO: play against the computer
-          // computer plays O, user plays X and goes first
-          // use a random Number generator for hover affect
-          // since computer by default goes 2nd, defensive first
-              // O = computer, X = player
-              //
           exports.findTargetBox = function(game, computerORplayer, noBoxesInRow){
 
             // called by computerPlayer() as part of choosing best move,
