@@ -38,16 +38,14 @@
 
         When a player pushes the "New Game" button, the board appears again, empty, and a new game begins.
 
-# Extra Credit TO DO:
+# Extra Credit 3 OUT OF 4 COMPLETE
 
-    To get an "exceeds" rating, you can expand on the project in the following ways:
+    To get an "exceeds" rating, you can expand on the project in the following ways: 4 steps
 
-    4 steps
+# 1: DONE: On the start screen, prompt the user add their name before the game starts
 
-# DONE: On the start screen, prompt the user add their name before the game starts
+# 2: DONE Display the player’s name on the board screen during game play
 
-# DONE Display the player’s name on the board screen during game play
+# 3: IN PROGRESS Add programming to support playing against the computer. Only one player plays; the other is controlled by your programming.
 
-# IN PROGRESS Add programming to support playing against the computer. Only one player plays; the other is controlled by your programming.
-
-# DONE: Display the player’s name if they win the game
+# 4: DONE: Display the player’s name if they win the game
