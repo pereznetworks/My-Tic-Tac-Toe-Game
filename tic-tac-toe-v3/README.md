@@ -44,10 +44,10 @@
 
     4 steps
 
-        On the start screen, prompt the user add their name before the game starts
+# DONE: On the start screen, prompt the user add their name before the game starts
 
-        Display the player’s name on the board screen during game play
+# DONE Display the player’s name on the board screen during game play
 
-        Add programming to support playing against the computer. Only one player plays; the other is controlled by your programming.
+# IN PROGRESS Add programming to support playing against the computer. Only one player plays; the other is controlled by your programming.
 
-        Display the player’s name if they win the game
+# DONE: Display the player’s name if they win the game

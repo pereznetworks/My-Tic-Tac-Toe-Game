@@ -1,12 +1,6 @@
 
 var tictactoe = (function (exports){
 
-          // importing playComputer module from ....
-            // my module playAgainstComputer.js
-             // implements a computer player
-               // in case of 1 name for player name input entered
-                 // current implementation requires at least one "named" player
-
           var exports = {
               needReset: false,
               playerO: 'O',
