@@ -12,9 +12,7 @@
     // if choosing to play against computer
       // execute computerPlayer()
 
-var playAgainstComputer = (function(exports, tictactoe){
-
-    var playComputer = {
+var playComputer = {
       turnComplete: false,
       moveNo: '',
       player: '',
@@ -29,14 +27,14 @@ var playAgainstComputer = (function(exports, tictactoe){
       opponentFilled: [],
     }
 
-      exports.turnComplete = function(game){
+      this.turnComplete = function(game, playComputer){
 
         if (game.computerTurnComplete) {
           game.isTurn = playComputer.opponent;
         }
       };
 
-      exports.hoverAffect = function(game, playComputer){
+      this.hoverAffect = function(game, playComputer){
         // to make it appear that computer player is thinking
           // x-svg or o-svg appears to hover (appear and disappear )
             // over several of the empty boxes,
@@ -67,7 +65,7 @@ var playAgainstComputer = (function(exports, tictactoe){
       }
 
       // function to 'analyze' game board
-      exports.analyzeGameBoard = function(game, playComputer, playerWno, computerWno){
+      this.analyzeGameBoard = function(game, playComputer, playerWno, computerWno){
 
         // new set of empty boxes each time computer 'analyzes' gameBoard
         const emptyBoxes = {};
@@ -85,8 +83,9 @@ var playAgainstComputer = (function(exports, tictactoe){
         }
       }; // end analyzeGameBoard() function
 
-      exports.computerTakeTurn = function(game, playComputer){
+      this.computerTakeTurn = function(game){
 
+        this = playComputer;
         // use a mouse-over hover-event
           // so it appears that computer is 'thinking'
         playComputer.hoverAffect(game, playComputer);
@@ -117,7 +116,7 @@ var playAgainstComputer = (function(exports, tictactoe){
 
     }; //end computerTakeTurn()
 
-}(playAgainstComputer || { }) );
+};
 
 
     //TODO: implement following rules in code

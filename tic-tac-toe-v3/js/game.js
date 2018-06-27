@@ -1,7 +1,8 @@
 
-var tictactoe = (function (exports, playComputer){
+var tictactoe = (function (exports){
 
-          // importing playComputer module form playAgainstComputer.js
+          // importing playComputer module from ....
+            // my module playAgainstComputer.js
              // implements a computer player
                // in case of 1 name for player name input entered
                  // current implementation requires at least one "named" player
@@ -52,6 +53,111 @@ var tictactoe = (function (exports, playComputer){
               $playerXNameLabel: '',
 
           }; // end exports object
+
+          exports.playComputer = {
+                turnComplete: false,
+                moveNo: '',
+                player: '',
+                opponent: '',
+                possibleBlock1: '',
+                possibleBlock2: '',
+                possibleWin1: '',
+                possibleWin2: '',
+                cpBoxFilledClass: '',
+                opponentBoxFilledClass: '',
+                playerFilled: [],
+                opponentFilled: [],
+              };
+
+          exports.playComputer.turnComplete = function(game){
+
+                    if (game.computerTurnComplete) {
+                      game.isTurn = game.playComputer.opponent;
+                    }
+                  };
+
+          exports.playComputer.hoverAffect = function(game){
+                    // to make it appear that computer player is thinking
+                      // x-svg or o-svg appears to hover (appear and disappear )
+                        // over several of the empty boxes,
+                          // with 1000 millisecond time intervals
+
+                          // get a random numbert to use for "hovering" affect
+                          let randomBoxNumber = Math.floor(Math.random() * 9);
+
+                            // for each function to hover X or O over random empty boxes
+                              // so computer appears to be 'thinking' inorder 'taking turn'
+                            game.filledBoxes.forEach(function (index, item){
+                              if (index !== randomBoxNumber) {
+                                  if (computerPlayer.isTurn === game.playerO) {
+                                    game.$boxes[randomBoxNumber].style.backgroundImage = "url('img/o.svg')";
+                                    game.$boxes[randomBoxNumber].style.backgroundColor = '#FFA000';
+                                  } else {
+                                    game.$boxes[randomBoxNumber].style.backgroundImage = "url('img/x.svg')";
+                                    game.$boxes[randomBoxNumber].style.backgroundColor = '#3688C3';
+                                  } // end if active player
+                                  setTimeout(function(game, lastRandomBoxNumber){
+                                    game.$boxes[randomBoxNumber].style.backgroundImage = "";
+                                    game.$boxes[randomBoxNumber].style.backgroundColor = "";
+                                  }, 1000);
+                              } // end if box is not yet selected
+
+                            }); // each forEach filledBoxes
+
+                  }
+
+                  // function to 'analyze' game board
+          exports.playComputer.analyzeGameBoard = function(game, playerWno, computerWno){
+
+                    // new set of possibleTargets each time computer 'analyzes' gameBoard
+                    const possibleTargets = {};
+
+                      // checking for computer's and player's possible winning rows
+                        // and which emoty boxes are 'targets' for best move
+
+                    if(playerWno) {
+                      emptyBoxes.possibleBlocks = game.emptyArray(emptyBoxes.possibleBlocks);
+                      emptyBoxes.possibleBlocks.push(game.findTargetBox(game, "player", playerWno));
+                    }
+                    if (computerWno){
+                      emptyBoxes.possibleWins = game.emptyArray(emptyBoxes.possibleWins);
+                      emptyBoxes.possibleWins.push(game.findTargetBox(game, "computer", computerWno));
+                    }
+
+                    return possibleTargets;
+                  }; // end analyzeGameBoard() function
+
+          exports.playComputer.computerTakeTurn = function(game){
+
+                    // use a mouse-over hover-event
+                      // so it appears that computer is 'thinking'
+                    game.playComputer.hoverAffect(game);
+
+                    // based on which move number,
+                      // get target empty boxes using analyzeGameBoard()
+                        // TODO: of possible targets
+                          // test for best move to block or win
+                    if (game.playComputer.moveNo == 'firstMove') {
+
+                      const possibleTargetsM1 = analyzeGameBoard(game, 'w1');
+
+                    } else if (game.playComputer.moveNo == 'secondMove'){
+
+                      const possibleTargetsM2 = analyzeGameBoard(game, 'w2', 'w1');
+
+                    } else if (game.playComputer.moveNo == 'thirdMove'){
+
+                      const possibleTargetsM3 = analyzeGameBoard(game, 'w2', 'w1');
+
+                    } else if (game.playComputer.moveNo == 'fourthMove'){
+
+                      const possibleTargetsM4 = analyzeGameBoard(game, 'w2', 'w2');
+
+                    }
+
+                    // at some point call turnComplete()
+
+                }; //end computerTakeTurn()
 
           exports.startGame = function(){
               // startGame called by start screen 'start' button
@@ -310,19 +416,19 @@ var tictactoe = (function (exports, playComputer){
               // get selected arrays and values for X or O
                 // set opponent player values so computer can 'see' the game board
              if (game.playerXComputer == true) {
-                  playComputer.player = playerX;
-                  playComputer.cpBoxFilledClass = 'box box-filled-2';
-                  playComputer.opponent = playerO;
-                  playComputer.playerFilled.push(game.Xfilled[(game.Xfilled.length - 1)]);
+                  game.playComputer.player = game.playerX;
+                  game.playComputer.cpBoxFilledClass = 'box box-filled-2';
+                  game.playComputer.opponent = game.playerO;
+                  game.playComputer.playerFilled.push(game.Xfilled[(game.Xfilled.length - 1)]);
                 } else if (game.playerOComputer == true) {
-                  playComputer.player = playerO;
-                  playComputer.cpBoxFilledClass = 'box box-filled-1';
-                  playComputer.opponent = playerX;
-                  playComputer.playerFilled.push(game.Ofilled[(game.Ofilled.length - 1)]);
+                  game.playComputer.player = game.playerO;
+                  game.playComputer.cpBoxFilledClass = 'box box-filled-1';
+                  game.playComputer.opponent = game.playerX;
+                  game.playComputer.playerFilled.push(game.Ofilled[(game.Ofilled.length - 1)]);
                 }
 
-              if (game.isTurn === playComputer.player) {
-                playComputer.computerTakeTurn(game, playComputer);
+              if (game.isTurn === game.playComputer.player) {
+                game.playComputer.computerTakeTurn(game);
               } // condition if true, to trigger computer to takeTurn()
 
             // 'O' or 'X' appears
@@ -480,6 +586,6 @@ var tictactoe = (function (exports, playComputer){
 
           });
 
-          return exports
+          return exports   // returning the entire object and it's methods
 
-}(tictactoe || { }) );
+}(tictactoe || { } ));
