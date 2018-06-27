@@ -124,7 +124,6 @@ var tictactoe = (function (exports, playComputer){
               // get name for player O
             }
 
-
             // make sure isTurn to X player
             game.isTurn = this.playerX;
             // 'visually activate player X' button
@@ -306,6 +305,26 @@ var tictactoe = (function (exports, playComputer){
           };
 
           exports.playGame = function(game){
+
+            // find out if computer is playing X or O
+              // get selected arrays and values for X or O
+                // set opponent player values so computer can 'see' the game board
+             if (game.playerXComputer == true) {
+                  playComputer.player = playerX;
+                  playComputer.cpBoxFilledClass = 'box box-filled-2';
+                  playComputer.opponent = playerO;
+                  playComputer.playerFilled.push(game.Xfilled[(game.Xfilled.length - 1)]);
+                } else if (game.playerOComputer == true) {
+                  playComputer.player = playerO;
+                  playComputer.cpBoxFilledClass = 'box box-filled-1';
+                  playComputer.opponent = playerX;
+                  playComputer.playerFilled.push(game.Ofilled[(game.Ofilled.length - 1)]);
+                }
+
+              if (game.isTurn === playComputer.player) {
+                playComputer.computerTakeTurn(game, playComputer);
+              } // condition if true, to trigger computer to takeTurn()
+
             // 'O' or 'X' appears
               // to follow player's mouse around tictactoe game board
             game.$boxes.each(function(index, item){

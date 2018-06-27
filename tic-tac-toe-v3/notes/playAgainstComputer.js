@@ -15,7 +15,7 @@
 var playComputer = (function(computer){
 
     var exports = {
-      turnComplete: false;
+      turnComplete: false,
       player: '',
       opponent: '',
       possibleBlock1: '',
@@ -139,7 +139,7 @@ var playComputer = (function(computer){
 
     }); //end computerTakeTurn()
 
-  }; // end computerPlayer() function
+  }; // end playComputer() function
 
 }(playComputer || { }) );
 

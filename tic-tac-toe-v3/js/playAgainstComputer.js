@@ -12,10 +12,11 @@
     // if choosing to play against computer
       // execute computerPlayer()
 
-var playAgainstComputer = (function(computer){
+var playAgainstComputer = (function(exports, tictactoe){
 
     var playComputer = {
-      turnComplete: false;
+      turnComplete: false,
+      moveNo: '',
       player: '',
       opponent: '',
       possibleBlock1: '',
@@ -25,37 +26,17 @@ var playAgainstComputer = (function(computer){
       cpBoxFilledClass: '',
       opponentBoxFilledClass: '',
       playerFilled: [],
-      opponentFilled: []
+      opponentFilled: [],
     }
 
-    // find out if computer is playing X or O
-      // get selected arrays and values for X or O
-        // set opponent player values so computer can 'see' the game board
-     if (game.playerXComputer == true) {
-          playComputer.player = playerX;
-          playComputer.cpBoxFilledClass = 'box box-filled-2';
-          playComputer.opponent = playerO;
-          playComputer.playerFilled.push(game.Xfilled[(game.Xfilled.length - 1));
-        } else if (game.playerOComputer == true) {
-          playComputer.player = playerO;
-          playComputer.cpBoxFilledClass = 'box box-filled-1';
-          playComputer.opponent = playerX;
-          playComputer.playerFilled.push(game.Ofilled[(game.Ofilled.length - 1));
-        }
-
-      if (game.isTurn === playComputer.player) {
-        computerTakeTurn(game, computer);
-      } // condition if true, to trigger computer to takeTurn()
-
-
-      playComputer.turnComplete = function(game){
+      exports.turnComplete = function(game){
 
         if (game.computerTurnComplete) {
           game.isTurn = playComputer.opponent;
         }
       };
 
-      playComputer.hoverAffect = function(game, computer){
+      exports.hoverAffect = function(game, playComputer){
         // to make it appear that computer player is thinking
           // x-svg or o-svg appears to hover (appear and disappear )
             // over several of the empty boxes,
@@ -85,66 +66,66 @@ var playAgainstComputer = (function(computer){
 
       }
 
-      playComputer.computerTakeTurn = function(game, computer){
+      // function to 'analyze' game board
+      exports.analyzeGameBoard = function(game, playComputer, playerWno, computerWno){
+
+        // new set of empty boxes each time computer 'analyzes' gameBoard
+        const emptyBoxes = {};
+
+          // checking for computer's and player's possible winning rows
+            // and which emoty boxes are 'targets' for best move
+
+        if(playerWno) {
+          emptyBoxes.possibleBlocks = game.emptyArray(emptyBoxes.possibleBlocks);
+          emptyBoxes.possibleBlocks.push(game.findTargetBox(game, "player", playerWno));
+        }
+        if (computerWno){
+          emptyBoxes.possibleWins = game.emptyArray(emptyBoxes.possibleWins);
+          emptyBoxes.possibleWins.push(game.findTargetBox(game, "computer", computerWno));
+        }
+      }; // end analyzeGameBoard() function
+
+      exports.computerTakeTurn = function(game, playComputer){
 
         // use a mouse-over hover-event
           // so it appears that computer is 'thinking'
-        hoverAffect(game, computer);
+        playComputer.hoverAffect(game, playComputer);
 
-       // notes on logic, functions, objects for computer choosing best move
-         // slowly implementing working code
-          // see notes below
-
-        // new set of empty boxes each time computer takes turn
-        const emptyBoxes = {};
-
-        // function to 'analyze' game board
-          // checking for computer's and player's possible winning rows
-            // and which emoty boxes are 'targets' for best move
-        function analyzeGameBoard(game, playerWno, computerWno){
-
-
-          if(playerWno) {
-            emptyBoxes.possibleBlocks = game.emptyArray(emptyBoxes.possibleBlocks);
-            emptyBoxes.possibleBlocks.push(game.findTargetBox(game, "player", playerWno));
-          }
-          if (computerWno){
-            emptyBoxes.possibleWins = game.emptyArray(emptyBoxes.possibleWins);
-            emptyBoxes.possibleWins.push(game.findTargetBox(game, "computer", computerWno));
-          }
-        }:
-
-        // based on which turn number,
+        // based on which move number,
           // get target empty boxes using analyzeGameBoard()
-            // test for best move to block or take a winning rows
-        if (firstMove) {
+            // TODO: of possible targets
+              // test for best move to block or win
+        if (playComputer.moveNo == 'firstMove') {
 
-          analyzeGameBoard(game, 'w1');
+          analyzeGameBoard(game, playComputer, 'w1');
 
-        } else if (secondMove){
+        } else if (playComputer.moveNo == 'secondMove'){
 
-          analyzeGameBoard(game, 'w2', 'w1');
+          analyzeGameBoard(game, playComputer, 'w2', 'w1');
 
-        } else if (thirdMove){
+        } else if (playComputer.moveNo == 'thirdMove'){
 
-          analyzeGameBoard(game, 'w2', 'w2');
+          analyzeGameBoard(game, playComputer, 'w2', 'w2');
 
-        } else if (fourthMove){
+        } else if (playComputer.moveNo == 'fourthMove'){
 
-          analyzeGameBoard(game, 'w2', 'w2');
+          analyzeGameBoard(game, playComputer, 'w2', 'w2');
 
         }
 
         // at some point call turnComplete()
 
-    }); //end computerTakeTurn()
-
-  }; // end computerPlayer() function
+    }; //end computerTakeTurn()
 
 }(playAgainstComputer || { }) );
 
+
     //TODO: implement following rules in code
-      // TODO: do not use forever nested if/else and array.forEach functions
+    // notes on logic, functions, objects for computer choosing best move
+      // slowly implementing working code
+
+      // TODO: try not to use crazy forever nested
+         // if/else and array.forEach functions
 
       // RULE 1: 4th move strategy
         // go for the win
