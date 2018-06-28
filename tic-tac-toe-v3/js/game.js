@@ -381,6 +381,11 @@ var tictactoe = (function (exports){
                 game.playerXComputer = true;
               }
 
+              // if either is true, start computer player
+              if (game.playerXComputer == true || game.playerOComputer == true ){
+                computerPlay(game);
+              } 
+
               game.$boardElmnt.show();
               game.$boardElmnt = $('#board');
               // get name for player O
