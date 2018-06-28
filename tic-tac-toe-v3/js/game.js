@@ -396,7 +396,7 @@ var tictactoe = (function (exports){
 
               // if either is true, start computer player
               if (game.playerXComputer == true || game.playerOComputer == true ){
-                computerPlay(game);
+                game.computer.computerPlay(game);
               }
 
               game.$boardElmnt.show();
@@ -649,9 +649,9 @@ var tictactoe = (function (exports){
 
           }; // end playGame() method
 
-          // show winner, or draw
-            // setup event handler for new game
           exports.finishGame = function(game){
+            // show winner, or draw
+              // setup event handler for new game
             let finishGameText = '';
             if (game.isWinner === 'playerX'){
               finishGameText = ` Winner! ${game.playerXName}!`;
