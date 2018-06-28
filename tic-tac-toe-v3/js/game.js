@@ -337,7 +337,7 @@ var tictactoe = (function (exports){
               return arrayToEmpty;
 
               // seems there should be a better way to do this...
-          };
+          }; // end emptyArray()
 
           exports.setupNewGame = function(game){
 
@@ -392,11 +392,6 @@ var tictactoe = (function (exports){
                 game.$playerXNameLabel[0].textContent = 'the computer';
                 game.playerXName = 'the computer';
                 game.playerXComputer = true;
-              }
-
-              // if either is true, start computer player
-              if (game.playerXComputer == true || game.playerOComputer == true ){
-                game.computer.computerPlay(game);
               }
 
               game.$boardElmnt.show();
@@ -582,14 +577,14 @@ var tictactoe = (function (exports){
               game.$liPlayerO.attr('class', 'players active');
             } // end if game.isTurn
 
-          };
+          }; // end takeTurn()
 
           exports.isGameOver = function(game){
             // after each turn is taken, do we have a winner ...
             if (game.isWinner === 'playerX' || game.isWinner === 'playerO' || game.isWinner === 'draw' ) {
               game.finishGame(game);
             }
-          }
+          };  // end isGameOver()
 
           exports.playGame = function(game){
 
@@ -636,7 +631,10 @@ var tictactoe = (function (exports){
                     game.takeTurn(index, item, game);
                     // after each turn is taken, do we have a winner ...
                     game.isGameOver(game);
-
+                    // if either is true, start computer player
+                    if (game.playerXComputer == true || game.playerOComputer == true ){
+                      game.computer.computerPlay(game);
+                    }
                 }
               }); // end box click event handler
             }); // end each function for boxes
