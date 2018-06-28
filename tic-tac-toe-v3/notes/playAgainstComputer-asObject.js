@@ -1,3 +1,10 @@
+// TODO: converstion to full 'smart computer player' module
+  // problem: dependent on game.js, remove selection and action on specific html nodes
+  // challenge: convert to "logic utlity",  minmax game algorithm implemenation
+  // need to have game modes: tictactoe, checkers.
+  // add game modes: ability to add mode for different games
+  // smart mode: abilty to detect and switch to a specific game mode
+
 // TODO: basic steps and logic
   // to add functionality for "playing against the computer"
 
@@ -158,9 +165,9 @@ var playComputer = {
           // return which empty boxes are targets for best move
 
       // const possibleWinners = {
-      //   rank4: [4],
-      //   rank3: [0,2,6,8],
-      //   rank2: [1,3,5,7]
+      //   center: [4],
+      //   corners: [0,2,6,8],
+      //   sides: [1,3,5,7]
       // }
       //
       // const computerPossibleWinners = { //start of game
