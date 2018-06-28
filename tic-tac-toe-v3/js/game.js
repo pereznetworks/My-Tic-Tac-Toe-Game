@@ -720,6 +720,7 @@ var tictactoe = (function (exports){
             });
 
 
+            // at present it is implied that user must type in thier name in input for player
             $('#start .button').click(function(){
 
               if (!exports.playerOName && !exports.playerXName) {
