@@ -339,35 +339,25 @@ var tictactoe = (function (exports){
 
                 if (game.computer.moveNo == 1) {
 
-                  // if first move, get possible target to block opponent
-                  let possibleTargetsM1 = ''
-                  possibleTargetsM1 = game.computer.analyzeGameBoard(game, 'w1');
+                  if (game.$boxes[4].className !== "box box-filled-1" || game.$boxes[4].className !== "box box-filled-2"){
+                    const targetBoxNo = 4;
+                    // if center box is empty
+                    game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
 
-                  // for each target of opponent possible blocks
-                  possibleTargetsM1.possibleBlocks.forEach(function(ptIndex, ptItem){
-                      // is target a center box ?
-                      if (ptItem == game.computer.possibleWinners.center[0] ){
-                        // then choose center box
-                        const targetBoxNo = ptItem;
-                        //then call takeTurn
-                        takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-                        // to play that center
+                  } else {
 
-                       } else {
-                        game.computer.possibleWinners.corners.forEach(function(cornerItem, cornerIndex){
-                          // is possible target a corner box ?
-                          if (ptItem == cornerItem ){
-                            // TODO: randomize which corner computer selects
-                            // then choose that corner
-                            const targetBoxNo = ptItem;
-                            //then call takeTurn
-                            game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-                             // to play that center box
-                           }
-                        });
-                      } // end if center is empty else take a corner box
-                    }); // end for each target of opponent possible blocks
-
+                    game.computer.possibleWinners.corners.forEach(function(cornerItem, cornerIndex){
+                      // is possible target a corner box ?
+                       if (game.$boxes[cornerItem]!== "box box-filled-1" || game.$boxes[cornerItem]!== "box box-filled-2"){
+                         // TODO: randomize which corner computer selects
+                         // then choose that corner
+                         const targetBoxNo = cornerItem;
+                         //then call takeTurn
+                         game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+                          // to play that center box
+                        }
+                    });
+                  }
 
                 } else if (game.computer.moveNo == 2){
 
@@ -378,7 +368,7 @@ var tictactoe = (function (exports){
 
                         possibleTargetsM2.possibleBlocks.forEach(function(ptItem, ptIndex){
                         // select target from opponent's w2 to block
-                          const targetBoxNo = ptItem;
+                          const targetBoxNo = ptItem[0];
                           //then call takeTurn
                           game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
                           // to play that target box for a block
@@ -392,7 +382,7 @@ var tictactoe = (function (exports){
 
                               if(cornerItem == ptItem){
                                 // select target that is a corner box from computer w1 to for a w2
-                                const targetBoxNo = ptItem;
+                                const targetBoxNo = ptItem[0];
                                 //then call takeTurn
                                 game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
                                 // to play that target box for a w2
@@ -419,7 +409,7 @@ var tictactoe = (function (exports){
                           possibleTargetsM3.possibleWins.forEach(function(ptItem, ptIndex){
 
                               // select target from computer w2 for a win
-                                const targetBoxNo = ptItem;
+                                const targetBoxNo = ptItem[0];
                                 //then call takeTurn
                                 game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
                                 // to play that target box for a win
@@ -432,7 +422,7 @@ var tictactoe = (function (exports){
 
                            possibleTargetsM3.possibleBlocks.forEach(function(ptItem, ptIndex){
                            // select target from opponent's w2 to block
-                             const targetBoxNo = ptItem;
+                             const targetBoxNo = ptItem[0];
                              //then call takeTurn
                              game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
                              // to play that target box for a block
@@ -443,10 +433,10 @@ var tictactoe = (function (exports){
                            let possibleTargetsM3w1 = '';
                            possibleTargetsM3w1 = game.computer.analyzeGameBoard(game, 'w1', 'w1');
 
-                           possibleTargetsM3.possibleWins.forEach(function(pTitem, ptIndex){
+                           possibleTargetsM3w1.possibleWins.forEach(function(ptItem, ptIndex){
 
                                // select target from computer w1 for a w2
-                                 const targetBoxNo = ptItem;
+                                 const targetBoxNo = ptItem[0];
                                  //then call takeTurn
                                  game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
                                  // to play that target box for a w2
@@ -469,7 +459,7 @@ var tictactoe = (function (exports){
                         possibleTargetsM4.possibleWins.forEach(function(ptItem, ptIndex){
 
                           // select target from computer w2 for a win
-                            const targetBoxNo = ptItem;
+                            const targetBoxNo = ptItem[0];
                             //then call takeTurn
                             game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
                             // to play that target box for a win
@@ -482,7 +472,7 @@ var tictactoe = (function (exports){
 
                        possibleTargetsM4.possibleBlocks.forEach(function(ptItem, ptIndex){
                        // select target from opponent's w2 to block
-                         const targetBoxNo = ptItem;
+                         const targetBoxNo = ptItem[0];
                          //then call takeTurn
                          game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
                          // to play that target box for a block
@@ -728,6 +718,36 @@ var tictactoe = (function (exports){
           return exports   // returning the entire object and it's methods
 
 }(tictactoe || { } ));
+
+//
+// // if first move, get possible target to block opponent
+// let possibleTargetsM1 = ''
+// possibleTargetsM1 = game.computer.analyzeGameBoard(game, 'w1');
+//
+// // for each target of opponent possible blocks
+// possibleTargetsM1.possibleBlocks.forEach(function(pbItemArray, pbItemIndex){
+//     // is target a center box ?
+//      pbItemArray.forEach(function(ptItem, ptIndex){
+//        if (ptItem == game.computer.possibleWinners.center[0] ){
+//          // then choose center box
+//          const targetBoxNo = ptItem;
+//          //then call takeTurn
+//          game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+//          // to play that center
+//         } else {
+//          game.computer.possibleWinners.corners.forEach(function(cornerItem, cornerIndex){
+//            // is possible target a corner box ?
+//            if (ptItem == cornerItem ){
+//              // TODO: randomize which corner computer selects
+//              // then choose that corner
+//              const targetBoxNo = ptItem;
+//              //then call takeTurn
+//              game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+//               // to play that center box
+//             }
+//          });
+//        } // end if center is empty else take a corner box
+//      });
 
 //
 // // detect possible win or blocked rows
