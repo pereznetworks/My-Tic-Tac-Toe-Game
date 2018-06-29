@@ -605,7 +605,7 @@ var tictactoe = (function (exports){
               game.winRowsProgress.forEach(function(winRowArray, indexWinRowArray){
                 if (indexWinRowArray < 3){
                   winRowArray.forEach(function(itemArray, indexOfItemArray){
-                    item[1] = 'E';
+                    itemArray[1] = 'E';
                   });
                 }
                 winRowArray[3] = 'none';
@@ -615,8 +615,8 @@ var tictactoe = (function (exports){
               game.Ofilled = game.emptyArray(game.Ofilled);
               game.Xfilled = game.emptyArray(game.Xfilled);
               game.filledBoxes = game.emptyArray(game.filledBoxes);
-              game.computer.playerFilled = game.emptyArray(playerFilled);
-              game.computer.opponentFilled = game.emptyArray(opponentFilled);
+              game.computer.playerFilled = game.emptyArray(game.computer.playerFilled);
+              game.computer.opponentFilled = game.emptyArray(game.computer.opponentFilled);
 
               // reselecting empty $boardElmnt
               game.$boardElmnt = $('#board');
