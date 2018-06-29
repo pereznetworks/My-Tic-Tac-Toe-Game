@@ -134,21 +134,11 @@ var tictactoe = (function (exports){
                 // increment moveNo,
                 game.computer.moveNo += 1;
 
-
-                // find out if computer is playing
-                // if playing is computer playing X or O
-                  // get selected arrays and values for X or O
-                    // set opponent player values so computer can 'see' the game board
+                // get opponent player filled boxes so computer can 'see' the game board
                 if (game.playerXComputer == true) {
-                      game.computer.player = game.playerX;
-                      game.computer.cpBoxFilledClass = 'box box-filled-2';
-                      game.computer.opponent = game.playerO;
-                      game.computer.playerFilled.push(game.Xfilled[(game.Xfilled.length - 1)]);
+                   game.computer.playerFilled.push(game.Xfilled[(game.Xfilled.length - 1)]);
                 } else if (game.playerOComputer == true) {
-                      game.computer.player = game.playerO;
-                      game.computer.cpBoxFilledClass = 'box box-filled-1';
-                      game.computer.opponent = game.playerX;
-                      game.computer.playerFilled.push(game.Ofilled[(game.Ofilled.length - 1)]);
+                   game.computer.playerFilled.push(game.Ofilled[(game.Ofilled.length - 1)]);
                 }
 
                   // use a mouse-over hover-event
@@ -384,11 +374,20 @@ var tictactoe = (function (exports){
 
             } else { // if this is not a reset, but the FIRST game...
 
-              if (!game.playerOName) {  // is one of the player name inputs blank
+              if (!game.playerOName) {  // is one of the playerO input is blank
+                // then setup computer to play O
+                game.computer.player = game.playerO;
+                game.computer.cpBoxFilledClass = 'box box-filled-1';
+                game.computer.opponent = game.playerX;
                 game.$playerONameLabel[0].textContent = 'the computer';
                 game.playerOName = 'the computer';
                 game.playerOComputer = true;
+
               } else if (!game.playerXName) {
+                // if plarerX input is blank setup computer to play X
+                game.computer.player = game.playerX;
+                game.computer.cpBoxFilledClass = 'box box-filled-2';
+                game.computer.opponent = game.playerO;
                 game.$playerXNameLabel[0].textContent = 'the computer';
                 game.playerXName = 'the computer';
                 game.playerXComputer = true;
