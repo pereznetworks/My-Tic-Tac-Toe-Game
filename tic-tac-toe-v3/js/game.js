@@ -267,7 +267,9 @@ var tictactoe = (function (exports){
                 if (winRowItem[3] === 'O-winner')
                     game.isWinner = 'playerO';
               });
-            } else if (blockedRows == 8){
+            }
+
+            if (blockedRows == 8){
                   // if all rows blocked, then game is a draw
                 game.isWinner = "draw";
               } // end if blocked rows = 8
@@ -294,6 +296,7 @@ var tictactoe = (function (exports){
               game.isTurn = game.playerO;
               game.$liPlayerX.attr('class', 'players');
               game.$liPlayerO.attr('class', 'players active');
+              game.isGameOver(game);
             } // end if game.isTurn
 
           }; // end takeTurn()
@@ -371,7 +374,7 @@ var tictactoe = (function (exports){
                     let possibleTargetsM2 = '';
                     possibleTargetsM2 = game.computer.analyzeGameBoard(game, 'w2', 'w1');
 
-                     if(possibleTargetsM2.possibleBlocks){
+                     if(possibleTargetsM2.possibleBlocks[0].length > 0){
 
                         possibleTargetsM2.possibleBlocks.forEach(function(ptItem, ptIndex){
                         // select target from opponent's w2 to block
@@ -383,7 +386,7 @@ var tictactoe = (function (exports){
 
                       } else {  // if opponent has no w2
 
-                        possibleTargetsM2 = possibleWins.forEach(function(ptItem, ptIndex){
+                        possibleTargetsM2.possibleWins.forEach(function(ptItem, ptIndex){
                           // itrate through target boxes, check for empty corner boxes
                           game.possibleWins.corner.forEach(function(cornerItem, cornerIndex){
 
@@ -411,7 +414,7 @@ var tictactoe = (function (exports){
                     // if opponent has no w2
                       // then find target from computer w1 for a w2
 
-                      if (possibleTargetsM3.possibleWins){  // computers has a w2
+                      if (possibleTargetsM3.possibleWins[0].length > 0){  // computers has a w2
 
                           possibleTargetsM3.possibleWins.forEach(function(ptItem, ptIndex){
 
@@ -425,7 +428,7 @@ var tictactoe = (function (exports){
                           // after each turn is taken, do we have a winner or draw ...
                           game.isGameOver(game);
 
-                         } else if (possibleTargetsM3.possibleBlocks){
+                        } else if (possibleTargetsM3.possibleBlocks[0].length > 0){
 
                            possibleTargetsM3.possibleBlocks.forEach(function(ptItem, ptIndex){
                            // select target from opponent's w2 to block
@@ -452,8 +455,8 @@ var tictactoe = (function (exports){
 
                 } else if (game.computer.moveNo == 4){
 
-                    let possibleTargetsm4 = '';
-                    possibleTargetsm4 = game.computer.analyzeGameBoard(game, 'w2', 'w2');
+                    let possibleTargetsM4 = '';
+                    possibleTargetsM4 = game.computer.analyzeGameBoard(game, 'w2', 'w2');
 
                     // so, this is computer player's LAST MOVE
                     // select target from computer w2 for a win
@@ -461,7 +464,7 @@ var tictactoe = (function (exports){
                     // select target to from opponent w2
                     // to block
 
-                    if (possibleTargetsM4.possibleWins){  // if computers has w2
+                    if (possibleTargetsM4.possibleWins[0].length > 0){  // if computers has w2
 
                         possibleTargetsM4.possibleWins.forEach(function(ptItem, ptIndex){
 
@@ -475,7 +478,7 @@ var tictactoe = (function (exports){
                         // after each turn is taken, do we have a winner or draw ...
                         game.isGameOver(game);
 
-                    } else if(possibleTargetsM4.possibleBlocks){ // if opponent has a w2
+                    } else if(possibleTargetsM4.possibleBlocks[0].length > 0){ // if opponent has a w2
 
                        possibleTargetsM4.possibleBlocks.forEach(function(ptItem, ptIndex){
                        // select target from opponent's w2 to block
@@ -484,6 +487,8 @@ var tictactoe = (function (exports){
                          game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
                          // to play that target box for a block
                        }); // end for each possibleBlocks
+
+                       game.isGameOver(game);
 
                      } // end if/else win or block
 
@@ -603,12 +608,13 @@ var tictactoe = (function (exports){
               });  // reset array used by detectIfWinner()
 
               game.winRowsProgress.forEach(function(winRowArray, indexWinRowArray){
-                if (indexWinRowArray < 3){
+
                   winRowArray.forEach(function(itemArray, indexOfItemArray){
-                    itemArray[1] = 'E';
+                    if (indexOfItemArray < 3){
+                     itemArray[1] = 'E';
+                    }
                   });
-                }
-                winRowArray[3] = 'none';
+                  winRowArray[3] = 'none';
               }); //reset array used by computerPlay()
 
               // make sure each array for O and X filled are empty
@@ -617,6 +623,7 @@ var tictactoe = (function (exports){
               game.filledBoxes = game.emptyArray(game.filledBoxes);
               game.computer.playerFilled = game.emptyArray(game.computer.playerFilled);
               game.computer.opponentFilled = game.emptyArray(game.computer.opponentFilled);
+              game.computer.moveNo = 0;
 
               // reselecting empty $boardElmnt
               game.$boardElmnt = $('#board');
