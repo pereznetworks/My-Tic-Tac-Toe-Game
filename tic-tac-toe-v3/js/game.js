@@ -138,6 +138,173 @@ var tictactoe = (function (exports){
             return possibleTargets;
           }; // end analyzeGameBoard() function
 
+          exports.trackFilledBoxes = function(game, selectedBoxNumber, selectedBy){
+
+              // first figure out whose turn it is
+              if (selectedBy === game.computer.player){
+                activePlayer = 'O';
+                inactivePlayer = 'X';
+              } else {
+                activePlayer = 'X';
+                inactivePlayer = 'O';
+              }
+
+              // as the game progresses, track who fills each box
+              // who has potential winning rows, which rows are blocked
+              // if the active player has just gotten a 3 in a row, a winner
+
+              game.winRowsProgress.forEach(function(itemArray, itemArrayIndex){
+                  // each item is an itemArray has 4 items,
+                  // 0,1 and 2 are arrays,
+                  // item 3 is a string, which player 1 or 2 boxes selected
+                  itemArray.forEach(function(rowItem, indexofRowItem){
+                       // skip condition test for indexofRowItem 3,
+                       // which is not an array
+                    if (indexofRowItem < 3) {
+                      // each rowItem is an array
+                       // has a 2 elements, a box# and a char; E, X, or O
+                      if (rowItem[0] == selectedBoxNumber) {
+                        // if box # = selected boxNumber
+                        rowItem[1] = selectedBy;
+                        if( itemArray[3] == `p${activePlayer}-w2` ){
+                            // and if active player has 2 boxes in this row
+                            itemArray[3] = `${activePlayer}-winner`;
+                            // then this row is a winner
+                          } else if ( itemArray[3] == `p${inactivePlayer}-w2` ) {
+                            // else if inactive player has 2 in boxes in this row
+                            itemArray[3] = `blocked`;
+                            // then marked it as blocked
+                          } else if( itemArray[3] === `p${activePlayer}-w1`){
+                            // else if active player already has 1 box in this row
+                            itemArray[3] = `p${activePlayer}-w2`;
+                            // then label it a row for active player, -w2
+                        } else if ( itemArray[3] == `p${inactivePlayer}-w1` ) {
+                          // else if inactive player has 1 in boxes in this row
+                          itemArray[3] = `blocked`;
+                          // then marked it as blocked
+                        } else if ( itemArray[3] == `none` ){
+                            // if no one has boxes in this row
+                            itemArray[3] = `p${selectedBy}-w1`;
+                            // then label it a row for active player, -w1
+                        }
+                      }
+                    }
+
+                  });
+              });
+
+
+          };// end trackFilledBoxes() method
+
+          exports.emptyArray = function(arrayToEmpty){
+
+            // doing this inorder to keep a 'clean' environment
+            let origArrayLength = arrayToEmpty.length;
+            for (var i = origArrayLength; i > 0; i--){
+              var bucket = arrayToEmpty.pop();
+            }
+            return arrayToEmpty;
+
+            // seems there should be a better way to do this...
+          }; // end emptyArray()
+
+          exports.findTargetBox = function(game, computerORplayer, noBoxesInRow){
+
+            // called by computerPlayer() as part of choosing best move,
+            // find empty box in computer or players's winning row
+
+            // required paramters
+            // game object
+            // computerORplayer; string for 'O' or 'X'
+            // noBoxesInRow; string for '-w2' or '-w1'
+            // isTargetBox; string for 'E'
+
+            const isTargetBox = 'E';
+            const targets = [];
+
+            game.winRowsProgress.forEach(function(rowItem, rowIndex){
+                // does computer or player have 1 or 2 boxes in any row
+                 if (rowItem[3] == `p${computerORplayer}-${noBoxesInRow}`){
+                   // iterate through that row,
+                    rowItem.forEach(function(rowItemArray, rowItemIndex){
+                    // find empty box
+                      if (rowItemArray[1] == isTargetBox){
+                         // choose box represented by rowItemArray[0]
+                         targets.push(rowItemArray[0]);
+                       }  // end if == isTargetBox
+                  }); // end forEach rowItem
+                } // if computer or player has winning row
+            }); // end for winRowsProgress
+
+            return targets;
+
+          }; // end findTargetBox() function
+
+          exports.detectIfWinner = function(game){
+
+            let blockedRows = 0;
+
+            // count blocked rows
+            game.winRowsProgress.forEach(function(winRowItem, winRowIndex){
+              if (winRowItem[3] == 'blocked'){
+                blockedRows += 1;
+              }
+            });  // end forEach to count blocked rows
+
+            // test if any player has a winning row
+            if (game.isTurn === 'X') {
+
+              game.winRowsProgress.forEach(function(winRowItem, winRowIndex){
+                // iterate each item of possible winning rows
+                if (winRowItem[3] === 'X-winner'){
+                    game.isWinner = 'playerX';
+                 }
+               });
+            } else if (game.isTurn === 'O'){
+
+              game.winRowsProgress.forEach(function(winRowItem, winRowIndex){
+                // iterate each item of possible winning rows
+                if (winRowItem[3] === 'O-winner')
+                    game.isWinner = 'playerO';
+              });
+            } else if (blockedRows == 8){
+                  // if all rows blocked, then game is a draw
+                game.isWinner = "draw";
+              } // end if blocked rows = 8
+
+          }; // end detectIfWinner() method
+
+          exports.takeTurn = function(indexNoOfSelectedBox, itemNoOfSelectedBox, game){
+
+            // simplifies playGame() function
+            // can then use in playAgainstComputer()
+            if (game.isTurn === game.playerO) {
+              game.trackFilledBoxes(game, indexNoOfSelectedBox, game.isTurn);
+              game.Ofilled.push(indexNoOfSelectedBox);
+              itemNoOfSelectedBox.setAttribute('class', 'box box-filled-1');
+              game.winner = game.detectIfWinner(game);
+              game.isTurn = game.playerX;
+              game.$liPlayerO.attr('class', 'players');
+              game.$liPlayerX.attr('class', 'players active');
+            } else {
+              game.trackFilledBoxes(game, indexNoOfSelectedBox, game.isTurn);
+              game.Xfilled.push(indexNoOfSelectedBox);
+              itemNoOfSelectedBox.setAttribute('class', 'box box-filled-2');
+              game.winner = game.detectIfWinner(game);
+              game.isTurn = game.playerO;
+              game.$liPlayerX.attr('class', 'players');
+              game.$liPlayerO.attr('class', 'players active');
+            } // end if game.isTurn
+
+          }; // end takeTurn()
+
+          exports.isGameOver = function(game){
+            // after each turn is taken, do we have a winner ...
+            if (game.isWinner === 'playerX' || game.isWinner === 'playerO' || game.isWinner === 'draw' ) {
+              game.finishGame(game);
+            }
+          };  // end isGameOver()
+
           exports.computer.computerPlay = function(game){
 
             // each time it's computer.player's turn
@@ -155,7 +322,8 @@ var tictactoe = (function (exports){
 
                 // use a mouse-over hover-event
                 // so it appears that computer is 'thinking'
-                game.computer.hoverAffect(game);
+                  // game.computer.hoverAffect(game);
+                // needs work
 
                 // based on which move number,
                   // w1 = 1 box in a possible winning row
@@ -215,9 +383,9 @@ var tictactoe = (function (exports){
 
                       } else {  // if opponent has no w2
 
-                        possibleTargetsM2 = possibleWinners.forEach(function(ptItem, ptIndex){
+                        possibleTargetsM2 = possibleWins.forEach(function(ptItem, ptIndex){
                           // itrate through target boxes, check for empty corner boxes
-                          game.possibleWinners.corner.forEach(function(cornerItem, cornerIndex){
+                          game.possibleWins.corner.forEach(function(cornerItem, cornerIndex){
 
                               if(cornerItem == ptItem){
                                 // select target that is a corner box from computer w1 to for a w2
@@ -243,9 +411,9 @@ var tictactoe = (function (exports){
                     // if opponent has no w2
                       // then find target from computer w1 for a w2
 
-                      if (possibleTargetsM3.possibleWinners){  // computers has a w2
+                      if (possibleTargetsM3.possibleWins){  // computers has a w2
 
-                          possibleTargetsM3.possibleWinners.forEach(function(ptItem, ptIndex){
+                          possibleTargetsM3.possibleWins.forEach(function(ptItem, ptIndex){
 
                               // select target from computer w2 for a win
                                 const targetBoxNo = ptItem;
@@ -253,6 +421,9 @@ var tictactoe = (function (exports){
                                 game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
                                 // to play that target box for a win
                               });
+
+                          // after each turn is taken, do we have a winner or draw ...
+                          game.isGameOver(game);
 
                          } else if (possibleTargetsM3.possibleBlocks){
 
@@ -269,7 +440,7 @@ var tictactoe = (function (exports){
                            let possibleTargetsM3w1 = '';
                            possibleTargetsM3w1 = game.computer.analyzeGameBoard(game, 'w1', 'w1');
 
-                           possibleTargetsM3.possibleWinners.forEach(function(pTitem, ptIndex){
+                           possibleTargetsM3.possibleWins.forEach(function(pTitem, ptIndex){
 
                                // select target from computer w1 for a w2
                                  const targetBoxNo = ptItem;
@@ -290,9 +461,9 @@ var tictactoe = (function (exports){
                     // select target to from opponent w2
                     // to block
 
-                    if (possibleTargetsM4.possibleWinners){  // if computers has w2
+                    if (possibleTargetsM4.possibleWins){  // if computers has w2
 
-                        possibleTargetsM4.possibleWinners.forEach(function(ptItem, ptIndex){
+                        possibleTargetsM4.possibleWins.forEach(function(ptItem, ptIndex){
 
                           // select target from computer w2 for a win
                             const targetBoxNo = ptItem;
@@ -300,6 +471,9 @@ var tictactoe = (function (exports){
                             game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
                             // to play that target box for a win
                           });
+
+                        // after each turn is taken, do we have a winner or draw ...
+                        game.isGameOver(game);
 
                     } else if(possibleTargetsM4.possibleBlocks){ // if opponent has a w2
 
@@ -315,235 +489,10 @@ var tictactoe = (function (exports){
 
                 } // end if/else for moveNo
 
-                // after each turn is taken, do we have a winner or draw ...
-                game.isGameOver(game);
 
             } // end if game.isTurn
 
           }; //end computerPlay()
-
-          exports.trackFilledBoxes = function(game, selectedBoxNumber, selectedBy){
-
-              // as the game progresses, track who fills each box
-              game.winRowsProgress.forEach(function(itemArray, itemArrayIndex){
-                  // each item is an itemArray has 4 items,
-                  // 0,1 and 2 are arrays,
-                  // item 3 is a string, which player 1 or 2 boxes selected
-                  itemArray.forEach(function(rowItem, indexofRowItem){
-                       // skip condition test for indexofRowItem 3,
-                       // which is not an array
-                    if (indexofRowItem < 3) {
-                      // each rowItem is an array
-                       // has a 2 elements, a box# and a char; E, X, or O
-                      if (rowItem[0] == selectedBoxNumber) {
-                        // if  this items[box #] = selected boxNumber
-                        rowItem[1] = selectedBy;
-                        if( itemArray[3] == `p${selectedBy}-w2` ){
-                            itemArray[3] = `${selectedBy}-winner`;
-                            // then mark element 3, (string)
-                            // as playerX or O-winner
-                          } else if( itemArray[3] === `p${selectedBy}-w1`){
-                          itemArray[3] = `p${selectedBy}-w2`;
-                          // then mark element 3, (string)
-                          // as playerX or O-w2
-                        } else {
-                          itemArray[3] = `p${selectedBy}-w1`;
-                          // then mark element 3, (string)
-                          // as playerX or O-w1
-                        }
-                      }
-                    }
-
-                  });
-              });
-
-
-          };// end trackFilledBoxes() method
-
-          exports.emptyArray = function(arrayToEmpty){
-
-            // doing this inorder to keep a 'clean' environment
-            let origArrayLength = arrayToEmpty.length;
-            for (var i = origArrayLength; i > 0; i--){
-              var bucket = arrayToEmpty.pop();
-            }
-            return arrayToEmpty;
-
-            // seems there should be a better way to do this...
-          }; // end emptyArray()
-
-          exports.findTargetBox = function(game, computerORplayer, noBoxesInRow){
-
-            // called by computerPlayer() as part of choosing best move,
-            // find empty box in computer or players's winning row
-
-            // required paramters
-            // game object
-            // computerORplayer; string for 'O' or 'X'
-            // noBoxesInRow; string for '-w2' or '-w1'
-            // isTargetBox; string for 'E'
-
-            const isTargetBox = 'E';
-            const targets = [];
-
-            game.winRowsProgress.forEach(function(rowItem, rowIndex){
-                // does computer or player have 1 or 2 boxes in any row
-                 if (rowItem[3] == `p${computerORplayer}-${noBoxesInRow}`){
-                   // iterate through that row,
-                    rowItem.forEach(function(rowItemArray, rowItemIndex){
-                    // find empty box
-                      if (rowItemArray[1] == isTargetBox){
-                         // choose box represented by rowItemArray[0]
-                         targets.push(rowItemArray[0]);
-                       }  // end if == isTargetBox
-                  }); // end forEach rowItem
-                } // if computer or player has winning row
-            }); // end for winRowsProgress
-
-            return targets;
-
-          }; // end findTargetBox() function
-
-          exports.detectIfWinner = function(game){
-
-            let blockedRows = 0;
-
-            // detect possible win or blocked rows
-              // at the end of each player's turn
-              // compare current or last box selection
-                // if only current player has 1,2 boxes in winning row,
-                  // mark with player's name
-                  // else mark row as blocked
-            if (game.isTurn === game.playerO){
-              const OfilledItem = game.Ofilled[(game.Ofilled.length - 1)];
-                // for current box selection, last element in Ofilled array
-                game.winRows.forEach(function(winRowItem, winRowIndex){
-                  // iterate each item of each set of possible winning rows
-                  let currentWinRowIndex = winRowIndex;
-                  winRowItem.forEach(function(rowItem, rowIndex){
-                    // if any match, test for row blocked,
-                      // if is still a possible win or if row is a winner
-                    if (rowItem === OfilledItem && winRowItem[3] === 'pO-w2'){
-
-                        game.winRows[currentWinRowIndex][3] = 'pO-winner';
-
-                    } else if ( rowItem === OfilledItem && winRowItem[3] === 'pO-w1'){
-
-                         game.winRows[currentWinRowIndex][3] = 'pO-w2';
-
-                    } else if (rowItem === OfilledItem
-                        && winRowItem[3] === 'none'){
-
-                         game.winRows[currentWinRowIndex][3] = 'pO-w1';
-
-                    } else if (rowItem === OfilledItem){
-
-                         game.winRows[currentWinRowIndex][3] = 'blocked';
-
-                    }
-                  });
-                });
-
-            } else {
-               const XfilledItem = game.Xfilled[(game.Xfilled.length - 1)];
-                 // for current box selection, last element in Ofilled array
-                 game.winRows.forEach(function(winRowItem, winRowIndex){
-                   // iterate each item of each set of possible winning rows
-                   let currentWinRowIndex = winRowIndex;
-                   winRowItem.forEach(function(rowItem, rowIndex){
-                     // if any match, test for row blocked,
-                       // if is still a possible win or if row is a winner
-                     if (rowItem === XfilledItem
-                         && winRowItem[3] === 'pX-w2'){
-
-                         game.winRows[currentWinRowIndex][3] = 'pX-winner';
-
-                     } else if ( rowItem === XfilledItem
-                         && winRowItem[3] === 'pX-w1'){
-
-                         game.winRows[currentWinRowIndex][3] = 'pX-w2';
-
-                     } else if (rowItem === XfilledItem
-                         && winRowItem[3] === 'none'){
-
-                        game.winRows[currentWinRowIndex][3] = 'pX-w1';
-
-                     } else if (rowItem === XfilledItem){
-
-                        game.winRows[currentWinRowIndex][3] = 'blocked';
-
-                     }
-                   });
-                 });
-
-            } // end if forEach to detect possible win or blocked row
-
-
-            // to simpilify placed this if/else byiteslf
-               // at end of each players turn
-              // test if any player has a winning row
-            if (game.isTurn === 'X') {
-
-              game.winRows.forEach(function(winRowItem, winRowIndex){
-                // iterate each item of possible winning rows
-                if (winRowItem[3] === 'pX-winner'){
-                    game.isWinner = 'playerX';
-                 }
-               });
-            } else if (game.isTurn === 'O'){
-
-              game.winRows.forEach(function(winRowItem, winRowIndex){
-                // iterate each item of possible winning rows
-                if (winRowItem[3] === 'pO-winner')
-                    game.isWinner = 'playerO';
-              });
-            } // end of a player as won
-
-            // test for how many blocked rows
-              game.winRows.forEach(function(winRowItem, winRowIndex){
-                // iterate each item of possible winning rows
-                if (winRowItem[3] === 'blocked') {
-                    blockedRows += 1;
-                  }
-              });  // end forEach to count blocked rows
-
-              if (blockedRows == 8){
-                  // if all rows blocked, then game is a draw
-                game.isWinner = "draw";
-              } // end if blocked rows = 8
-
-          }; // end detectIfWinner() method
-
-          exports.takeTurn = function(indexNoOfSelectedBox, itemNoOfSelectedBox, game){
-
-            // simplifies playGame() function
-            // can then use in playAgainstComputer()
-            if (game.isTurn === game.playerO) {
-              game.trackFilledBoxes(game, indexNoOfSelectedBox, game.isTurn);
-              game.Ofilled.push(indexNoOfSelectedBox);
-              itemNoOfSelectedBox.setAttribute('class', 'box box-filled-1');
-              game.winner = game.detectIfWinner(game);
-              game.isTurn = game.playerX;
-              game.$liPlayerO.attr('class', 'players');
-              game.$liPlayerX.attr('class', 'players active');
-            } else {
-              game.trackFilledBoxes(game, indexNoOfSelectedBox, game.isTurn);
-              game.Xfilled.push(indexNoOfSelectedBox);
-              itemNoOfSelectedBox.setAttribute('class', 'box box-filled-2');
-              game.winner = game.detectIfWinner(game);
-              game.isTurn = game.playerO;
-              game.$liPlayerX.attr('class', 'players');
-              game.$liPlayerO.attr('class', 'players active');
-            } // end if game.isTurn
-
-          }; // end takeTurn()
-
-          exports.isGameOver = function(game){
-            // after each turn is taken, do we have a winner ...
-            if (game.isWinner === 'playerX' || game.isWinner === 'playerO' || game.isWinner === 'draw' ) {
-              game.finishGame(game);
-            }
-          };  // end isGameOver()
 
           exports.playGame = function(game){
 
@@ -590,7 +539,7 @@ var tictactoe = (function (exports){
                     game.takeTurn(index, item, game);
                     // after each turn is taken, do we have a winner ...
                     game.isGameOver(game);
-                    // if either is true, start computer player
+                    // if either below is true, start computer player
                     if (game.playerXComputer == true || game.playerOComputer == true ){
                       game.computer.computerPlay(game);
                     }
@@ -772,3 +721,74 @@ var tictactoe = (function (exports){
           return exports   // returning the entire object and it's methods
 
 }(tictactoe || { } ));
+
+//
+// // detect possible win or blocked rows
+//   // at the end of each player's turn
+//   // compare current or last box selection
+//     // if only current player has 1,2 boxes in winning row,
+//       // mark with player's name
+//       // else mark row as blocked
+// if (game.isTurn === game.playerO){
+//   const OfilledItem = game.Ofilled[(game.Ofilled.length - 1)];
+//     // for current box selection, last element in Ofilled array
+//     game.winRows.forEach(function(winRowItem, winRowIndex){
+//       // iterate each item of each set of possible winning rows
+//       let currentWinRowIndex = winRowIndex;
+//       winRowItem.forEach(function(rowItem, rowIndex){
+//         // if any match, test for row blocked,
+//           // if is still a possible win or if row is a winner
+//         if (rowItem === OfilledItem && winRowItem[3] === 'pO-w2'){
+//
+//             game.winRows[currentWinRowIndex][3] = 'pO-winner';
+//
+//         } else if ( rowItem === OfilledItem && winRowItem[3] === 'pO-w1'){
+//
+//              game.winRows[currentWinRowIndex][3] = 'pO-w2';
+//
+//         } else if (rowItem === OfilledItem
+//             && winRowItem[3] === 'none'){
+//
+//              game.winRows[currentWinRowIndex][3] = 'pO-w1';
+//
+//         } else if (rowItem === OfilledItem){
+//
+//              game.winRows[currentWinRowIndex][3] = 'blocked';
+//
+//         }
+//       });
+//     });
+//
+// } else {
+//    const XfilledItem = game.Xfilled[(game.Xfilled.length - 1)];
+//      // for current box selection, last element in Ofilled array
+//      game.winRows.forEach(function(winRowItem, winRowIndex){
+//        // iterate each item of each set of possible winning rows
+//        let currentWinRowIndex = winRowIndex;
+//        winRowItem.forEach(function(rowItem, rowIndex){
+//          // if any match, test for row blocked,
+//            // if is still a possible win or if row is a winner
+//          if (rowItem === XfilledItem
+//              && winRowItem[3] === 'pX-w2'){
+//
+//              game.winRows[currentWinRowIndex][3] = 'pX-winner';
+//
+//          } else if ( rowItem === XfilledItem
+//              && winRowItem[3] === 'pX-w1'){
+//
+//              game.winRows[currentWinRowIndex][3] = 'pX-w2';
+//
+//          } else if (rowItem === XfilledItem
+//              && winRowItem[3] === 'none'){
+//
+//             game.winRows[currentWinRowIndex][3] = 'pX-w1';
+//
+//          } else if (rowItem === XfilledItem){
+//
+//             game.winRows[currentWinRowIndex][3] = 'blocked';
+//
+//          }
+//        });
+//      });
+//
+// } // end if forEach to detect possible win or blocked row
