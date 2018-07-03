@@ -233,7 +233,7 @@ var tictactoe = (function (exports){
                                if (i == randomBoxNumber3){
                                    // TODO: randomize which corner computer selects
                                    // then choose that corner
-                                   const targetBoxNo = targetBoxes[randomBoxNumber2];
+                                   const targetBoxNo = targetBoxes[randomBoxNumber3];
                                    //then call takeTurn
                                    game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
                                     // to play that center box
