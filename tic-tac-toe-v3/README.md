@@ -64,20 +64,31 @@
 
       NEED TO FIX:
 
-        1: playerO-active label may turn on or off at incorrect times
+        1: FIXED
+           bug: playerO-active label may turn on or off at incorrect times
+           set a setTimeout with each turn computer takes
+             so computer player active label get a chance to be 'actived'
+           fixed new game playerO label also
+             on newGame, reset both $playerX and $playerO labels to 'inactive'
 
-        2: when an opponent gets flanked, immediate winner declared
+        2: FIXED
+           bug: human player can click and fill in a box when it's computer's turn
+            which cause even more strange stuff to happen, yuk..
+           disabled click and hover events on $(li.box)
+            if computer player is enabled and it's computer's turn 
+
+        3: when an opponent gets flanked, immediate winner declared
             need to wait for 3 in a row to be actually selected
             perhaps, highlighting the winning row and waiting for 2-3 seconds
 
-        3: ensure that draw or tie is not declared to early
+        4: ensure that draw or tie is not declared to early
             when only 1 square is left empty with no possible wins
 
-        4: ensure that game scenarios account for side or corner possible win-targets
+        5: ensure that game scenarios account for side or corner possible win-targets
             after moves, 2,3,4
             including the randomness if more than one win-target possible
 
-        5: Fix the hoverAffect() method,
+        6: Fix the hoverAffect() method,
             so that boxes fill-in then disappear, as if computer is thinking.
 
 # 4: DONE: Display the player’s name if they win the game
