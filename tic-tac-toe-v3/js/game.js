@@ -1,72 +1,291 @@
 
 var tictactoe = (function (exports){
 
-          var exports = {
-              needReset: false,
-              playerO: 'O',
-              playerX: 'X',
-              playerOName: '',
-              playerXName: '',
-              playerOComputer: false,
-              playerXComputer: false,
-              computerTurnComplete: false,
-              isTurn: 'X',
-              isWinner: 'keep playing',
-              Ofilled: [],
-              Xfilled: [],
-              filledBoxes: [],
-              winRows: [  // possible winning rows
-                  [0,1,2,'none'],  // 0
-                  [3,4,5,'none'],  // 1
-                  [6,7,8,'none'],  // 2
-                  [0,3,6,'none'],  // 3
-                  [1,4,7,'none'],  // 4
-                  [2,5,8,'none'],  // 5
-                  [0,4,8,'none'],  // 6
-                  [2,4,6,'none'],  // 7
-                ],
-              winRowsProgress: [  // possible winning rows
-                  [[0,'E'],[1,'E'],[2,'E'],'none'],  // 0
-                  [[3,'E'],[4,'E'],[5,'E'],'none'],  // 1
-                  [[6,'E'],[7,'E'],[8,'E'],'none'],  // 2
-                  [[0,'E'],[3,'E'],[6,'E'],'none'],  // 3
-                  [[1,'E'],[4,'E'],[7,'E'],'none'],  // 4
-                  [[2,'E'],[5,'E'],[8,'E'],'none'],  // 5
-                  [[0,'E'],[4,'E'],[8,'E'],'none'],  // 6
-                  [[2,'E'],[4,'E'],[6,'E'],'none'],  // 7
-                ],
-              $liPlayerX: '',
-              $liPlayerO: '',
-              $boxes: '',
-              $boardElmnt: '',
-              $startElmnt: '',
-              $finishElmnt: '',
-              $playerONameInput: '',
-              $playerXNameInput: '',
-              $playerONameLabel: '',
-              $playerXNameLabel: '',
+        var exports = {
+            needReset: false,
+            playerO: 'O',
+            playerX: 'X',
+            playerOName: '',
+            playerXName: '',
+            playerOComputer: false,
+            playerXComputer: false,
+            computerTurnComplete: false,
+            isTurn: 'X',
+            isWinner: 'keep playing',
+            Ofilled: [],
+            Xfilled: [],
+            filledBoxes: [],
+            winRows: [  // possible winning rows
+                [0,1,2,'none'],  // 0
+                [3,4,5,'none'],  // 1
+                [6,7,8,'none'],  // 2
+                [0,3,6,'none'],  // 3
+                [1,4,7,'none'],  // 4
+                [2,5,8,'none'],  // 5
+                [0,4,8,'none'],  // 6
+                [2,4,6,'none'],  // 7
+              ],
+            winRowsProgress: [  // possible winning rows
+                [[0,'E'],[1,'E'],[2,'E'],'none'],  // 0
+                [[3,'E'],[4,'E'],[5,'E'],'none'],  // 1
+                [[6,'E'],[7,'E'],[8,'E'],'none'],  // 2
+                [[0,'E'],[3,'E'],[6,'E'],'none'],  // 3
+                [[1,'E'],[4,'E'],[7,'E'],'none'],  // 4
+                [[2,'E'],[5,'E'],[8,'E'],'none'],  // 5
+                [[0,'E'],[4,'E'],[8,'E'],'none'],  // 6
+                [[2,'E'],[4,'E'],[6,'E'],'none'],  // 7
+              ],
+            $liPlayerX: '',
+            $liPlayerO: '',
+            $boxes: '',
+            $boardElmnt: '',
+            $startElmnt: '',
+            $finishElmnt: '',
+            $playerONameInput: '',
+            $playerXNameInput: '',
+            $playerONameLabel: '',
+            $playerXNameLabel: '',
 
-          }; // end exports object
+        }; // end exports object
 
           exports.computer = {
-                turnComplete: false,
-                moveNo: 0,
-                player: '',
-                opponent: '',
-                possibleBlock1: '',
-                possibleBlock2: '',
-                possibleWin1: '',
-                possibleWin2: '',
-                cpBoxFilledClass: '',
-                opponentBoxFilledClass: '',
-                playerFilled: [],
-                opponentFilled: [],
-                possibleWinners: {
-                  center: [4],
-                  corners: [0,2,6,8],
-                  sides: [1,3,5,7]
-                }
-            };
+              turnComplete: false,
+              moveNo: 0,
+              player: '',
+              opponent: '',
+              possibleBlock1: '',
+              possibleBlock2: '',
+              possibleWin1: '',
+              possibleWin2: '',
+              cpBoxFilledClass: '',
+              opponentBoxFilledClass: '',
+              playerFilled: [],
+              opponentFilled: [],
+              possibleWinners: {
+                center: [4],
+                corners: [0,2,6,8],
+                sides: [1,3,5,7]
+              },
+          };
+
+          exports.computer.computerPlay = function(game){
+
+            // each time it's computer.player's turn
+            if (game.isTurn === game.computer.player) {
+
+              // increment moveNo,
+              game.computer.moveNo += 1;
+
+              // get opponent player filled boxes so computer can 'see' the game board
+              if (game.playerXComputer == true) {
+                 game.computer.playerFilled.push(game.Xfilled[(game.Xfilled.length - 1)]);
+              } else if (game.playerOComputer == true) {
+                 game.computer.playerFilled.push(game.Ofilled[(game.Ofilled.length - 1)]);
+              }
+
+                // use a mouse-over hover-event
+                // so it appears that computer is 'thinking'
+                  // game.computer.hoverAffect(game);
+                // needs work
+
+                // based on which move number,
+                  // w1 = 1 box in a possible winning row
+                  // w2 = 2 boxes in a possible winning row
+                  // target = empty box in possible winning row
+                    // using analyzeGameBoard()
+                      // find target boxes
+                      // possibleBlocks = target boxes to block opponent's w1 or w2
+                      // possibleWins = target boxes for computer to get a w1 or w2
+
+                if (game.computer.moveNo == 1) {
+
+                  if (game.$boxes[4].className !== "box box-filled-1" && game.$boxes[4].className !== "box box-filled-2"){
+                    const targetBoxNo = 4;
+                    // if center box is empty
+                    game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+
+                  } else {
+
+                    const randomBoxNumber = Math.floor(Math.random() * 4);
+
+                    for (let i = 0; i < game.computer.possibleWinners.corners.length; i++){
+                      if (game.$boxes[i]!== "box box-filled-1" && game.$boxes[i]!== "box box-filled-2"){
+                        if (i == randomBoxNumber){
+                          // TODO: randomize which corner computer selects
+                          // then choose that corner
+                          const targetBoxNo = game.computer.possibleWinners.corners[i];
+                          //then call takeTurn
+                          game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+                           // to play that center box
+                          i = game.computer.possibleWinners.corners.length;
+                        }
+                       }
+                    }
+                    // game.computer.possibleWinners.corners.forEach(function(cornerItem, cornerIndex){
+                    //   // is possible target a corner box ?
+                    //
+                    // });
+                  }
+
+                } else if (game.computer.moveNo == 2){
+
+                    let possibleTargetsM2 = '';
+                    possibleTargetsM2 = game.computer.analyzeGameBoard(game, 'w2', 'w1');
+
+                     if(possibleTargetsM2.possibleBlocks[0].length > 0){
+
+                        possibleTargetsM2.possibleBlocks.forEach(function(ptItem, ptIndex){
+                        // select target from opponent's w2 to block
+                          const targetBoxNo = ptItem;
+                          //then call takeTurn
+                          game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+                          // to play that target box for a block
+                        }); // end for each possibleBlocks
+
+                      } else {  // if opponent has no w2
+
+                        possibleTargetsM2.possibleWins.forEach(function(ptItem, ptIndex){
+                          // itrate through target boxes, check for empty corner boxes
+                          game.computer.possibleWinners.corners.forEach(function(cornerItem, cornerIndex){
+
+                              if(cornerItem == ptItem){
+                                // select target that is a corner box from computer w1 to for a w2
+                                const targetBoxNo = ptItem;
+                                //then call takeTurn
+                                game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+                                // to play that target box for a w2
+                               }
+
+                          }); // end for each corner box
+                        }); // end for each possibleWinners
+
+                      } // end if possible to Block opponent else go for 2 in a row
+
+                } else if (game.computer.moveNo == 3){
+
+                    let possibleTargetsM3 = '';
+                    possibleTargetsM3 = game.computer.analyzeGameBoard(game, 'w2', 'w2');
+
+                    // select target from computer w2 for a win
+                      // if no target from computer w2,( it's blocked)
+                    // then select target to block opponent w2
+                    // if opponent has no w2
+                      // then find target from computer w1 for a w2
+
+                      if (possibleTargetsM3.possibleWins[0].length > 0){  // computers has a w2
+
+                          possibleTargetsM3.possibleWins.forEach(function(ptItem, ptIndex){
+
+                              // select target from computer w2 for a win
+                                const targetBoxNo = ptItem[0];
+                                //then call takeTurn
+                                game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+                                // to play that target box for a win
+                              });
+
+                          // after each turn is taken, do we have a winner or draw ...
+                          game.isGameOver(game);
+
+                        } else if (possibleTargetsM3.possibleBlocks[0].length > 0){
+
+                           possibleTargetsM3.possibleBlocks.forEach(function(ptItem, ptIndex){
+                           // select target from opponent's w2 to block
+                             const targetBoxNo = ptItem[0];
+                             //then call takeTurn
+                             game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+                             // to play that target box for a block
+                           }); // end for each possibleBlocks
+
+                         } else { // opponent has no w2s
+
+                           let possibleTargetsM3w1 = '';
+                           possibleTargetsM3w1 = game.computer.analyzeGameBoard(game, 'w1', 'w1');
+
+                           possibleTargetsM3w1.possibleWins.forEach(function(ptItem, ptIndex){
+
+                               // select target from computer w1 for a w2
+                                 const targetBoxNo = ptItem[0];
+                                 //then call takeTurn
+                                 game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+                                 // to play that target box for a w2
+                               });
+                        } // end if possible to Block opponent else go for 2 in a row
+
+                } else if (game.computer.moveNo == 4){
+
+                    let possibleTargetsM4 = '';
+                    possibleTargetsM4 = game.computer.analyzeGameBoard(game, 'w2', 'w2');
+
+                    // so, this is computer player's LAST MOVE
+                    // select target from computer w2 for a win
+                    // or
+                    // select target to from opponent w2
+                    // to block
+
+                    if (possibleTargetsM4.possibleWins[0].length > 0){  // if computers has w2
+
+                        possibleTargetsM4.possibleWins.forEach(function(ptItem, ptIndex){
+
+                          // select target from computer w2 for a win
+                            const targetBoxNo = ptItem[0];
+                            //then call takeTurn
+                            game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+                            // to play that target box for a win
+                          });
+
+                        // after each turn is taken, do we have a winner or draw ...
+                        game.isGameOver(game);
+
+                    } else if(possibleTargetsM4.possibleBlocks[0].length > 0){ // if opponent has a w2
+
+                       possibleTargetsM4.possibleBlocks.forEach(function(ptItem, ptIndex){
+                       // select target from opponent's w2 to block
+                         const targetBoxNo = ptItem[0];
+                         //then call takeTurn
+                         game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+                         // to play that target box for a block
+                       }); // end for each possibleBlocks
+
+                       game.isGameOver(game);
+
+                     } else {
+                       
+                       let possibleTargetsM4w1 = '';
+                       possibleTargetsM4w1 = game.computer.analyzeGameBoard(game, 'w1', 'w1');
+
+                       if (possibleTargetsM4w1.possibleWins[0].length > 0){
+                         possibleTargetsM4w1.possibleWins.forEach(function(ptItem, ptIndex){
+
+                           // select target from computer w1 for a w2
+                             const targetBoxNo = ptItem;
+                             //then call takeTurn
+                             game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+                             // to play that target box for a w2
+                           });
+
+                           game.isGameOver(game);
+
+                        } else if(possibleTargetsM4w1.possibleBlocks[0].length > 0){ // if opponent has a w2
+
+                           possibleTargetsM4w1.possibleBlocks.forEach(function(ptItem, ptIndex){
+                           // select target from opponent's w2 to block
+                             const targetBoxNo = ptItem[0];
+                             //then call takeTurn
+                             game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+                             // to play that target box for a block
+                           }); // end for each possibleBlocks
+
+                           game.isGameOver(game);
+
+                         }
+                     }// end if/else win or block
+
+                } // end if/else for moveNo
+
+
+            } // end if game.isTurn
+
+          }; //end computerPlay()
 
           exports.computer.turnComplete = function(game){
             if (game.computerTurnComplete) {
@@ -307,187 +526,6 @@ var tictactoe = (function (exports){
               game.finishGame(game);
             }
           };  // end isGameOver()
-
-          exports.computer.computerPlay = function(game){
-
-            // each time it's computer.player's turn
-            if (game.isTurn === game.computer.player) {
-
-              // increment moveNo,
-              game.computer.moveNo += 1;
-
-              // get opponent player filled boxes so computer can 'see' the game board
-              if (game.playerXComputer == true) {
-                 game.computer.playerFilled.push(game.Xfilled[(game.Xfilled.length - 1)]);
-              } else if (game.playerOComputer == true) {
-                 game.computer.playerFilled.push(game.Ofilled[(game.Ofilled.length - 1)]);
-              }
-
-                // use a mouse-over hover-event
-                // so it appears that computer is 'thinking'
-                  // game.computer.hoverAffect(game);
-                // needs work
-
-                // based on which move number,
-                  // w1 = 1 box in a possible winning row
-                  // w2 = 2 boxes in a possible winning row
-                  // target = empty box in possible winning row
-                    // using analyzeGameBoard()
-                      // find target boxes
-                      // possibleBlocks = target boxes to block opponent's w1 or w2
-                      // possibleWins = target boxes for computer to get a w1 or w2
-
-                if (game.computer.moveNo == 1) {
-
-                  if (game.$boxes[4].className !== "box box-filled-1" || game.$boxes[4].className !== "box box-filled-2"){
-                    const targetBoxNo = 4;
-                    // if center box is empty
-                    game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-
-                  } else {
-
-                    game.computer.possibleWinners.corners.forEach(function(cornerItem, cornerIndex){
-                      // is possible target a corner box ?
-                       if (game.$boxes[cornerItem]!== "box box-filled-1" || game.$boxes[cornerItem]!== "box box-filled-2"){
-                         // TODO: randomize which corner computer selects
-                         // then choose that corner
-                         const targetBoxNo = cornerItem;
-                         //then call takeTurn
-                         game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-                          // to play that center box
-                        }
-                    });
-                  }
-
-                } else if (game.computer.moveNo == 2){
-
-                    let possibleTargetsM2 = '';
-                    possibleTargetsM2 = game.computer.analyzeGameBoard(game, 'w2', 'w1');
-
-                     if(possibleTargetsM2.possibleBlocks[0].length > 0){
-
-                        possibleTargetsM2.possibleBlocks.forEach(function(ptItem, ptIndex){
-                        // select target from opponent's w2 to block
-                          const targetBoxNo = ptItem[0];
-                          //then call takeTurn
-                          game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-                          // to play that target box for a block
-                        }); // end for each possibleBlocks
-
-                      } else {  // if opponent has no w2
-
-                        possibleTargetsM2.possibleWins.forEach(function(ptItem, ptIndex){
-                          // itrate through target boxes, check for empty corner boxes
-                          game.possibleWins.corner.forEach(function(cornerItem, cornerIndex){
-
-                              if(cornerItem == ptItem){
-                                // select target that is a corner box from computer w1 to for a w2
-                                const targetBoxNo = ptItem[0];
-                                //then call takeTurn
-                                game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-                                // to play that target box for a w2
-                               }
-
-                          }); // end for each corner box
-                        }); // end for each possibleWinners
-
-                      } // end if possible to Block opponent else go for 2 in a row
-
-                } else if (game.computer.moveNo == 3){
-
-                    let possibleTargetsM3 = '';
-                    possibleTargetsM3 = game.computer.analyzeGameBoard(game, 'w2', 'w2');
-
-                    // select target from computer w2 for a win
-                      // if no target from computer w2,( it's blocked)
-                    // then select target to block opponent w2
-                    // if opponent has no w2
-                      // then find target from computer w1 for a w2
-
-                      if (possibleTargetsM3.possibleWins[0].length > 0){  // computers has a w2
-
-                          possibleTargetsM3.possibleWins.forEach(function(ptItem, ptIndex){
-
-                              // select target from computer w2 for a win
-                                const targetBoxNo = ptItem[0];
-                                //then call takeTurn
-                                game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-                                // to play that target box for a win
-                              });
-
-                          // after each turn is taken, do we have a winner or draw ...
-                          game.isGameOver(game);
-
-                        } else if (possibleTargetsM3.possibleBlocks[0].length > 0){
-
-                           possibleTargetsM3.possibleBlocks.forEach(function(ptItem, ptIndex){
-                           // select target from opponent's w2 to block
-                             const targetBoxNo = ptItem[0];
-                             //then call takeTurn
-                             game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-                             // to play that target box for a block
-                           }); // end for each possibleBlocks
-
-                         } else { // opponent has no w2s
-
-                           let possibleTargetsM3w1 = '';
-                           possibleTargetsM3w1 = game.computer.analyzeGameBoard(game, 'w1', 'w1');
-
-                           possibleTargetsM3w1.possibleWins.forEach(function(ptItem, ptIndex){
-
-                               // select target from computer w1 for a w2
-                                 const targetBoxNo = ptItem[0];
-                                 //then call takeTurn
-                                 game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-                                 // to play that target box for a w2
-                               });
-                        } // end if possible to Block opponent else go for 2 in a row
-
-                } else if (game.computer.moveNo == 4){
-
-                    let possibleTargetsM4 = '';
-                    possibleTargetsM4 = game.computer.analyzeGameBoard(game, 'w2', 'w2');
-
-                    // so, this is computer player's LAST MOVE
-                    // select target from computer w2 for a win
-                    // or
-                    // select target to from opponent w2
-                    // to block
-
-                    if (possibleTargetsM4.possibleWins[0].length > 0){  // if computers has w2
-
-                        possibleTargetsM4.possibleWins.forEach(function(ptItem, ptIndex){
-
-                          // select target from computer w2 for a win
-                            const targetBoxNo = ptItem[0];
-                            //then call takeTurn
-                            game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-                            // to play that target box for a win
-                          });
-
-                        // after each turn is taken, do we have a winner or draw ...
-                        game.isGameOver(game);
-
-                    } else if(possibleTargetsM4.possibleBlocks[0].length > 0){ // if opponent has a w2
-
-                       possibleTargetsM4.possibleBlocks.forEach(function(ptItem, ptIndex){
-                       // select target from opponent's w2 to block
-                         const targetBoxNo = ptItem[0];
-                         //then call takeTurn
-                         game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-                         // to play that target box for a block
-                       }); // end for each possibleBlocks
-
-                       game.isGameOver(game);
-
-                     } // end if/else win or block
-
-                } // end if/else for moveNo
-
-
-            } // end if game.isTurn
-
-          }; //end computerPlay()
 
           exports.playGame = function(game){
 
