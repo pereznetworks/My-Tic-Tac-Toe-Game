@@ -10,7 +10,7 @@
         When the player clicks the start button the start screen disappears, the board appears, and the game begins.
         The game starts with X, and the X player box is highlighted to indicate this.
 
-    Game play:
+# Game play:
 
         The game play following these rules:
 
@@ -30,7 +30,7 @@
 
         When the game ends, the board disappears and the game end screen appears.
 
-  Game end:
+# Game end:
 
         The word "Winner" appears and the screen is the players color, Blue for X and Orange for O.
 
@@ -46,6 +46,38 @@
 
 # 2: DONE Display the player’s name on the board screen during game play
 
-# 3: IN PROGRESS Add programming to support playing against the computer. Only one player plays; the other is controlled by your programming.
+# 3: DEBUGGING Add programming to support playing against the computer.
+
+      If only one player name plays; the other played by the computer.
+
+      Ideal: Computer will play to win, but should play to bitter end, even if draw.
+             Will always block opponents 2 in a row.
+             Randomness built-in where more than 1 choice for win possible.
+             So the computer will not respond that same to every scenario.
+
+             while an unbeatable computer player is admirable,
+             making the computer player appear to lose 'naturally' or 'randomly',
+             makes playing more fun for the human player  
+
+      NEED TO TEST COMPUTER PLAYING AS X.
+      FOR COMPUTER PLAYING AS O, MOST scenarios tested.
+
+      NEED TO FIX:
+
+        1: playerO-active label may turn on or off at incorrect times
+
+        2: when an opponent gets flanked, immediate winner declared
+            need to wait for 3 in a row to be actually selected
+            perhaps, highlighting the winning row and waiting for 2-3 seconds
+
+        3: ensure that draw or tie is not declared to early
+            when only 1 square is left empty with no possible wins
+
+        4: ensure that game scenarios account for side or corner possible win-targets
+            after moves, 2,3,4
+            including the randomness if more than one win-target possible
+
+        5: Fix the hoverAffect() method,
+            so that boxes fill-in then disappear, as if computer is thinking.
 
 # 4: DONE: Display the player’s name if they win the game
