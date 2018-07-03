@@ -227,6 +227,18 @@ var tictactoe = (function (exports){
                                  }); // end for each possibleWinners
                                }); // end for each corner box
 
+                              if (targetBoxes.length == 0){
+                                game.computer.possibleWinners.sides.forEach(function(sideItem, sideIndex){
+                                  possibleTargetsM3w1.possibleWins[0].forEach(function(ptItem, ptIndex){
+                                   // itrate through target boxes, check for empty side boxes
+                                      if(sideItem == ptItem){
+                                        // select target that is a corner box from computer w1 to for a w2
+                                        targetBoxes.push(ptItem);
+                                        // to play that target box for a w2
+                                       }
+                                  }); // end for each possibleWinners
+                                }); // end for each corner box
+                              } 
                               const randomBoxNumber3 = Math.floor(Math.random() * 2);
 
                               for (let i = 0; i < targetBoxes.length; i++){
