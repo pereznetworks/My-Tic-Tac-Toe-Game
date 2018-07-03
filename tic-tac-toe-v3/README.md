@@ -75,11 +75,15 @@
            bug: human player can click and fill in a box when it's computer's turn
             which cause even more strange stuff to happen, yuk..
            disabled click and hover events on $(li.box)
-            if computer player is enabled and it's computer's turn 
+            if computer player is enabled and it's computer's turn
 
-        3: when an opponent gets flanked, immediate winner declared
+        3: when one player gets 'flanked', immediate winner declared
             need to wait for 3 in a row to be actually selected
-            perhaps, highlighting the winning row and waiting for 2-3 seconds
+            perhaps, highlighting the winning row and waiting for 1-2 seconds
+
+            ...okay, weird unintended programmed behavior...
+            in the 'flanked' scenario, the 3rd box in the unblocked row ...
+              .. actually get's filled in !?!?!?!?
 
         4: ensure that draw or tie is not declared to early
             when only 1 square is left empty with no possible wins
@@ -88,7 +92,7 @@
             after moves, 2,3,4
             including the randomness if more than one win-target possible
 
-        6: Fix the hoverAffect() method,
+        6: Fix the computer player's hoverAffect() method,
             so that boxes fill-in then disappear, as if computer is thinking.
 
 # 4: DONE: Display the player’s name if they win the game
