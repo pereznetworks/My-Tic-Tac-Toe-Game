@@ -3,6 +3,7 @@ var tictactoe = (function (exports){
 
         var exports = {
             needReset: false,
+            setNewPlayers: false,
             playerO: 'O',
             playerX: 'X',
             playerOName: '',
@@ -320,20 +321,25 @@ var tictactoe = (function (exports){
             game.$boardElmnt.hide();
             game.$finishElmnt.show();
 
-            $('#finish .button').click(function(){
+            $('#resetGame').click(function(){
 
               game.needReset = true;
               game.setupNewGame(game);
               game.playGame(game);
 
             });
+
+            $('#newPlayers').click(function(){
+
+              game.setNewPlayers = true;
+              game.needReset = true;
+              game.playerOName = '';
+              game.playerXName = '';
+              game.setupNewGame(game);
+            });
           }; // end finishGame() method
 
           exports.setupNewGame = function(game){
-
-            game.$startElmnt.hide();
-            game.$finishElmnt.hide();
-            game.isWinner = 'keep playing';
 
             if (game.needReset) { // make sure board is cleared for new game
 
@@ -365,17 +371,17 @@ var tictactoe = (function (exports){
               game.filledBoxes = game.emptyArray(game.filledBoxes);
               game.computer.moveNo = 0;
 
-              // reselecting empty $boardElmnt
-              game.$boardElmnt = $('#board');
-              game.$boardElmnt.show();
+              // // reselecting empty $boardElmnt
+              // game.$boardElmnt = $('#board');
+              // game.$boardElmnt.show();
 
-              // reset flag
+              // now that game is reset, set needReset to false
               game.needReset = false;
 
             } else { // if this is not a reset, but the FIRST game...
 
-              if (!game.playerOName) {  // is one of the playerO input is blank
-                // then setup computer to play O
+              if (!game.playerOName) {  // if one of the player inputs is blank
+                // if player O name input blank, then setup computer to play O
                 game.computer.player = game.playerO;
                 game.computer.cpBoxFilledClass = 'box box-filled-1';
                 game.computer.opponent = game.playerX;
@@ -384,7 +390,7 @@ var tictactoe = (function (exports){
                 game.playerOComputer = true;
 
               } else if (!game.playerXName) {
-                // if plarerX input is blank setup computer to play X
+                // if playerX name input is blank setup computer to play X
                 game.computer.player = game.playerX;
                 game.computer.cpBoxFilledClass = 'box box-filled-2';
                 game.computer.opponent = game.playerO;
@@ -393,19 +399,35 @@ var tictactoe = (function (exports){
                 game.playerXComputer = true;
               }
 
+            } // end if(game.needReset)
+
+
+            if (!game.setNewPlayers){
+              // if NOT setting new players, just reset game board, show game board
               game.$boardElmnt.show();
               game.$boardElmnt = $('#board');
-              // get name for player O
-            }
+              // make sure isTurn to X player
+              game.isTurn = this.playerX;
+              // visually activate player X's label and de-activate player O label
+              game.$liPlayerO.attr('class', 'players');
+              game.$liPlayerX.attr('class', 'players active');
+              game.$startElmnt.hide();
+              game.$finishElmnt.hide();
+              game.isWinner = 'keep playing';
+              game.playGame(game);
+            } else {
+              // if setting new players, show start screen and set flag to false
+              game.$boardElmnt.hide();
+              game.$finishElmnt.hide();
+              $('#playerO')[0].value = '';
+              $('#playerX')[0].value = '';
+              game.$startElmnt.show();
+              game.setNewPlayers = false;
+            } // end if (!game.setNewPlayers)
 
-            // make sure isTurn to X player
-            game.isTurn = this.playerX;
-            // 'visually activate player X' label
-            game.$liPlayerO.attr('class', 'players');
-            game.$liPlayerX.attr('class', 'players active');
-            // now that game is reset, set new game to false
 
-          };
+
+          }; // end setupNewGame()
 
           exports.startGame = function(){
               // startGame called by start screen 'start' button
@@ -416,7 +438,7 @@ var tictactoe = (function (exports){
               //setup a new game
               this.setupNewGame(this);
               // with-in playGame, toggle isTurn, place appropriate X or O's
-              this.playGame(this)
+              //this.playGame(this);
           }; // end startGame() method
 
           exports.computer.computerPlay = function(game){
