@@ -287,7 +287,7 @@ var tictactoe = (function (exports){
                           // if either below is true, start computer player
                           if (game.playerXComputer == true || game.playerOComputer == true ){
                             // brief delay, so human sees computer taking it's turn...
-                            setTimeout( game.computer.computerPlay, 0800, game);
+                            setTimeout( game.computer.computerPlay, 1000, game);
                           }
                       }
                     }); // end box click event handler
@@ -461,9 +461,8 @@ var tictactoe = (function (exports){
                   }); // end for each corner box
                 } // end 2nd (if targetBoxes.length == 0)
 
-               const randomBoxNumber = Math.floor(Math.random() * 2);
-
                if (targetBoxes.length > 1){
+                 const randomBoxNumber = Math.floor(Math.random() * targetBoxes.length);
                  for (let i = 0; i < targetBoxes.length; i++){
                   if (i == randomBoxNumber){
                      // choose a random box number from possible targets
@@ -523,9 +522,8 @@ var tictactoe = (function (exports){
                   }); // end for each side box
                 } // end 2nd (if targetBoxes.length == 0)
 
-               const randomBoxNumber = Math.floor(Math.random() * 2);
-
                if (targetBoxes > 1){
+                 const randomBoxNumber = Math.floor(Math.random() * targetBoxes.length);
                    for (let i = 0; i < targetBoxes.length; i++){
                     if (i == randomBoxNumber){
                        // choose random box number from posible Targets
@@ -550,12 +548,6 @@ var tictactoe = (function (exports){
 
               // increment moveNo,
               game.computer.moveNo += 1;
-
-                // TODO : fix this, disabled for now, needs work
-                // use a mouse-over hover-event
-                // so it appears that computer is 'thinking'
-                  // game.computer.hoverAffect(game);
-                // needs work
 
                 // depending on move or turn number,
                   // w1 = possible winning row opponent has 1 box in
@@ -675,48 +667,6 @@ var tictactoe = (function (exports){
               game.isTurn = game.computer.opponent;
             }
           };
-
-          exports.computer.hoverAffect = function(game){
-
-           // to make it appear that computer player is thinking
-            // x-svg or o-svg appears to hover (appear and disappear )
-              // over several of the empty boxes,
-                // with 1000 millisecond time intervals
-
-            // return a random number to use for "hovering" affect
-            const randomBoxNumber = function(){
-              return Math.floor(Math.random() * 9);
-              // return a number between 0 and 9, rounding down to cut out floating decimal
-            }
-
-            // for each function to hover X or O over random empty boxes
-              // so computer appears to be 'thinking' inorder 'taking turn'
-
-            game.$boxes.each(function (index, item){
-              if (item.class !== 'box box-filled-1' || item.class !== 'box box-filled-2') {
-                  if (game.computer.player === 'O') {
-                    if (index == randomBoxNumber()){
-                      item.style.backgroundImage = "url('img/o.svg')";
-                      item.style.backgroundColor = '#FFA000';
-                      setTimeout(function(item){
-                        item.style.backgroundImage = "";
-                        item.style.backgroundColor = "";
-                      }, 1000, item);
-                     }
-                  } else {
-                    if (index == randomBoxNumber()){
-                     item.style.backgroundImage = "url('img/x.svg')";
-                     item.style.backgroundColor = '#3688C3';
-                     setTimeout(function(item){
-                       item.style.backgroundImage = "";
-                       item.style.backgroundColor = "";
-                     },1000, item);
-                    }
-                  } // end if computer.player O or X
-              } // end if box is not yet selected
-            }); // each forEach $boxes
-
-          }; // end hover affect
 
           exports.computer.analyzeGameBoard = function(game, opponentWno, computerWno){
 
