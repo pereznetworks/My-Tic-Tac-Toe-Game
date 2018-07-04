@@ -285,7 +285,7 @@ var tictactoe = (function (exports){
                           // after each turn is taken, do we have a winner ...
                           game.isGameOver(game);
                           // if either below is true, start computer player
-                          if (game.playerXComputer == true || game.playerOComputer == true ){
+                          if (game.playerXComputer == true || game.playerOComputer == true && game.isWinner === 'keep playing'){
                             // brief delay, so human sees computer taking it's turn...
                             setTimeout( game.computer.computerPlay, 1000, game);
                           }
