@@ -77,7 +77,8 @@
            disabled click and hover events on $(li.box)
             if computer player is enabled and it's computer's turn
 
-        3: when one player gets 'flanked', immediate winner declared
+        3: TEST Fix
+            when one player gets 'flanked', immediate winner declared
             need to wait for 3 in a row to be actually selected
             perhaps, highlighting the winning row and waiting for 1-2 seconds
 
@@ -85,10 +86,12 @@
             in the 'flanked' scenario, the 3rd box in the unblocked row ...
               .. actually get's filled in !?!?!?!?
 
-        4: ensure that draw or tie is not declared to early
+        4: TEST Fix
+            ensure that draw or tie is not declared to early
             when only 1 square is left empty with no possible wins
 
-        5: ensure that game scenarios account for side or corner possible win-targets
+        5: TEST Fix
+            ensure that game scenarios account for side or corner possible win-targets
             after moves, 2,3,4
             including the randomness if more than one win-target possible
 

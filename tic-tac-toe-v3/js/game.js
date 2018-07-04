@@ -287,7 +287,7 @@ var tictactoe = (function (exports){
                           // if either below is true, start computer player
                           if (game.playerXComputer == true || game.playerOComputer == true ){
                             // brief delay, so human sees computer taking it's turn...
-                            setTimeout( game.computer.computerPlay, 1000, game);
+                            setTimeout( game.computer.computerPlay, 0800, game);
                           }
                       }
                     }); // end box click event handler
@@ -476,7 +476,7 @@ var tictactoe = (function (exports){
                   }
                 } else {
                   // only one possible empty box is a target for a block
-                  const targetBoxNo = targetBoxes[randomBoxNumber];
+                  const targetBoxNo = targetBoxes[0];
                   //then call takeTurn, to play that empty box
                   game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
                 }
@@ -566,8 +566,11 @@ var tictactoe = (function (exports){
                         // which iterates winRowsProgress to find...
                           // possibleBlocks = target boxes to block opponent's w1 or w2
                           // possibleWins = target boxes for computer to get a w1 or w2
-                  // descion tree below, basically
-                   // simplifies possible moves based on..which turn number computer is taking
+                  // descion tree below, basically...
+                   // simplifies possible moves based on
+                   // ..which turn number computer is taking
+                    // with boxes filled, only 1 possible winner this move
+                     // hopefully not more than 1..
                     // if opponent has a w2, then a winning row needs to be blocked this turn
                       // if not can computer win this turn, fill 3rd box of a w2
                         // if not what about blocking or getting a w2
@@ -599,19 +602,19 @@ var tictactoe = (function (exports){
                     let possibleTargetsM3 = '';
                     possibleTargetsM3 = game.computer.analyzeGameBoard(game, 'w2', 'w2');
 
-                      if (possibleTargetsM3.possibleBlocks[0].length > 0){  // computers has a w2
+                      if (possibleTargetsM3.possibleWins[0].length > 0){  // computers has a w2
 
-                          makeBlockMove(game, possibleTargetsM3);
+                          makeWinMove(game, possibleTargetsM3);
                           // do we have a winner or draw ...
                           game.isGameOver(game);
 
-                        } else if (possibleTargetsM3.possibleWins[0].length > 0){
+                      } else if (possibleTargetsM3.possibleBlocks[0].length > 0){
 
-                           makeWinMove(game, possibleTargetsM3);
+                           makeBlockMove(game, possibleTargetsM3);
                            // do we have a winner or draw ...
                            game.isGameOver(game);
 
-                         } else {
+                      } else {
 
                            let possibleTargetsM3w1 = '';
                            possibleTargetsM3w1 = game.computer.analyzeGameBoard(game, 'w1', 'w1');
@@ -621,22 +624,22 @@ var tictactoe = (function (exports){
                            // do we have a winner or draw ...
                            game.isGameOver(game);
 
-                         }
+                      }
 
                 } else if (game.computer.moveNo == 4){
 
                     let possibleTargetsM4 = '';
                     possibleTargetsM4 = game.computer.analyzeGameBoard(game, 'w2', 'w2');
 
-                    if (possibleTargetsM4.possibleBlocks[0].length > 0){  // if opponent has w2
+                    if (possibleTargetsM4.possibleWins[0].length > 0){  // if opponent has w2
 
-                        makeBlockMove(game, possibleTargetsM4);
+                        makeWinMove(game, possibleTargetsM4);
                         // do we have a winner or draw ...
                         game.isGameOver(game);
 
-                    } else if(possibleTargetsM4.possibleWins[0].length > 0){ // if opponent has no w2
+                    } else if(possibleTargetsM4.possibleBlocks[0].length > 0){ // if opponent has no w2
 
-                       makeWinMove(game, possibleTargetsM4);
+                       makeBlockMove(game, possibleTargetsM4);
                        // do we have a winner or draw ...
                        game.isGameOver(game);
 
