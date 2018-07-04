@@ -62,11 +62,11 @@
       border-radius: 4px;
     }
 
-#finish {
-
+#message {
+  font-size: 4em;
 }
 
-@media only screen and (max-width: 720px ) {
+@media only screen and (max-width: 780px ) {
 
   #playerNames{
     width: 100%;

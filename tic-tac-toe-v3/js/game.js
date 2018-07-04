@@ -288,7 +288,7 @@ var tictactoe = (function (exports){
                           // if either below is true, start computer player
                           if (game.playerXComputer == true || game.playerOComputer == true && game.isWinner === 'keep playing'){
                             // brief delay, so human sees computer taking it's turn...
-                            setTimeout( game.computer.computerPlay, 1000, game);
+                            setTimeout( game.computer.computerPlay, 800, game);
                           }
                       }
                     }); // end box click event handler
@@ -308,10 +308,10 @@ var tictactoe = (function (exports){
               // setup event handler for new game
             let finishGameText = '';
             if (game.isWinner === 'playerX'){
-              finishGameText = ` Winner! ${game.playerXName}!`;
+              finishGameText = ` ${game.playerXName}!`;
               game.$finishElmnt.attr('class', "screen screen-win-two");
             } else if ( game.isWinner === 'playerO' ){
-              finishGameText = ` Winner! ${game.playerOName}!`;
+              finishGameText = ` ${game.playerOName}!`;
               game.$finishElmnt.attr('class', "screen screen-win-one");
             } else {
               finishGameText = `It's a tie!`;
@@ -470,7 +470,7 @@ var tictactoe = (function (exports){
                   }); // end for each corner box
                 } // end (if targetBoxes.length == 0)
 
-                if (targetBoxes.length == 0){
+                if (targetBoxes.length <= 2){
                   game.computer.possibleWinners.sides.forEach(function(sideItem, sideIndex){
                     possibleTargets.possibleBlocks[0].forEach(function(ptItem, ptIndex){
                      // itrate through target boxes, check for empty side boxes
@@ -531,7 +531,7 @@ var tictactoe = (function (exports){
                   }); // end for each corner box
                 } // end (if targetBoxes.length == 0)
 
-                if (targetBoxes.length == 0){
+                if (targetBoxes.length <= 2){
                   game.computer.possibleWinners.sides.forEach(function(sideItem, sideIndex){
                     possibleTargets.possibleWins[0].forEach(function(ptItem, ptIndex){
                      // itrate through target boxes, check for empty side boxes
@@ -633,10 +633,18 @@ var tictactoe = (function (exports){
                            let possibleTargetsM3w1 = '';
                            possibleTargetsM3w1 = game.computer.analyzeGameBoard(game, 'w1', 'w1');
 
-                          makeWinMove(game, possibleTargetsM3w1);
+                           if (possibleTargetsM3w1.possibleWins[0].length > 0){  // computers has a w2
 
-                           // do we have a winner or draw ...
-                           game.isGameOver(game);
+                               makeWinMove(game, possibleTargetsM3w1);
+                               // do we have a winner or draw ...
+                               game.isGameOver(game);
+
+                           } else if (possibleTargetsM3w1.possibleBlocks[0].length > 0){
+
+                               makeBlockMove(game, possibleTargetsM3w1);
+                               // do we have a winner or draw ...
+                               game.isGameOver(game);
+                           }
 
                       }
 

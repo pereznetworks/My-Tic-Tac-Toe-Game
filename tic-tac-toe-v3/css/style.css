@@ -15,11 +15,14 @@ h1 {
   text-align: left;
   width: 1.875em; }
 
+  #pgh-msg {
+    margin: 3em 1em 3em 1em;
+  }
+
 .button {
   background: #fff;
   border-radius: 4px;
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
-  display: inline-block;
   padding: 1.25em 3em;
   text-decoration: none;
   -webkit-transition: 0.25s ease;
@@ -45,13 +48,14 @@ h1 {
   .screen-start {
     background: #54D17A; }
     .screen-start h1 {
+      padding-bottom: 1em;
       font-size: 6em; }
     .screen-start .button {
       color: #54D17A; }
     .screen-start h1 + .button {
       margin-top: 5em; }
   .screen-win p {
-    font-size: 6em;
+    font-size: 4em;
     font-weight: 700;
     color: #fff;
     position: relative; }
@@ -70,16 +74,17 @@ h1 {
     background: #FFA000; }
     .screen-win-one .button {
       color: #3688C3; }
-    .screen-win-one p:before {
-      content: "O ";
+    .screen-win-one #message:before {
+      content: "Winner, O:";
       top: 1.75rem; }
   .screen-win-two {
     background: #3688C3; }
     .screen-win-two .button {
       color: #FFA000; }
-    .screen-win-two p:before {
-      content: "X ";
+    .screen-win-two #message:before {
+      content: "Winner, X:";
       top: 4.5rem; }
+
 
 .board {
   padding-top: 1em; }
