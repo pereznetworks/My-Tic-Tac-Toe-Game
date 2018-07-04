@@ -611,7 +611,7 @@ var tictactoe = (function (exports){
                            let possibleTargetsM3w1 = '';
                            possibleTargetsM3w1 = game.computer.analyzeGameBoard(game, 'w1', 'w1');
 
-                          makeWinMove(game, possibleTargetsM3W1);
+                          makeWinMove(game, possibleTargetsM3w1);
 
                            // do we have a winner or draw ...
                            game.isGameOver(game);

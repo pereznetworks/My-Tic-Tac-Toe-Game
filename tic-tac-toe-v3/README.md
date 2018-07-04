@@ -77,7 +77,7 @@
            disabled click and hover events on $(li.box)
             if computer player is enabled and it's computer's turn
 
-        3: TEST Fix
+        3: FIXED
             when one player gets 'flanked', immediate winner declared
             need to wait for 3 in a row to be actually selected
             perhaps, highlighting the winning row and waiting for 1-2 seconds
@@ -86,16 +86,23 @@
             in the 'flanked' scenario, the 3rd box in the unblocked row ...
               .. actually get's filled in !?!?!?!?
 
+              changed to end loop after one choice taken
+                when iterating through possible win targets
+
         4: TEST Fix
             ensure that draw or tie is not declared to early
             when only 1 square is left empty with no possible wins
 
-        5: TEST Fix
+        5: FIXED
             ensure that game scenarios account for side or corner possible win-targets
             after moves, 2,3,4
             including the randomness if more than one win-target possible
 
-        6: Fix the computer player's hoverAffect() method,
-            so that boxes fill-in then disappear, as if computer is thinking.
+        6: REMOVED
+            hoverAffect() for computer dropped
+            not enough time for affect to occur
+            when set to occur to quickly is confusing
+
+        7: other bugs: move-randomization, double-finish-screen, a few others..
 
 # 4: DONE: Display the player’s name if they win the game
