@@ -205,9 +205,14 @@
            Since this gives the human player a chance to win...
             it's more fun for the human player.  
 
-  4:  When the a player wins...
-        the player’s name is displayed in the finish-win screen.
+  4:  When a player wins...
+        that player’s name is displayed in the finish-win screen.
 
+        When a player wins...
+              that player’s name is displayed in the finish-win screen.
+
+        when 'play again' is clicked the player names persist
+        and the players can continue to play each other
 
 # TicTacToe program flow:
 
@@ -392,6 +397,9 @@
 
               I could give the players a choice ...
                of a colors and symbols to use in the game.
+
+              I could also provide a choice to play a series of games
+                2 out of 3, 4 out of 5, etc.
 
               I could add some code to 'rank' the target boxes...
               by using a move-tree
