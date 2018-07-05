@@ -273,7 +273,7 @@
 
        The winRowsProgress table is a bit complex.
        By tracking more information here..
-          I can use simpler code in the rest of code.
+          I can use simpler methods in the rest of code.
 
           The winRowsProgress table is made up of the possible winning-rows,
            or rows of 3, vertically, horizontally, diagonally,
