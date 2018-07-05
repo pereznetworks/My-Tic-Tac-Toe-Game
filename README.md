@@ -1,16 +1,26 @@
 # TD-Project4: TIC-TAC-TOE
 
+# TODO:
+
+    Fix browser crash bug
+
+    Finish documentation
+
 # Project Expectations:  
 
-    No plugins are used. Besides the html and provided css and svg images, all javascript, game.js, is written by me. I modified index.html, styles.css a little and added a game.css as well.
+    No plugins are used. All javascript, game.js, is written by me.
+    I modified the provided index.html, styles.css a little.
+    I added a game.css as well.
 
 # Start Screen - Game start
 
     When the page loads, the startup screen appears.
 
-    When the player clicks the start button the start screen disappears, the board appears, and the game begins.
+    When the player clicks the start button, the start screen disappears.
+    Then the game board appears, and the game begins.
 
-    The game starts with X, and the X player box is highlighted to indicate this.
+    The game starts with player X, and the X player label is active.
+    When active the box is highlighted with the player's color.
 
     EXTRA CREDIT # 1
 
