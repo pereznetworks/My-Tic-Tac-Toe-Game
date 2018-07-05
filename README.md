@@ -1,6 +1,6 @@
 # TD-Project4: TIC-TAC-TOE
 
-# Project Expectations:  Completed:
+# Project Expectations:  
 
     No plugins are used. Besides the html and provided css and svg images, all javascript, game.js, is written by me. I modified index.html, styles.css a little and added a game.css as well.
 
