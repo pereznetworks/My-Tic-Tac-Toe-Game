@@ -240,17 +240,32 @@
 
      Game play is handled by the playGame() and the takeTurn() method.
 
-          With each turn, gamePlay(), calls takeTurn(), which calls trackFilledBoxes, which updates winRowsProgress with state of each box and state of the row the box is in.
+          With each turn, gamePlay(), calls takeTurn(),
 
-          The takeTurn() method 'fills-in' the players selected box with X or O.
+          gamePlay()
 
-          After this the takeTurn() methods, calls detectIfWinner to update game.isWinner if there is a winner.
+           A: calls takeTurn()
 
-          Then playGame calls isGameOver() to see check the game.isWinner variable to see if it is set to "keep playing", or if there is a tie or winner.
+              takeTurn()
+                1: calls trackFilledBoxes(),
+                trackFilledBoxes() updates winRowsProgress table,
+                with state of each box
+                 and state of the winning-row the box is in.
 
-          game.isGameOver() calls finishGame() if there is a tie or a winner.
+                2: 'fills-in' the players selected box with X or O.
 
-          Otherwise, gamePlay() continues.
+                3: calls detectIfWinner() to update game.isWinner
+                  if there is a winner or a tie
+
+           B: calls isGameOver()
+                1: to check the game.isWinner variable
+                   if it is set to "keep playing",
+                   or if there is a tie or winner.
+
+                   game.isGameOver()
+                    calls finishGame() if there is a tie or a winner.
+
+            C: Otherwise, gamePlay() continues.
 
       The state of the game-board is tracked in game.winRowsProgress table array.
 
