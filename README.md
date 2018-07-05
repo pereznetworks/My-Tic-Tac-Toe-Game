@@ -4,7 +4,7 @@
 
     No plugins are used. Besides the html and provided css and svg images, all javascript, game.js, is written by me. I modified index.html, styles.css a little and added a game.css as well.
 
-# Start Screen - Game begin
+# Start Screen - Game start
 
     When the page loads, the startup screen appears.
 
