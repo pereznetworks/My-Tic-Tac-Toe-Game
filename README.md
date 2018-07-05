@@ -325,8 +325,14 @@
            calculating all the different moves possible in a game
            I went a somewhat simpler route.
 
-          I use the game.winRowsProgress to...
-          look at which wins are possible given the boxes that have been filled and how many turns remain.
+           Assuming, for each turn,
+            how many boxes the opponent could have filled,
+            and then how soon opponent could have 2 boxes in a row
+
+          I can use the game.winRowsProgress to...
+          look at which wins are possible,
+          given the boxes that have been filled,
+          and how many turns remain.
 
           The computerPlay() method, calls the analyzeGameBoard() method,
            passing a value of what state of winning-rows to check for,
