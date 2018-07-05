@@ -26,44 +26,98 @@
 
     EXTRA CREDIT # 1
 
-        The game will not begin if both players name are blank. On 'start game', if both players name are blank, the player X name input is highlighted with an placeholder prompting for at least 1 player name.
+        The game will not begin if both players name inputs are blank.
 
-        At least 1 player name must be entered of player X or O. The player names are then presented with X and O label and on the finish winner screen.
+        On clicking 'start game', if both players name are blank...
+          the player X name input is highlighted
+          with an placeholder prompting for at least 1 player name.
 
-        If only 1 player name entered, the computer plays the player with no name.
+        At least 1 player name must be entered in player X or O.
+        The player names are then presented with X and O label
+        The name of the player who wins is presented on finish-win screen.
+
+        EXTRA CREDIT # 3
+
+          If only 1 player name entered...
+            the computer plays the player with no name.
+
+            So the computer can play both X or O, but the UI assumes most humans will want to play the game as X.
+
+            More on the computer player below...
+
+        TODO:
+          switch the Player X and Player O name input....
+          most humans playing the game like to read from left to right.
+          Since X normally taken the first turn...
+            the player X name input 'feels' better placed on the left.
+            with player O on the right.
 
 # Board Screen - Game play:
 
     The game play following these rules:
 
+    Play alternates between X and O.
+
     EXTRA CREDIT # 2
-        Play alternates between X and O, with names of each player in each player label.
+        The names of each player appear the player labels.
 
-    The current player is indicated at the top of the page -- the box with the symbol O or X is highlighted for the current player.
+    The current or active player is indicated by...
+    -- the label the symbol O or X is highlighted for the current player.
 
-    When the current player mouses over an empty square on the board, it's symbol the X or O should appear on the square.
+    As the current player's mouse 'hovers' over empty square on the board.
+    Their symbol, the X or O, appears temporarily.
+    Their symbol follows the player's mouse around the board.
 
-    Players can only click on empty squares. When the player clicks on an empty square the proper image to the square marking it as occupied.
+    Players can only click one empty box per turn.
+    When the player clicks on an empty square ...
+    their image is permanently placed in the box, marking it as occupied.
 
-    Once a box is chosen, or clicked, the players turn ends and the other players turn begins.
-    The Player O or X label will be 'active' background color, when it's that players turn.
-    There is no opportunity to go back and deselect a box or do a turn over again.
+    Once a box is chosen, or clicked...
+     the players turn ends and the other players turn begins.
+
+    On each turn, the respective 'active' background color...
+     changes from grey to the active color for X or O.
+
+     There is no opportunity to go back ...
+      Nor deselect a box nor do a turn over again.
 
     EXTRA CREDIT # 3
 
-        When it's the computer player's turn, a setTimeout of 800 milliseconds is used to give the highlight affect of the computer player's player-label to occur. This also makes it easier for the human player to realize that the computer is taking it's turn.
+        If there's only 1 player name, the computer plays the nameless player.
 
-        While the computer is taking it's turn, mouse-hover and mouse-click events on the Tictactoe boxes is disabled. This is so the human player will not click a box by mistake. The mouse-hover and mouse-click event on the Tictactoe boxes in enabled when it's the human's turn.
+        When it's the computer player's turn...
 
-        More on the computer player below.
+        a setTimeout of 800 milliseconds is used ...
+        to allow for the activation of computer player's player-label ...
 
-    The game ends when one player has three of their symbols in a row either horizontally, vertically or diagonally.
+        This slows the game a little, but makes it easier for the human to realize that the computer is taking it's turn.
+
+        While the computer is taking it's turn...
+
+         the mouse-hover and mouse-click events are disabled
+         ...on the Tictactoe boxes.
+
+         This is so the human player will not click a box by mistake.
+
+         The mouse-hover and mouse-click event on the Tictactoe boxes
+          are enabled again when it's the human's turn.
+
+        More on the computer player below....
+
+    The game ends when ...
+    one player has three of their symbols in a row....
+      either horizontally, vertically or diagonally
+
+    The game also end when there is possibility for 3 in row.
 
     When the game ends, the board disappears and the finish screen appears.
 
 # Finish Screen - Game end:
 
-    The word "Winner" appears and the screen is the players color, Blue for X and Orange for O.
+    On the finish screen...
+
+      The word "Winner" appears ...
+      and the screen is the players color, Blue for X and Orange for O.
 
     EXTRA CREDIT #4:  
 
