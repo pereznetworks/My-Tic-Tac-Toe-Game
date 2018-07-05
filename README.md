@@ -2,11 +2,31 @@
 
 # TODO:
 
-    Fix browser crash bug
+        BUG FIX:
 
-        The browser crash bug started after adding an additional if/else branch to  my computerPlay()'s decision-tree.  
+           computerPlay(), makeWinMove and makeBlockMove functions
 
-    Finish documentation
+           The browser crash bug started after adding an additional if/else branch to  my computerPlay()'s decision-tree.  
+
+           This is where a 2 bugs may occurring
+
+           in move or turn 4..
+           causing the game to fill in 2 boxes..
+           once as the computer the other the opponent
+           causing a draw or a winner to be declared too early
+
+           in any turn..
+           causing an infinite-loop
+
+        UI tweak
+
+            switch the Player X and Player O name input....
+            most humans playing the game like to read from left to right.
+            Since X normally takes the first turn...
+              the player X name input 'feels' better placed on the left.
+              with player O on the right.
+
+        Finish documentation
 
 # Project Expectations:  
 
@@ -45,13 +65,6 @@
             most humans will want to play the game as X.
 
             More on the computer player below under # Extra Credits.
-
-        TODO:
-          switch the Player X and Player O name input....
-          most humans playing the game like to read from left to right.
-          Since X normally takes the first turn...
-            the player X name input 'feels' better placed on the left.
-            with player O on the right.
 
 # Board Screen - Game play:
 
@@ -363,18 +376,13 @@
               a random number generator is used to ...
               pick from the possible win or block targets.
 
-              BUG FIX:
-
-               This is where a 2 bugs may occurring
-
-               in move or turn 4..
-               causing the game to fill in 2 boxes..
-               once as the computer the other the opponent
-
-               in any turn..
-               causing an infinite-loop
-
           In a future versions....
+
+              I could make the tictactoe module, a plugin,
+                completely independent of specific html nodes
+
+              I could give the players a choice ...
+               of a colors and symbols to use in the game.
 
               I could add some code to 'rank' the target boxes...
               by using a move-tree
@@ -387,3 +395,8 @@
                Then add code to analyze the game...
                 to reveal which move at which turn can be taken...
                 to win, or not lose, that scenario in the future.
+
+              By implementing min-max algorithm,
+               or other game-based algorithms,
+               I could make the TicTacToe into just one game-mode
+               then add other game-modes, chess, checkers. etc..
