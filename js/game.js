@@ -1,3 +1,4 @@
+"use strict";
 
 var tictactoe = (function (exports){
 
@@ -54,6 +55,9 @@ var tictactoe = (function (exports){
           };
 
           exports.trackFilledBoxes = function(game, selectedBoxNumber, selectedBy){
+
+              let activePlayer = '';
+              let inactivePlayer = '';
 
               // first figure out whose turn it is
               if (selectedBy === game.computer.player){
@@ -431,8 +435,12 @@ var tictactoe = (function (exports){
                   // itrate through target boxes, check for empty side boxes
                      if(centerItem == ptItem){
                        // select center box if empty
-                       targetBoxes.push(ptItem);
-                       // add to targetBoxes to played
+                       // prevent duplicates
+                     const lastItemInTargetBoxes = targetBoxes[targetBoxes.length - 1];
+                      if (ptItem !== lastItemInTargetBoxes){
+                        targetBoxes.push(ptItem);
+                        // add to targetBoxes to played
+                       }
                       }
                  }); // end for each possible block
                }); // end for possibleWinners.corner
@@ -443,25 +451,30 @@ var tictactoe = (function (exports){
                     // itrate through target boxes, check for empty side boxes
                        if(cornerItem == ptItem){
                          // select target that is a corner box from computer w1 to for a w2
-                         targetBoxes.push(ptItem);
-                         // add to targets to play for a block
+                         // prevent duplicates
+                        const lastItemInTargetBoxes = targetBoxes[targetBoxes.length - 1];
+                        if (ptItem !== lastItemInTargetBoxes)
+                          targetBoxes.push(ptItem);
+                          // add to targets to play for a block
                         }
                     }); // end for each possible block
                   }); // end for each corner box
-                } // end (if targetBoxes.length == 0)
 
-                if (targetBoxes.length <= 2){
                   game.computer.possibleWinners.sides.forEach(function(sideItem, sideIndex){
                     possibleTargets.possibleBlocks[0].forEach(function(ptItem, ptIndex){
                      // itrate through target boxes, check for empty side boxes
                         if(sideItem == ptItem){
                           // select target that is a side box from computer w1 to for a w2
-                          targetBoxes.push(ptItem);
-                          // to play that target box for a block
+                          // prevent duplicates
+                        const lastItemInTargetBoxes = targetBoxes[targetBoxes.length - 1];
+                          if (ptItem !== lastItemInTargetBoxes){
+                            targetBoxes.push(ptItem);
+                            // to play that target box for a block
+                          }
                          }
                     }); // end for each possible block
                   }); // end for each corner box
-                } // end 2nd (if targetBoxes.length == 0)
+                } // end if (targetBoxes.length == 0)
 
                if (targetBoxes.length > 1){
                  const randomBoxNumber = Math.floor(Math.random() * targetBoxes.length);
@@ -492,8 +505,12 @@ var tictactoe = (function (exports){
                   // itrate through target boxes, check for empty side boxes
                      if(centerItem == ptItem){
                        // select center box if empty
-                       targetBoxes.push(ptItem);
-                       // add to targetBoxes to played
+                          // prevent duplicates
+                       const lastItemInTargetBoxes = targetBoxes[targetBoxes.length - 1];
+                       if (ptItem !== lastItemInTargetBoxes){
+                          targetBoxes.push(ptItem);
+                          // add to targetBoxes to played
+                       }
                       }
                  }); // end for each possibleWinners
                }); // end for each corner box
@@ -504,25 +521,31 @@ var tictactoe = (function (exports){
                     // itrate through target boxes, check for empty side boxes
                        if(cornerItem == ptItem){
                          // select target that is a corner box from computer w1 to for a w2
-                         targetBoxes.push(ptItem);
-                         // add to targetBoxes to played
+                           // prevent duplicates
+                         const lastItemInTargetBoxes = targetBoxes[targetBoxes.length - 1];
+                         if (ptItem !== lastItemInTargetBoxes){
+                           targetBoxes.push(ptItem);
+                           // add to targetBoxes to played
+                         }
                         }
                     }); // end for each possibleWinners
                   }); // end for each corner box
-                } // end (if targetBoxes.length == 0)
 
-                if (targetBoxes.length <= 2){
                   game.computer.possibleWinners.sides.forEach(function(sideItem, sideIndex){
                     possibleTargets.possibleWins[0].forEach(function(ptItem, ptIndex){
                      // itrate through target boxes, check for empty side boxes
                         if(sideItem == ptItem){
                           // select target that is a corner box from computer w1 to for a w2
-                          targetBoxes.push(ptItem);
-                          // to play that target box for a w2
+                          // prevent duplicates
+                        const lastItemInTargetBoxes = targetBoxes[targetBoxes.length - 1];
+                        if (ptItem !== lastItemInTargetBoxes){
+                           targetBoxes.push(ptItem);
+                            // to play that target box for a w2
+                        }
                          }
                     }); // end for each possibleWinners
                   }); // end for each side box
-                } // end 2nd (if targetBoxes.length == 0)
+                } // end if (targetBoxes.length == 0)
 
                if (targetBoxes > 1){
                  const randomBoxNumber = Math.floor(Math.random() * targetBoxes.length);
@@ -567,11 +590,22 @@ var tictactoe = (function (exports){
 
                           makeBlockMove(game, possibleTargetsM2);
 
-                        } else if (possibleTargetsM2.possibleWins[0].length > 0){  // if opponent has no w2
+                        } else { // if no 2 in a row by opponent
 
-                           makeWinMove(game, possibleTargetsM2);
-                        } // end if possible to Block opponent else go for 2 in a row
+                          let possibleTargetsM2w1 = '';
+                          possibleTargetsM2w1 = game.computer.analyzeGameBoard(game, 'w1', 'w1');
 
+                          if(possibleTargetsM2w1.possibleBlocks[0].length > 0){
+
+                               makeBlockMove(game, possibleTargetsM2w1);
+
+                           } else if (possibleTargetsM2.possibleWins[0].length > 0){  // if opponent has no w2
+
+                               makeWinMove(game, possibleTargetsM2w1);
+
+                            } // end if possible to Block opponent else go for 2 in a row
+
+                        } // end if possible to Block 2 in a row by opponent
 
                   } else if (game.computer.moveNo == 3){
 
@@ -669,8 +703,8 @@ var tictactoe = (function (exports){
               possibleWins:[]
             };
 
-              // checking for computer's and player's possible winning rows
-                // and which of the boxes in these rows are 'targets', or are empty
+            // checking for computer's and player's possible winning rows
+            // and which of the boxes in these rows are 'targets', or are empty
 
             if(opponentWno) {
               possibleTargets.possibleBlocks.push(game.findTargetBox(game, game.computer.opponent, opponentWno));
