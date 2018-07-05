@@ -16,16 +16,6 @@ var tictactoe = (function (exports){
             Ofilled: [],
             Xfilled: [],
             filledBoxes: [],
-            winRows: [  // possible winning rows
-                [0,1,2,'none'],  // 0
-                [3,4,5,'none'],  // 1
-                [6,7,8,'none'],  // 2
-                [0,3,6,'none'],  // 3
-                [1,4,7,'none'],  // 4
-                [2,5,8,'none'],  // 5
-                [0,4,8,'none'],  // 6
-                [2,4,6,'none'],  // 7
-              ],
             winRowsProgress: [  // possible winning rows
                 [[0,'E'],[1,'E'],[2,'E'],'none'],  // 0
                 [[3,'E'],[4,'E'],[5,'E'],'none'],  // 1
@@ -54,14 +44,8 @@ var tictactoe = (function (exports){
               moveNo: 0,
               player: '',
               opponent: '',
-              possibleBlock1: '',
-              possibleBlock2: '',
-              possibleWin1: '',
-              possibleWin2: '',
               cpBoxFilledClass: '',
               opponentBoxFilledClass: '',
-              playerFilled: [],
-              opponentFilled: [],
               possibleWinners: {
                 center: [4],
                 corners: [0,2,6,8],
@@ -351,10 +335,6 @@ var tictactoe = (function (exports){
                 this.style.backgroundImage = '';
               }); // reset each box background Color and Image style to 'empty'
 
-              game.winRows.forEach(function(item, index){
-                item[3] = 'none';
-              });  // reset array used by detectIfWinner()
-
               game.winRowsProgress.forEach(function(winRowArray, indexWinRowArray){
 
                   winRowArray.forEach(function(itemArray, indexOfItemArray){
@@ -568,125 +548,107 @@ var tictactoe = (function (exports){
             // each time it's computer.player's turn
             if (game.isTurn === game.computer.player) {
 
-              // increment moveNo,
-              game.computer.moveNo += 1;
+                // increment moveNo,
+                game.computer.moveNo += 1;
 
-                // depending on move or turn number,
-                  // w1 = possible winning row opponent has 1 box in
-                  // w2 = possible winning row opponent has 2 boxes in
-                  // target = empty box in possible winning row
-                    // using analyzeGameBoard()
-                      // calls findTargetBox()
-                        // which iterates winRowsProgress to find...
-                          // possibleBlocks = target boxes to block opponent's w1 or w2
-                          // possibleWins = target boxes for computer to get a w1 or w2
-                  // descion tree below, basically...
-                   // simplifies possible moves based on
-                   // ..which turn number computer is taking
-                    // with boxes filled, only 1 possible winner this move
-                     // hopefully not more than 1..
-                    // if opponent has a w2, then a winning row needs to be blocked this turn
-                      // if not can computer win this turn, fill 3rd box of a w2
-                        // if not what about blocking or getting a w2
-                          // if not what about blocking or getting a w1
-
+                // calc moved to make, based on move or turn number
                 if (game.computer.moveNo == 1) {
 
-                  let possibleTargetsM1 = '';
-                  possibleTargetsM1 = game.computer.analyzeGameBoard(game, 'w1');
-                  makeBlockMove(game, possibleTargetsM1);
+                    let possibleTargetsM1 = '';
+                    possibleTargetsM1 = game.computer.analyzeGameBoard(game, 'w1');
+                    makeBlockMove(game, possibleTargetsM1);
 
-                } else if (game.computer.moveNo == 2){
+                  } else if (game.computer.moveNo == 2){
 
-                    let possibleTargetsM2 = '';
-                    possibleTargetsM2 = game.computer.analyzeGameBoard(game, 'w2', 'w1');
+                      let possibleTargetsM2 = '';
+                      possibleTargetsM2 = game.computer.analyzeGameBoard(game, 'w2', 'w1');
 
-                     if(possibleTargetsM2.possibleBlocks[0].length > 0){
+                       if(possibleTargetsM2.possibleBlocks[0].length > 0){
 
-                        makeBlockMove(game, possibleTargetsM2);
+                          makeBlockMove(game, possibleTargetsM2);
 
-                      } else if (possibleTargetsM2.possibleWins[0].length > 0){  // if opponent has no w2
+                        } else if (possibleTargetsM2.possibleWins[0].length > 0){  // if opponent has no w2
 
-                         makeWinMove(game, possibleTargetsM2);
-                      } // end if possible to Block opponent else go for 2 in a row
+                           makeWinMove(game, possibleTargetsM2);
+                        } // end if possible to Block opponent else go for 2 in a row
 
 
-                } else if (game.computer.moveNo == 3){
+                  } else if (game.computer.moveNo == 3){
 
-                    let possibleTargetsM3 = '';
-                    possibleTargetsM3 = game.computer.analyzeGameBoard(game, 'w2', 'w2');
+                      let possibleTargetsM3 = '';
+                      possibleTargetsM3 = game.computer.analyzeGameBoard(game, 'w2', 'w2');
 
-                      if (possibleTargetsM3.possibleWins[0].length > 0){  // computers has a w2
+                        if (possibleTargetsM3.possibleWins[0].length > 0){  // computers has a w2
 
-                          makeWinMove(game, possibleTargetsM3);
+                            makeWinMove(game, possibleTargetsM3);
+                            // do we have a winner or draw ...
+                            game.isGameOver(game);
+
+                        } else if (possibleTargetsM3.possibleBlocks[0].length > 0){
+
+                             makeBlockMove(game, possibleTargetsM3);
+                             // do we have a winner or draw ...
+                             game.isGameOver(game);
+
+                        } else {
+
+                             let possibleTargetsM3w1 = '';
+                             possibleTargetsM3w1 = game.computer.analyzeGameBoard(game, 'w1', 'w1');
+
+                             if (possibleTargetsM3w1.possibleWins[0].length > 0){  // computers has a w2
+
+                                 makeWinMove(game, possibleTargetsM3w1);
+                                 // do we have a winner or draw ...
+                                 game.isGameOver(game);
+
+                             } else if (possibleTargetsM3w1.possibleBlocks[0].length > 0){
+
+                                 makeBlockMove(game, possibleTargetsM3w1);
+                                 // do we have a winner or draw ...
+                                 game.isGameOver(game);
+                             }
+
+                        }
+
+                  } else if (game.computer.moveNo == 4){
+
+                      let possibleTargetsM4 = '';
+                      possibleTargetsM4 = game.computer.analyzeGameBoard(game, 'w2', 'w2');
+
+                      if (possibleTargetsM4.possibleWins[0].length > 0){  // if opponent has w2
+
+                          makeWinMove(game, possibleTargetsM4);
                           // do we have a winner or draw ...
                           game.isGameOver(game);
 
-                      } else if (possibleTargetsM3.possibleBlocks[0].length > 0){
+                      } else if(possibleTargetsM4.possibleBlocks[0].length > 0){ // if opponent has no w2
 
-                           makeBlockMove(game, possibleTargetsM3);
-                           // do we have a winner or draw ...
-                           game.isGameOver(game);
+                         makeBlockMove(game, possibleTargetsM4);
+                         // do we have a winner or draw ...
+                         game.isGameOver(game);
 
-                      } else {
+                       } else {
 
-                           let possibleTargetsM3w1 = '';
-                           possibleTargetsM3w1 = game.computer.analyzeGameBoard(game, 'w1', 'w1');
+                         let possibleTargetsM4w1 = '';
+                         possibleTargetsM4w1 = game.computer.analyzeGameBoard(game, 'w1', 'w1');
 
-                           if (possibleTargetsM3w1.possibleWins[0].length > 0){  // computers has a w2
+                         if (possibleTargetsM4w1.possibleWins[0].length > 0){
 
-                               makeWinMove(game, possibleTargetsM3w1);
-                               // do we have a winner or draw ...
-                               game.isGameOver(game);
+                             makeWinMove(game, possibleTargetsM4w1);
+                             // do we have a winner or draw ...
+                             game.isGameOver(game);
 
-                           } else if (possibleTargetsM3w1.possibleBlocks[0].length > 0){
+                          } else if(possibleTargetsM4w1.possibleBlocks[0].length > 0){ // if opponent has a w2
 
-                               makeBlockMove(game, possibleTargetsM3w1);
-                               // do we have a winner or draw ...
-                               game.isGameOver(game);
+                             makeBlockMove(game, possibleTargetsM4w1);
+                             // do we have a winner or draw ...
+                             game.isGameOver(game);
+
                            }
 
-                      }
+                       }// end if/else win or block
 
-                } else if (game.computer.moveNo == 4){
-
-                    let possibleTargetsM4 = '';
-                    possibleTargetsM4 = game.computer.analyzeGameBoard(game, 'w2', 'w2');
-
-                    if (possibleTargetsM4.possibleWins[0].length > 0){  // if opponent has w2
-
-                        makeWinMove(game, possibleTargetsM4);
-                        // do we have a winner or draw ...
-                        game.isGameOver(game);
-
-                    } else if(possibleTargetsM4.possibleBlocks[0].length > 0){ // if opponent has no w2
-
-                       makeBlockMove(game, possibleTargetsM4);
-                       // do we have a winner or draw ...
-                       game.isGameOver(game);
-
-                     } else {
-
-                       let possibleTargetsM4w1 = '';
-                       possibleTargetsM4w1 = game.computer.analyzeGameBoard(game, 'w1', 'w1');
-
-                       if (possibleTargetsM4w1.possibleWins[0].length > 0){
-
-                           makeWinMove(game, possibleTargetsM4w1);
-                           // do we have a winner or draw ...
-                           game.isGameOver(game);
-
-                        } else if(possibleTargetsM4w1.possibleBlocks[0].length > 0){ // if opponent has a w2
-
-                           makeBlockMove(game, possibleTargetsM4w1);
-                           // do we have a winner or draw ...
-                           game.isGameOver(game);
-
-                         }
-
-                     }// end if/else win or block
-
-                } // end if/else for moveNo
+                  } // end if/else for moveNo
 
             } // end if game.isTurn
 
@@ -770,104 +732,3 @@ var tictactoe = (function (exports){
           return exports   // returning the entire object and it's methods
 
 }(tictactoe || { } ));
-
-//
-// // if first move, get possible target to block opponent
-// let possibleTargetsM1 = ''
-// possibleTargetsM1 = game.computer.analyzeGameBoard(game, 'w1');
-//
-// // for each target of opponent possible blocks
-// possibleTargetsM1.possibleBlocks.forEach(function(pbItemArray, pbItemIndex){
-//     // is target a center box ?
-//      pbItemArray.forEach(function(ptItem, ptIndex){
-//        if (ptItem == game.computer.possibleWinners.center[0] ){
-//          // then choose center box
-//          const targetBoxNo = ptItem;
-//          //then call takeTurn
-//          game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-//          // to play that center
-//         } else {
-//          game.computer.possibleWinners.corners.forEach(function(cornerItem, cornerIndex){
-//            // is possible target a corner box ?
-//            if (ptItem == cornerItem ){
-//              // TODO: randomize which corner computer selects
-//              // then choose that corner
-//              const targetBoxNo = ptItem;
-//              //then call takeTurn
-//              game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-//               // to play that center box
-//             }
-//          });
-//        } // end if center is empty else take a corner box
-//      });
-
-//
-// // detect possible win or blocked rows
-//   // at the end of each player's turn
-//   // compare current or last box selection
-//     // if only current player has 1,2 boxes in winning row,
-//       // mark with player's name
-//       // else mark row as blocked
-// if (game.isTurn === game.playerO){
-//   const OfilledItem = game.Ofilled[(game.Ofilled.length - 1)];
-//     // for current box selection, last element in Ofilled array
-//     game.winRows.forEach(function(winRowItem, winRowIndex){
-//       // iterate each item of each set of possible winning rows
-//       let currentWinRowIndex = winRowIndex;
-//       winRowItem.forEach(function(rowItem, rowIndex){
-//         // if any match, test for row blocked,
-//           // if is still a possible win or if row is a winner
-//         if (rowItem === OfilledItem && winRowItem[3] === 'pO-w2'){
-//
-//             game.winRows[currentWinRowIndex][3] = 'pO-winner';
-//
-//         } else if ( rowItem === OfilledItem && winRowItem[3] === 'pO-w1'){
-//
-//              game.winRows[currentWinRowIndex][3] = 'pO-w2';
-//
-//         } else if (rowItem === OfilledItem
-//             && winRowItem[3] === 'none'){
-//
-//              game.winRows[currentWinRowIndex][3] = 'pO-w1';
-//
-//         } else if (rowItem === OfilledItem){
-//
-//              game.winRows[currentWinRowIndex][3] = 'blocked';
-//
-//         }
-//       });
-//     });
-//
-// } else {
-//    const XfilledItem = game.Xfilled[(game.Xfilled.length - 1)];
-//      // for current box selection, last element in Ofilled array
-//      game.winRows.forEach(function(winRowItem, winRowIndex){
-//        // iterate each item of each set of possible winning rows
-//        let currentWinRowIndex = winRowIndex;
-//        winRowItem.forEach(function(rowItem, rowIndex){
-//          // if any match, test for row blocked,
-//            // if is still a possible win or if row is a winner
-//          if (rowItem === XfilledItem
-//              && winRowItem[3] === 'pX-w2'){
-//
-//              game.winRows[currentWinRowIndex][3] = 'pX-winner';
-//
-//          } else if ( rowItem === XfilledItem
-//              && winRowItem[3] === 'pX-w1'){
-//
-//              game.winRows[currentWinRowIndex][3] = 'pX-w2';
-//
-//          } else if (rowItem === XfilledItem
-//              && winRowItem[3] === 'none'){
-//
-//             game.winRows[currentWinRowIndex][3] = 'pX-w1';
-//
-//          } else if (rowItem === XfilledItem){
-//
-//             game.winRows[currentWinRowIndex][3] = 'blocked';
-//
-//          }
-//        });
-//      });
-//
-// } // end if forEach to detect possible win or blocked row
