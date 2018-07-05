@@ -46,6 +46,8 @@
 
     EXTRA CREDIT # 1
 
+        Player Names.
+
         The game will not begin if both players name inputs are blank.
 
         On clicking 'start game', if both players name are blank...
@@ -58,11 +60,11 @@
 
         EXTRA CREDIT # 3
 
-          If only 1 player name entered...
+          If only 1 player name is entered...
             the computer plays the player with no name.
 
             So the computer can play both X or O, but the UI assumes...
-            most humans will want to play the game as X.
+            most humans will want to play the game as X, with first turn.
 
             More on the computer player below under # Extra Credits.
 
@@ -73,12 +75,12 @@
     Play alternates between X and O.
 
     EXTRA CREDIT # 2
-        The names of each player appear the player labels.
+        The names of each player appear with X and O player labels.
 
     The current or active player is indicated by...
     -- the label the symbol O or X is highlighted for the current player.
 
-    As the current player's mouse 'hovers' over empty square on the board.
+    As the current player's mouse 'hovers' over an empty box on the board,
     Their symbol, the X or O, appears temporarily.
     Their symbol follows the player's mouse around the board.
 
@@ -89,7 +91,8 @@
     Once a box is chosen, or clicked...
      the players turn ends and the other players turn begins.
 
-    On each turn, the respective 'active' background color...
+    On each turn, the player's label,
+     get it's respective 'active' background color...
      changes from grey to the active color for X or O.
 
      There is no opportunity to go back ...
@@ -123,7 +126,8 @@
     one player has three of their symbols in a row....
       either horizontally, vertically or diagonally
 
-    The game also end when there is possibility for 3 in row.
+    The game will end when all boxes are filled..
+      and there is no possibility for 3 in row.
 
     When the game ends, the board disappears and the finish screen appears.
 
@@ -132,7 +136,7 @@
     On the finish screen...
 
       The word "Winner" appears ...
-      and the screen is the players color, Blue for X and Orange for O.
+      and the screen is that players color, Blue for X and Orange for O.
 
     EXTRA CREDIT #4:  
 
