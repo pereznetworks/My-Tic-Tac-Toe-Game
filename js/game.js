@@ -60,12 +60,12 @@ var tictactoe = (function (exports){
               let inactivePlayer = '';
 
               // first figure out whose turn it is
-              if (selectedBy === game.computer.player){
-                activePlayer = 'O';
-                inactivePlayer = 'X';
-              } else {
+              if (game.isTurn === game.playerX){
                 activePlayer = 'X';
                 inactivePlayer = 'O';
+              } else {
+                activePlayer = 'O';
+                inactivePlayer = 'X';
               }
 
               // as the game progresses, track who fills each box
