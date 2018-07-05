@@ -238,7 +238,8 @@
 
 # Game-State and the Computer-Player
 
-     Game play is handled by the playGame() and the takeTurn() method.
+     Game play is handles the mostly by playGame().
+        and the takeTurn() method.
 
           With each turn, gamePlay(), calls takeTurn(),
 
@@ -267,43 +268,116 @@
 
             C: Otherwise, gamePlay() continues.
 
-      The state of the game-board is tracked in game.winRowsProgress table array.
+      So the state of the game-board is tracked in ...
+          game.winRowsProgress table array.
 
-          The key to tracking the game-state and to allowing the computer-player to 'see' the game-board, is the winRowsProgress table, which is an array or arrays. The winRowsProgress table is a bit complex. By tracking more information here, I can use simpler code in the rest of my game-state and computer-player programming.
+       The winRowsProgress table is a bit complex.
+       By tracking more information here..
+          I can use simpler code in the rest of code.
 
-          The winRowsProgress table is made up of the possible winning-rows, or rows of 3, vertically, horizontally, diagonally, that could result in a win.
+          The winRowsProgress table is made up of the possible winning-rows,
+           or rows of 3, vertically, horizontally, diagonally,
+           that could result in a win.
 
-          Each winning-row is an array of 4 elements. The first 3, are the boxes. The fourth element of each winning-row is a string, which represents the state of that winning-row.
-          The state of each winning-row can be empty, or blocked.
+          Each winning-row is an array of 4 elements.
 
-          In addition, in the winning-row's fourth element, the state, is also used to track which player still has a chance to win with that row, how many boxes are filled by that player.
+          The first 3, are the boxes.
 
-          So the winning-row state could then be set to X-w1, X-w2 or O-w1 or O-w2. Once a winning-row is completed by one player, this fourth element is set to X-winner or O-winner.
+          The fourth element of each winning-row is a string,
+            which represents the state of that winning-row.
+            The state of each winning-row can be empty, or blocked.
 
-          As for the boxes, the first 3 elements of each winning-row each are arrays containing 2 elements, [ [integer],['state'] ]. The 0 element of each box array is the number of that box on the tictactoe board counting from 0, top-left corner, left to right. The [1] element of each box array is the 'state' of each box, E for empty, X or O.
+            In addition, in the winning-row's fourth element,
+            is also used to track which player has boxes in that row,
+            how many boxes are filled by that player.
+
+            So the winning-row state could then be set to
+             X-w1, X-w2 or O-w1 or O-w2.
+            Once a winning-row is completed by one player,
+             this fourth element is set to X-winner or O-winner.
+
+           As for the boxes,
+            the first 3 elements of each winning-row each are arrays
+             each containing 2 elements, [ [integer],['state'] ].
+
+             The 0 element of each box array is...
+              the number of that box on the tictactoe board
+              counting from 0, top-left corner, left to right.
+
+             The [1] element of each box array is the 'state' of each box,
+              E for empty.
+              And X or O, depending on which player fills that box.
 
       The Computer Player
 
-          The computerPlay() methods uses 3 different levels of methods. In the computerPlay() method, a fairly simple if/else decision-tree is used to find empty boxes that are targets for a block or for a win.
+          if the computer player is playing...
+          and there is not yet winner or a tie..
+           takeTurn() calls computerPlay() after the human's turn is done.
 
-          The computerPlay() if/else decision-tree is turn-based.
+          The computerPlay() methods uses 3 different levels of methods.
+            In the computerPlay() method,
+              a fairly simple if/else decision-tree is used to...
+               choose boxes that are targets for a block or for a win.
 
-          Instead of calculating all the different moves possible in a move-branching tree, after each turn. I choose a somewhat simpler method.
+          The computerPlay()'s if/else decision-tree is turn-based.
 
-          I used the game.winRowsProgress allows me to simply look at which wins are possible given the moves that have been made.
+          Instead of..
+           calculating all the different moves possible in a game
+           I went a somewhat simpler route.
 
-          The computerPlay() method, calls the analyzeGameBoard() method, passing a value of what state of winning-rows to check for, whether to look for winning rows that have 1, ''-w1', or 2, '-w2', boxes filled in.
+          I use the game.winRowsProgress allows me to...
+          look at which wins are possible given the boxes that have been filled and how many turns remain.
 
-          The analyzeGameBoard() functions calls the findTargetBox, which reads the winRowsProgress table-array, filtering on winning-rows have a certain number of empty boxes and which player filled boxes in a winning-row   The winRowsProgress table array is updated after each move by the trackFilledBoxes method.
+          The computerPlay() method, calls the analyzeGameBoard() method,
+           passing a value of what state of winning-rows to check for,
+           whether to look for winning rows that have...
+            1, '-w1', or 2, '-w2', boxes filled in.
 
-          The analyzeGameBoard(), returns an object, possibleTargets, with 2 arrays. Each array is set of empty boxes that are targets for a block of a winning row or completion of a winning row.  
+          The analyzeGameBoard() functions calls findTargetBox(),
+           which reads the winRowsProgress table-array,
+           filtering on winning-rows have a '-w1' or '-w2'
 
-          Back in the computerPlay() method, 2 functions, makeWinMove or makeBlockMove are called depending on whether blocks or wins are available.  The makeWinMove and makeBlockMove are passed the possibleTargets object.
+           The winRowsProgress table array is updated after each move by the trackFilledBoxes() method.
 
-          When there is more then one block or win possibility, a random number generator is used to pick from the possible win or block targets.
+          The analyzeGameBoard(), returns an object, possibleTargets,
+           it has 2 arrays.
+           Each array is set of numbers,
+           or empty boxes that are targets...
+            for a block of a winning row...
+            or completion of a winning row.  
 
-          In a future version....
+          Back in the computerPlay() method,
+            2 functions, makeWinMove or makeBlockMove are called
+             depending on whether blocks or wins are available.
 
-              I could add some code to 'rank' the targets by using a move-tree for the possible win or block targets only.
+             The makeWinMove and makeBlockMove are passed ...
+             the array from the possibleTargets object.
 
-              I could also, add code so the computer player 'learns'. I could do this by saving the state of the winRowsProgress table at the end of each game, lose or win. Then add code to analyze which "move" to reveal a tictactoe box that is a target to win that scenario in the future.
+             When there is more then one block or win possibility,
+              a random number generator is used to ...
+              pick from the possible win or block targets.
+
+              BUG FIX:
+
+               This is where a 2 bugs may occurring
+
+               in move or turn 4..
+               causing the game to fill in 2 boxes..
+               once as the computer the other the opponent
+
+               in any turn..
+               causing an infinite-loop
+
+          In a future versions....
+
+              I could add some code to 'rank' the target boxes...
+              by using a move-tree
+              for the possible win or block targets only.
+
+              I could also, add code so the computer player 'learns'.
+              by saving the state of the winRowsProgress table
+               at the end of each game, lose or win.
+
+               Then add code to analyze the game...
+                to reveal which move at which turn can be taken...
+                to continue to win, or not lose, that scenario in the future.
