@@ -44,7 +44,7 @@
             So the computer can play both X or O, but the UI assumes...
             most humans will want to play the game as X.
 
-            More on the computer player below...
+            More on the computer player below under # Extra Credits.
 
         TODO:
           switch the Player X and Player O name input....
@@ -104,7 +104,7 @@
          The mouse-hover and mouse-click event on the Tictactoe boxes
           are enabled again when it's the human's turn.
 
-        More on the computer player below....
+         More on the computer player below under # Extra Credits.
 
     The game ends when ...
     one player has three of their symbols in a row....
@@ -125,40 +125,71 @@
 
         The name of the player who wins, is also shown.
 
-    If it's tie, no winner, the screen is green and the phrase "It's a tie" appears.
+    If it's tie, no winner...
+     the screen is green and the phrase "It's a tie" appears.
 
-    If all of the squares are filled and no players have three in a row, the game is a tie.
-    When only box is left empty, and no win is possible, the game will display the finish screen with, 'it's a tie'.
+    2 choices are presented on the finish-screen...
 
-    When the "Play Game!" button is clicked, a game reset occurs, the board appears again, empty, and a new game begins. A game reset is: all internal game, and computer player if needed,  tracking values as well as the filled-in boxes are reset to appear empty.
+      When the "Play Game!" button is clicked a game reset occurs.
+        A game reset is: internal values are reset to default starting values.
+        The game board appears again, empty.
+        The same player names persist and a new game begins.
 
-    When 'playing again', the player names remain.
-
-    When the "New Game, with different players" button is clicked, a game reset occurs, but also the player names are reset also. The start screen, with blank player name inputs appears again, to start a new game with different players  
+        When the "New Game, with different players" button is clicked...
+         a game reset also occurs, however...
+          The player names are reset to blank and..
+          The normal start screen appears..
+            with blank player name inputs,
+            and the 'start game' button
 
 # Extra Credits
 
   1: On the start screen, the user is prompted to add their name before the game starts
 
-  2: Display the player’s name on the board screen during game play
+  2: The player’s name/s are displayed on the board screen during game play
 
-  3: Add programming to support playing against the computer.
+  3: A computer player has been implemented.
 
-          If only one player name is entered; the player name that is blank is by the computer.
+          If only one player name is entered;
+          the player name that is blank is played by the computer.
 
-          When it's the computer player's turn, a setTimeout of 800 milliseconds is used to give the highlight affect of the computer player's player-label to occur. This also makes it easier for the human player to realize that the computer is taking it's turn.
+          When it's the computer player's turn,
+          a setTimeout of 800 milliseconds is used...
+           so the computer player's player-label activation can occur.
+           This makes it easier for the human player to realize ...
+            that the computer is taking it's turn.
 
-          While the computer is taking it's turn, mouse-hover and mouse-click events on the Tictactoe boxes is disabled. This is so the human player will not click a box by mistake. The mouse-hover and mouse-click event on the Tictactoe boxes in enabled when it's the human's turn.
+          While the computer is taking it's turn,
+           mouse-hover and mouse-click events on the Tictactoe boxes...
+            are disabled.
 
-          The computer player will play to win, but will also play to bitter end, even if a draw.
+            This is so the human player will not click a box by mistake.
 
-          Instead of implementing an unbeatable computer player, I added both logic and randomness so the computer player will win, is possible, but will also not always respond that same way to every scenario.
+            The mouse-hover and mouse-click events on the Tictactoe boxes`
+             are enabled when it's the human's turn.
 
-          When there is more then one block or win possibility, a random number generator is used to pick from the possible win or block targets.
+          The computer player will play to win...
+           but will also play to bitter end, even if a draw.
 
-          This makes the computer player appear to win or lose 'naturally'. I believe this makes the playing experience more fun for the human player  
+           I added both logic and randomness to the computer player.
+            The computer will play to win, if possible..
+            The computer will block the human from winning.
+            But the computer will not always respond that same way...
+             to the same scenario.
 
-  4: DONE: Display the player’s name if they win the game
+          When there is more then one block or win possibility...
+           a random number generator is used to...
+            pick from the possible win or block targets.
+
+          This makes the computer player...
+           appear to win or lose 'naturally'.
+           without purely 'programmed responses'.
+
+           Since this give the human player a chance to win...
+            it's more fun for the human player.  
+
+  4:  When the a player wins...
+        the player’s name is displayed in the finish-win screen.
 
 
 # TicTacToe program flow:
