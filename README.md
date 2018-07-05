@@ -147,7 +147,7 @@
 
     2 choices are presented on the finish-screen...
 
-      When the "Play Game!" button is clicked a game reset occurs.
+      When the "Play Again!" button is clicked a game reset occurs.
         A game reset is: internal values are reset to default starting values.
         The game board appears again, empty.
         The same player names persist and a new game begins.
@@ -202,7 +202,7 @@
            appear to win or lose 'naturally'.
            without purely 'programmed responses'.
 
-           Since this give the human player a chance to win...
+           Since this gives the human player a chance to win...
             it's more fun for the human player.  
 
   4:  When the a player wins...
@@ -331,16 +331,21 @@
           and there is not yet winner or a tie..
            takeTurn() calls computerPlay() after the human's turn is done.
 
-          The computerPlay() methods uses 3 different levels of methods.
-            In the computerPlay() method,
-              a fairly simple if/else decision-tree is used to...
-               choose boxes that are targets for a block or for a win.
-
-          The computerPlay()'s if/else decision-tree is turn-based.
-
           Instead of..
            calculating all the different moves possible in a game
            I went a somewhat simpler route.
+
+          The computerPlay() methods uses 3 different levels of methods.
+            In the computerPlay() method,
+            The computerPlay()'s if/else decision-tree is turn-based.
+              It is used to...
+               based on turn or move number,
+                if computer has 2 in a row, complete it to win
+                or look block 2 in a row,
+                if no 2 in a row, then
+                  look for targets to block future 2 in a row
+                    or even a fork
+                  look to get 2 in a row
 
            Assuming, for each turn,
             how many boxes the opponent could have filled,
