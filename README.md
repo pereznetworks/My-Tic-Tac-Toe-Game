@@ -41,7 +41,8 @@
           If only 1 player name entered...
             the computer plays the player with no name.
 
-            So the computer can play both X or O, but the UI assumes most humans will want to play the game as X.
+            So the computer can play both X or O, but the UI assumes...
+            most humans will want to play the game as X.
 
             More on the computer player below...
 
