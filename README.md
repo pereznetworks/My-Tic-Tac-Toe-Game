@@ -348,7 +348,7 @@
           The analyzeGameBoard(), returns an object, possibleTargets,
            it has 2 arrays.
            Each array is set of numbers,
-           or empty boxes that are targets...
+            representing which empty TicTacToe boxes are targets...
             for a block of a winning row...
             or completion of a winning row.  
 
@@ -357,7 +357,7 @@
              depending on whether blocks or wins are available.
 
              The makeWinMove and makeBlockMove are passed ...
-             the array from the possibleTargets object.
+             the arrays from the possibleTargets object.
 
              When there is more then one block or win possibility,
               a random number generator is used to ...
