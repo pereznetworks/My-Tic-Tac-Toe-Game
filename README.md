@@ -4,6 +4,8 @@
 
     Fix browser crash bug
 
+        The browser crash bug started after adding an additional if/else branch to  my computerPlay()'s decision-tree.  
+
     Finish documentation
 
 # Project Expectations:  
