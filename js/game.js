@@ -209,13 +209,21 @@ var tictactoe = (function (exports){
               game.Ofilled.push(indexNoOfSelectedBox);
               itemNoOfSelectedBox.setAttribute('class', 'box box-filled-1');
               game.winner = game.detectIfWinner(game);
-              game.isGameOver(game);
+              if (game.playerOComputer == true){
+                setTimeout(game.isGameOver, 400, game);
+              } else {
+                game.isGameOver(game);
+              }
             } else {
               game.trackFilledBoxes(game, indexNoOfSelectedBox, game.isTurn);
               game.Xfilled.push(indexNoOfSelectedBox);
               itemNoOfSelectedBox.setAttribute('class', 'box box-filled-2');
               game.winner = game.detectIfWinner(game);
-              game.isGameOver(game);
+              if (game.playerXComputer == true){
+                setTimeout(game.isGameOver, 400, game);
+              } else {
+                game.isGameOver(game);
+              }
             } // end if game.isTurn
 
           }; // end takeTurn()
@@ -589,7 +597,7 @@ var tictactoe = (function (exports){
                 // increment moveNo,
                 game.computer.moveNo += 1;
                 // decide on best move
-                setTimeout(decideMove, 1000, game);
+                setTimeout(decideMove, 800, game);
 
             } // end if game.isTurn
 
