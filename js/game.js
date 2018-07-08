@@ -247,36 +247,41 @@ var tictactoe = (function (exports){
 
           exports.playGame = function(game){
 
-            // 'O' or 'X' appears to follow player's mouse around tictactoe game board
-            game.$boxes.each(function(index, item){
-                $(this).hover(  // when the mouse hovers over a box...
-                  function(){ // execute this function
-                    // if box is not selected, (or is empty)
-                    if (this.attributes[0].value === "box"){
-                      // if it's playerO's turn ..
-                      if (game.isTurn === game.playerO && game.playerOComputer == false) {
-                        // playerO's symbol appears...
-                        this.style.backgroundImage = "url('img/o.svg')";
-                        this.style.backgroundColor = '#FFA000';
-                      } else if (game.isTurn === game.playerX && game.playerXComputer == false){
-                        // else playerX's symbol appears...
-                        this.style.backgroundImage = "url('img/x.svg')";
-                        this.style.backgroundColor = '#3688C3';
-                      } // end if game.isTurn
-                    } // end if this.attributes[0].value === "box"
-                  },// end hover if class 'box', (is not yet selected)
-                   function(){
-                    // "X" or "O" disappears when mouse moves away from box
-                    if (this.attributes[0].value === "box"){
-                        this.style.backgroundImage = "";
-                        this.style.backgroundColor = "";
-                      } // end if active player
-                  }
-                );
-            }); // end mouse hover event
+            if (game.isTurn = game.computer.player){
+              game.computer.computerPlay(game);
+            } // end if (computer is playing and game is NOT over)
 
             // for each box on tictactoe board
                 if (game.isTurn !== game.computer.player){
+
+                  // 'O' or 'X' appears to follow player's mouse around tictactoe game board
+                  game.$boxes.each(function(index, item){
+                      $(this).hover(  // when the mouse hovers over a box...
+                        function(){ // execute this function
+                          // if box is not selected, (or is empty)
+                          if (this.attributes[0].value === "box"){
+                            // if it's playerO's turn ..
+                            if (game.isTurn === game.playerO && game.playerOComputer == false) {
+                              // playerO's symbol appears...
+                              this.style.backgroundImage = "url('img/o.svg')";
+                              this.style.backgroundColor = '#FFA000';
+                            } else if (game.isTurn === game.playerX && game.playerXComputer == false){
+                              // else playerX's symbol appears...
+                              this.style.backgroundImage = "url('img/x.svg')";
+                              this.style.backgroundColor = '#3688C3';
+                            } // end if game.isTurn
+                          } // end if this.attributes[0].value === "box"
+                        },// end hover if class 'box', (is not yet selected)
+                         function(){
+                          // "X" or "O" disappears when mouse moves away from box
+                          if (this.attributes[0].value === "box"){
+                              this.style.backgroundImage = "";
+                              this.style.backgroundColor = "";
+                            } // end if active player
+                        }
+                      );
+                  }); // end mouse hover event
+
                   game.$boxes.each(function(index, item){
                     $(this).click(function(){
                       if (item.attributes[0].value === "box"){ // if not filled in yet
@@ -285,12 +290,10 @@ var tictactoe = (function (exports){
                           // fill in chosen box with X or O depending on game.isTurn ...
                           game.takeTurn(index, item, game);
                           // if either below is true, start computer player
-                          if (game.playerXComputer == true || game.playerOComputer == true && game.isWinner == 'keep playing'){
-                            game.computer.computerPlay(game);
-                          } // end if (computer is playing and game is NOT over)
                       } // end if (if box not filled in yet)
                     }); // end box click event handler
                   }); // end forEach tictactoe boxes
+
                 } // end if (it's not computer player's turn)
 
           }; // end playGame() method
@@ -415,8 +418,6 @@ var tictactoe = (function (exports){
 
             } // end if (!game.setNewPlayers)
 
-
-
           }; // end setupNewGame()
 
           exports.startGame = function(){
@@ -436,8 +437,6 @@ var tictactoe = (function (exports){
               // test for targets to get 3 or 2 in row
               // 1 in a row, r1
               // 2 in a row, r2
-              let rankedtargetBoxes = [];
-              let rankedtargetBoxesR1 = [];
 
               let possibleTargets = '';
               possibleTargets = game.computer.analyzeGameBoard(game, 'r2', 'r2');
@@ -470,6 +469,16 @@ var tictactoe = (function (exports){
                     // else if target to block opponent from getting 2 in a row
                      makeBlockMove(game, possibleTargetsR1);
                      // block it
+
+                   } else { // then computer is playing X
+
+                     let targetBoxes = [0,2,4,6,8];
+                     const randomBoxNumber = Math.floor(Math.random() * targetBoxes.length);
+                     const targetBoxNo = targetBoxes[randomBoxNumber];
+                     // store box being filled in
+                     game.filledBoxes.push(targetBoxNo);
+                     // then call takeTurn, to play that box
+                     game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
 
                    }
 
