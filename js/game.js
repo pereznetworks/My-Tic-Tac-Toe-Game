@@ -15,7 +15,7 @@ var tictactoe = (function (exports){
             isTurn: 'X',
             isWinner: 'keep playing',
             filledBoxes: [],
-            winRowsProgress: [
+            gameBoardState: [
                 [[0,'E'],[1,'E'],[2,'E'],'none'],  // 0
                 [[3,'E'],[4,'E'],[5,'E'],'none'],  // 1
                 [[6,'E'],[7,'E'],[8,'E'],'none'],  // 2
@@ -73,7 +73,7 @@ var tictactoe = (function (exports){
               // who has a potential winning row, which rows are blocked
               // if the active player has just gotten a 3 in a row, or a winner
 
-              game.winRowsProgress.forEach(function(itemArray, itemArrayIndex){
+              game.gameBoardState.forEach(function(itemArray, itemArrayIndex){
                   // each item is an itemArray has 4 items,
                   // 0,1 and 2 are arrays,
                   // item 3 is a string, which player 1 or 2 boxes selected
@@ -145,7 +145,7 @@ var tictactoe = (function (exports){
             const isTargetBox = 'E';  // any empty, 'E', box is a target for block or a  win
             const targets = [];  // array for target boxes
 
-            game.winRowsProgress.forEach(function(rowItem, rowIndex){
+            game.gameBoardState.forEach(function(rowItem, rowIndex){
                 // does computer or player have 1 or 2 boxes in any row
                  if (rowItem[3] == `p${computerORplayer}-${noBoxesInRow}`){
                    // iterate through that row,
@@ -157,7 +157,7 @@ var tictactoe = (function (exports){
                        }  // end if == isTargetBox
                   }); // end forEach rowItem
                 } // if computer or player has winning row
-            }); // end for winRowsProgress
+            }); // end for gameBoardState
 
             return targets;
 
@@ -168,7 +168,7 @@ var tictactoe = (function (exports){
             let blockedRows = 0;
 
             // count blocked rows
-            game.winRowsProgress.forEach(function(winRowItem, winRowIndex){
+            game.gameBoardState.forEach(function(winRowItem, winRowIndex){
               if (winRowItem[3] == 'blocked'){
                 blockedRows += 1;
               }
@@ -177,7 +177,7 @@ var tictactoe = (function (exports){
             // test if any player has a winning row
             if (game.isTurn === 'X') {
 
-              game.winRowsProgress.forEach(function(winRowItem, winRowIndex){
+              game.gameBoardState.forEach(function(winRowItem, winRowIndex){
                 // iterate each item of possible winning rows
                 if (winRowItem[3] === 'X-winner'){
                     game.isWinner = 'playerX';
@@ -185,7 +185,7 @@ var tictactoe = (function (exports){
                });
             } else if (game.isTurn === 'O'){
 
-              game.winRowsProgress.forEach(function(winRowItem, winRowIndex){
+              game.gameBoardState.forEach(function(winRowItem, winRowIndex){
                 // iterate each item of possible winning rows
                 if (winRowItem[3] === 'O-winner')
                     game.isWinner = 'playerO';
@@ -343,7 +343,7 @@ var tictactoe = (function (exports){
                 this.style.backgroundImage = '';
               }); // reset each box background Color and Image style to 'empty'
 
-              game.winRowsProgress.forEach(function(winRowArray, indexWinRowArray){
+              game.gameBoardState.forEach(function(winRowArray, indexWinRowArray){
 
                   winRowArray.forEach(function(itemArray, indexOfItemArray){
                     if (indexOfItemArray < 3){

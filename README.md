@@ -248,7 +248,7 @@
                       setupNewGame
                        if reset
                           emptyArray
-                            on filledBoxes, Xfilled, Ofilled and winRowsProgress
+                            on filledBoxes and gameBoardState
                             if computer player,
                               on playerFilled and opponentFilled
                       playGame
@@ -271,7 +271,7 @@
 
               takeTurn()
                 1: calls trackFilledBoxes(),
-                trackFilledBoxes() updates winRowsProgress table,
+                trackFilledBoxes() updates gameBoardState table,
                 with state of each box
                  and state of the winning-row the box is in.
 
@@ -291,13 +291,13 @@
             C: Otherwise, gamePlay() continues.
 
       So the state of the game-board is tracked in ...
-          game.winRowsProgress table array.
+          game.gameBoardState table array.
 
-       The winRowsProgress table is a bit complex.
+       The gameBoardState table is a bit complex.
        By tracking more information here..
           I can use simpler methods in the rest of code.
 
-          The winRowsProgress table is made up of the possible winning-rows,
+          The gameBoardState table is made up of the possible winning-rows,
            or rows of 3, vertically, horizontally, diagonally,
            that could result in a win.
 
@@ -356,7 +356,7 @@
             how many boxes the opponent could have filled,
             and then how soon opponent could have 2 boxes in a row
 
-          I can use the game.winRowsProgress to...
+          I can use the game.gameBoardState to...
           look at which wins are possible,
           given the boxes that have been filled,
           and how many turns remain.
@@ -367,10 +367,10 @@
             1, '-w1', or 2, '-w2', boxes filled in.
 
           The analyzeGameBoard() functions calls findTargetBox(),
-           which reads the winRowsProgress table-array,
+           which reads the gameBoardState table-array,
            filtering on winning-rows have a '-w1' or '-w2'
 
-           The winRowsProgress table array is updated after each move by the trackFilledBoxes() method.
+           The gameBoardState table array is updated after each move by the trackFilledBoxes() method.
 
           The analyzeGameBoard(), returns an object, possibleTargets,
            it has 2 arrays.
@@ -406,7 +406,7 @@
               for the possible win or block targets only.
 
               I could also, add code so the computer player 'learns'.
-              by saving the state of the winRowsProgress table
+              by saving the state of the gameBoardState table
                at the end of each game, lose or win.
 
                Then add code to analyze the game...
