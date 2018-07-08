@@ -314,7 +314,7 @@
             how many boxes are filled by that player.
 
             So the winning-row state could then be set to
-             X-w1, X-w2 or O-w1 or O-w2.
+             X-r1, X-r2 or O-r1 or O-r2.
             Once a winning-row is completed by one player,
              this fourth element is set to X-winner or O-winner.
 
@@ -364,11 +364,11 @@
           The computerPlay() method, calls the analyzeGameBoard() method,
            passing a value of what state of winning-rows to check for,
            whether to look for winning rows that have...
-            1, '-w1', or 2, '-w2', boxes filled in.
+            1, 'r1', or 2, 'r2', boxes filled in.
 
           The analyzeGameBoard() functions calls findTargetBox(),
            which reads the gameBoardState table-array,
-           filtering on winning-rows have a '-w1' or '-w2'
+           filtering on winning-rows have a 'r1' or 'r2'
 
            The gameBoardState table array is updated after each move by the trackFilledBoxes() method.
 
