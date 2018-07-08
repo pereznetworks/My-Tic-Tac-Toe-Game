@@ -71,6 +71,7 @@ var tictactoe = (function (exports){
 
               // as the game progresses, track who fills each box
               // who has a potential winning row, which rows are blocked
+              // r1 = 1 box in a winning row, r2 = 1 boxes in a winning row
               // if the active player has just gotten a 3 in a row, or a winner
 
               game.gameBoardState.forEach(function(itemArray, itemArrayIndex){
@@ -86,26 +87,26 @@ var tictactoe = (function (exports){
                       if (rowItem[0] == selectedBoxNumber) {
                         // if box # = selected boxNumber
                         rowItem[1] = selectedBy;
-                        if( itemArray[3] == `p${activePlayer}-w2` ){
+                        if( itemArray[3] == `p${activePlayer}-r2` ){
                             // and if active player has 2 boxes in this row
                             itemArray[3] = `${activePlayer}-winner`;
                             // then this row is a winner
-                          } else if ( itemArray[3] == `p${inactivePlayer}-w2` ) {
+                          } else if ( itemArray[3] == `p${inactivePlayer}-r2` ) {
                             // else if inactive player has 2 in boxes in this row
                             itemArray[3] = `blocked`;
                             // then marked it as blocked
-                          } else if( itemArray[3] === `p${activePlayer}-w1`){
+                          } else if( itemArray[3] === `p${activePlayer}-r1`){
                             // else if active player already has 1 box in this row
-                            itemArray[3] = `p${activePlayer}-w2`;
-                            // then label it a row for active player, -w2
-                        } else if ( itemArray[3] == `p${inactivePlayer}-w1` ) {
+                            itemArray[3] = `p${activePlayer}-r2`;
+                            // then label it a row for active player, -r2
+                        } else if ( itemArray[3] == `p${inactivePlayer}-r1` ) {
                           // else if inactive player has 1 in boxes in this row
                           itemArray[3] = `blocked`;
                           // then marked it as blocked
                         } else if ( itemArray[3] == `none` ){
                             // if no one has boxes in this row
-                            itemArray[3] = `p${selectedBy}-w1`;
-                            // then label it a row for active player, -w1
+                            itemArray[3] = `p${selectedBy}-r1`;
+                            // then label it a row for active player, -r1
                         }
                       }
                     }
@@ -138,8 +139,8 @@ var tictactoe = (function (exports){
             // game object
             // computerORplayer; string for 'O' or 'X'
             // noBoxesInRow; string
-               // for '-w2' for 2 in a row
-               // or '-w1' for 1 in a row
+               // for '-r2' for 2 in a row
+               // or '-r1' for 1 in a row
 
 
             const isTargetBox = 'E';  // any empty, 'E', box is a target for block or a  win
@@ -418,7 +419,8 @@ var tictactoe = (function (exports){
 
           }; // end setupNewGame()
 
-          exports.startGame = function(){ // startGame called by start screen 'start' button
+          exports.startGame = function(){
+            // startGame called by start screen 'start' button
               // first game with new players, needReset can be set to false
               this.needReset = false;
               //setup a new game
@@ -429,13 +431,14 @@ var tictactoe = (function (exports){
 
             const decideMove = function(game){
 
-              // calc move to make,
-              // test for how many boxes in a row opponent has
-              // 1 in a winning row, w1
-              // 2 in a winning row, w2
+              // decide on move to make,
+              // test for targets to block 3 or 2 in row by opponent
+              // test for targets to get 3 or 2 in row
+              // 1 in a row, r1
+              // 2 in a row, r2
 
               let possibleTargets = '';
-              possibleTargets = game.computer.analyzeGameBoard(game, 'w2', 'w2');
+              possibleTargets = game.computer.analyzeGameBoard(game, 'r2', 'r2');
               // which empty boxes are targets to block opponent from completing 3 in a row
               // and which empty boxes are targets for computyer to complete 2 in a row
 
@@ -452,7 +455,7 @@ var tictactoe = (function (exports){
                } else {
 
                  let possibleTargetsW1 = '';
-                 possibleTargetsW1 = game.computer.analyzeGameBoard(game, 'w1', 'w1');
+                 possibleTargetsW1 = game.computer.analyzeGameBoard(game, 'r1', 'r1');
                  // which empty boxes are targets to block opponent from getting 2 in a row
                  // and which are targets to get 2 in a row
 
@@ -461,7 +464,7 @@ var tictactoe = (function (exports){
                      makeWinMove(game, possibleTargetsW1);
                      // play it
 
-                  } else if(possibleTargetsW1.possibleBlocks[0].length > 0){ // if opponent has a w2
+                  } else if(possibleTargetsW1.possibleBlocks[0].length > 0){ // if opponent has a r2
                     // else if target to block opponent from getting 2 in a row
                      makeBlockMove(game, possibleTargetsW1);
                      // block it
@@ -492,7 +495,7 @@ var tictactoe = (function (exports){
                    possibleTargets.possibleBlocks[0].forEach(function(ptItem, ptIndex){
                     // itrate through target boxes,
                        if(cornerItem == ptItem){
-                         // select target that is a corner box from computer w1 to for a w2
+                         // select target that is a corner box from computer r1 to for a r2
                           targetBoxes.push(ptItem);
                           // add to targets to play for a block
                         }
@@ -503,7 +506,7 @@ var tictactoe = (function (exports){
                     possibleTargets.possibleBlocks[0].forEach(function(ptItem, ptIndex){
                      // itrate through target boxes,
                         if(sideItem == ptItem){
-                            // select target that is a side box from computer w1 to for a w2
+                            // select target that is a side box from computer r1 to for a r2
                             targetBoxes.push(ptItem);
                             // to play that target box for a block
                           }
@@ -551,7 +554,7 @@ var tictactoe = (function (exports){
                    possibleTargets.possibleWins[0].forEach(function(ptItem, ptIndex){
                     // itrate through target boxes,
                        if(cornerItem == ptItem){
-                         // select target that is a corner box from computer w1 to for a w2
+                         // select target that is a corner box from computer r1 to for a r2
                            targetBoxes.push(ptItem);
                            // add to targetBoxes to played
                          }
@@ -562,9 +565,9 @@ var tictactoe = (function (exports){
                     possibleTargets.possibleWins[0].forEach(function(ptItem, ptIndex){
                      // itrate through target boxes,
                         if(sideItem == ptItem){
-                          // select target that is a side box from computer w1 to for a w2
+                          // select target that is a side box from computer r1 to for a r2
                            targetBoxes.push(ptItem);
-                            // to play that target box for a w1 or w2
+                            // to play that target box for a r1 or r2
                           }
                     }); // end for each side box
                   }); // end for possibleWinners.sides
