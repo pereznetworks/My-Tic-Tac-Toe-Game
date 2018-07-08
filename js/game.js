@@ -14,8 +14,6 @@ var tictactoe = (function (exports){
             computerTurnComplete: false,
             isTurn: 'X',
             isWinner: 'keep playing',
-            Ofilled: [],
-            Xfilled: [],
             filledBoxes: [],
             winRowsProgress: [
                 [[0,'E'],[1,'E'],[2,'E'],'none'],  // 0
@@ -27,6 +25,9 @@ var tictactoe = (function (exports){
                 [[0,'E'],[4,'E'],[8,'E'],'none'],  // 6
                 [[2,'E'],[4,'E'],[6,'E'],'none'],  // 7
               ],
+            filledInClassNameforActivePlayer: '',
+            filledInClassNameforO: 'box box-filled-1',
+            filledInClassNameforX: 'box box-filled-2',
             $liPlayerX: '',
             $liPlayerO: '',
             $boxes: '',
@@ -200,31 +201,29 @@ var tictactoe = (function (exports){
 
           exports.takeTurn = function(indexNoOfSelectedBox, itemNoOfSelectedBox, game){
 
-            // fill in box for player O or X
-            // after each turn
-                // detectIfWinner()
-                // isGameOver()
-            if (game.isTurn === game.playerO) {
-              game.trackFilledBoxes(game, indexNoOfSelectedBox, game.isTurn);
-              game.Ofilled.push(indexNoOfSelectedBox);
-              itemNoOfSelectedBox.setAttribute('class', 'box box-filled-1');
-              game.winner = game.detectIfWinner(game);
-              if (game.playerOComputer == true){
-                setTimeout(game.isGameOver, 400, game);
-              } else {
-                game.isGameOver(game);
-              }
+            if (game.isTurn === 'X'){
+              // active player is X, so use css box-filled-in class name for X
+              game.filledInClassNameforActivePlayer = game.filledInClassNameforX;
             } else {
+              // active player is X, so use css box-filled-in class name for O
+              game.filledInClassNameforActivePlayer = game.filledInClassNameforO;
+            }
+
+              // keep track of filled boxes
               game.trackFilledBoxes(game, indexNoOfSelectedBox, game.isTurn);
-              game.Xfilled.push(indexNoOfSelectedBox);
-              itemNoOfSelectedBox.setAttribute('class', 'box box-filled-2');
+              // change class name of box, to trigger css to fill-in box for X or O
+              itemNoOfSelectedBox.setAttribute('class', game.filledInClassNameforActivePlayer);
+              // return state of game, winner, tie or 'keep playing'
               game.winner = game.detectIfWinner(game);
-              if (game.playerXComputer == true){
-                setTimeout(game.isGameOver, 400, game);
+
+              // if computer is playing O or X, and if it's computer player's turn ....
+              if (game.isTurn === game.computer.player){
+                // wait a bit so human can see box filled in
+                setTimeout(game.isGameOver, 200, game);
               } else {
+                // else if only humans are playing no need for setTimeout
                 game.isGameOver(game);
               }
-            } // end if game.isTurn
 
           }; // end takeTurn()
 
@@ -285,7 +284,7 @@ var tictactoe = (function (exports){
                           // fill in chosen box with X or O depending on game.isTurn ...
                           game.takeTurn(index, item, game);
                           // if either below is true, start computer player
-                          if (game.playerXComputer == true || game.playerOComputer == true && game.isWinner === 'keep playing'){
+                          if (game.playerXComputer == true || game.playerOComputer == true && game.isWinner == 'keep playing'){
                             game.computer.computerPlay(game);
                           } // end if (computer is playing and game is NOT over)
                       } // end if (if box not filled in yet)
@@ -355,8 +354,6 @@ var tictactoe = (function (exports){
               }); //reset array used track progress of winning rows
 
               // make sure each array for O and X filled are empty
-              game.Ofilled = game.emptyArray(game.Ofilled);
-              game.Xfilled = game.emptyArray(game.Xfilled);
               game.filledBoxes = game.emptyArray(game.filledBoxes);
               game.computer.moveNo = 0;
 
@@ -429,7 +426,6 @@ var tictactoe = (function (exports){
           }; // end startGame() method
 
           exports.computer.computerPlay = function(game){
-
 
             const decideMove = function(game){
 
@@ -593,12 +589,10 @@ var tictactoe = (function (exports){
 
             // if it's computer.player's turn
             if (game.isTurn === game.computer.player) {
-
                 // increment moveNo,
                 game.computer.moveNo += 1;
                 // decide on best move
                 setTimeout(decideMove, 800, game);
-
             } // end if game.isTurn
 
           }; //end computerPlay()
