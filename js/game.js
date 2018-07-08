@@ -209,21 +209,13 @@ var tictactoe = (function (exports){
               game.Ofilled.push(indexNoOfSelectedBox);
               itemNoOfSelectedBox.setAttribute('class', 'box box-filled-1');
               game.winner = game.detectIfWinner(game);
-              if (game.playerOComputer == true){
-                setTimeout(game.isGameOver, 1000, game);
-              } else {
-                game.isGameOver(game);
-              }
+              game.isGameOver(game);
             } else {
               game.trackFilledBoxes(game, indexNoOfSelectedBox, game.isTurn);
               game.Xfilled.push(indexNoOfSelectedBox);
               itemNoOfSelectedBox.setAttribute('class', 'box box-filled-2');
               game.winner = game.detectIfWinner(game);
-              if (game.playerXComputer == true){
-                setTimeout(game.isGameOver, 1000, game);
-              } else {
-                game.isGameOver(game);
-              }
+              game.isGameOver(game);
             } // end if game.isTurn
 
           }; // end takeTurn()
@@ -432,6 +424,12 @@ var tictactoe = (function (exports){
 
 
             const decideMove = function(game){
+
+              // calc move to make,
+              // test for how many boxes in a row opponent has
+              // 1 in a winning row, w1
+              // 2 in a winning row, w2
+
               let possibleTargets = '';
               possibleTargets = game.computer.analyzeGameBoard(game, 'w2', 'w2');
               // which empty boxes are targets to block opponent from completing 3 in a row
@@ -439,7 +437,7 @@ var tictactoe = (function (exports){
 
               if (possibleTargets.possibleWins[0].length > 0){
                 // if target for computer to complete 3 in a row
-                  makeWinMove(game, possibleTargetsM4);
+                  makeWinMove(game, possibleTargets);
                   // play it, for a win
 
               } else if(possibleTargets.possibleBlocks[0].length > 0){
@@ -461,7 +459,7 @@ var tictactoe = (function (exports){
 
                   } else if(possibleTargetsW1.possibleBlocks[0].length > 0){ // if opponent has a w2
                     // else if target to block opponent from getting 2 in a row
-                     makeBlockMove(game, possibleTargetW1);
+                     makeBlockMove(game, possibleTargetsW1);
                      // block it
 
                    }
@@ -590,125 +588,8 @@ var tictactoe = (function (exports){
 
                 // increment moveNo,
                 game.computer.moveNo += 1;
-
-                // calc move to make, based on move or turn number,
-                // and test for how many boxes in a row opponent has
-                // 1 in a winning row, w1
-                // 2 in a winning row, w2
-                if (game.computer.moveNo == 1) {
-
-                    let possibleTargetsM1 = '';
-                    possibleTargetsM1 = game.computer.analyzeGameBoard(game, 'w1');
-                    // // which empty boxes are targets to block opponent from getting 2 in a row
-                    makeBlockMove(game, possibleTargetsM1);
-                    // block it
-
-                  } else if (game.computer.moveNo == 2){
-
-                      let possibleTargetsM2 = '';
-                      possibleTargetsM2 = game.computer.analyzeGameBoard(game, 'w2');
-                      // which empty boxes are targets to block opponent from completing 3 in a row
-
-                       if( possibleTargetsM2.possibleBlocks[0].length > 0){
-                          // if target to block opponnet from completing 3 in a row
-                          makeBlockMove(game, possibleTargetsM2);
-                          // block it
-
-                        } else { // if no 2 in a row by opponent
-
-                          let possibleTargetsM2w1 = '';
-                          possibleTargetsM2w1 = game.computer.analyzeGameBoard(game, 'w1', 'w1');
-                          // which empty boxes are targets to block opponent from getting 2 in a row
-                          // and which are targets to get 2 in a row
-
-                          if(possibleTargetsM2w1.possibleBlocks[0].length > 0){
-                               // if target to block opponnet from gettting 2 in a row
-                               makeBlockMove(game, possibleTargetsM2w1); // block it
-
-                           } else if (possibleTargetsM2.possibleWins[0].length > 0){
-                             // else if targets for computer to get 2 in a row,
-                               makeWinMove(game, possibleTargetsM2w1);
-
-                            } // end if possible to Block opponent else go for 2 in a row
-
-                        } // end if possible to Block 2 in a row by opponent
-
-                  } else if (game.computer.moveNo == 3){
-
-                      let possibleTargetsM3 = '';
-                      possibleTargetsM3 = game.computer.analyzeGameBoard(game, 'w2', 'w2');
-                      // which empty boxes are targets to block opponent from completing 3 in a row
-                      // and which empty boxes are targets for computyer to complete 2 in a row
-
-                        if (possibleTargetsM3.possibleWins[0].length > 0){
-                          // if target for computer to complete 3 in a row
-                            makeWinMove(game, possibleTargetsM3);
-                            // play it, to win
-
-                        } else if (possibleTargetsM3.possibleBlocks[0].length > 0){
-                          // else if target to block opponent from completing 3 in a row
-                             makeBlockMove(game, possibleTargetsM3);
-                             // block it ...
-
-                        } else {
-
-                             let possibleTargetsM3w1 = '';
-                             possibleTargetsM3w1 = game.computer.analyzeGameBoard(game, 'w1', 'w1');
-                             // which empty boxes are targets to block opponent from getting 2 in a row
-                             // and which are targets to get 2 in a row
-
-                             if (possibleTargetsM3w1.possibleWins[0].length > 0){
-                              // if target for computer to get 2 in a row
-                                 makeWinMove(game, possibleTargetsM3w1);
-                                 // play it
-
-                             } else if (possibleTargetsM3w1.possibleBlocks[0].length > 0){
-                               // else if target to block opponent from getting 2 in a row
-                                 makeBlockMove(game, possibleTargetsM3w1);
-                                 // block it
-                             }
-
-                        }
-
-                  } else if (game.computer.moveNo == 4){
-
-                      let possibleTargetsM4 = '';
-                      possibleTargetsM4 = game.computer.analyzeGameBoard(game, 'w2', 'w2');
-                      // which empty boxes are targets to block opponent from completing 3 in a row
-                      // and which empty boxes are targets for computyer to complete 2 in a row
-
-                      if (possibleTargetsM4.possibleWins[0].length > 0){
-                        // if target for computer to complete 3 in a row
-                          makeWinMove(game, possibleTargetsM4);
-                          // play it, for a win
-
-                      } else if(possibleTargetsM4.possibleBlocks[0].length > 0){
-                        // else if target to block opponent from completing 3 in a row
-                         makeBlockMove(game, possibleTargetsM4);
-                         // block it
-
-                       } else {
-
-                         let possibleTargetsM4w1 = '';
-                         possibleTargetsM4w1 = game.computer.analyzeGameBoard(game, 'w1', 'w1');
-                         // which empty boxes are targets to block opponent from getting 2 in a row
-                         // and which are targets to get 2 in a row
-
-                         if (possibleTargetsM4w1.possibleWins[0].length > 0){
-                           // if target for computer to get 2 in a row
-                             makeWinMove(game, possibleTargetsM4w1);
-                             // play it
-
-                          } else if(possibleTargetsM4w1.possibleBlocks[0].length > 0){ // if opponent has a w2
-                            // else if target to block opponent from getting 2 in a row
-                             makeBlockMove(game, possibleTargetsM4w1);
-                             // block it
-
-                           }
-
-                       }// end if/else win or block
-
-                  } // end if/else for moveNo
+                // decide on best move
+                setTimeout(decideMove, 1000, game);
 
             } // end if game.isTurn
 
