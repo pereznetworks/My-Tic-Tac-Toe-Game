@@ -436,6 +436,8 @@ var tictactoe = (function (exports){
               // test for targets to get 3 or 2 in row
               // 1 in a row, r1
               // 2 in a row, r2
+              let rankedtargetBoxes = [];
+              let rankedtargetBoxesR1 = [];
 
               let possibleTargets = '';
               possibleTargets = game.computer.analyzeGameBoard(game, 'r2', 'r2');
@@ -454,19 +456,19 @@ var tictactoe = (function (exports){
 
                } else {
 
-                 let possibleTargetsW1 = '';
-                 possibleTargetsW1 = game.computer.analyzeGameBoard(game, 'r1', 'r1');
+                 let possibleTargetsR1 = '';
+                 possibleTargetsR1 = game.computer.analyzeGameBoard(game, 'r1', 'r1');
                  // which empty boxes are targets to block opponent from getting 2 in a row
                  // and which are targets to get 2 in a row
 
-                 if (possibleTargetsW1.possibleWins[0].length > 0){
+                 if (possibleTargetsR1.possibleWins[0].length > 0){
                    // if target for computer to get 2 in a row
-                     makeWinMove(game, possibleTargetsW1);
+                     makeWinMove(game, possibleTargetsR1);
                      // play it
 
-                  } else if(possibleTargetsW1.possibleBlocks[0].length > 0){ // if opponent has a r2
+                  } else if(possibleTargetsR1.possibleBlocks[0].length > 0){ // if opponent has a r2
                     // else if target to block opponent from getting 2 in a row
-                     makeBlockMove(game, possibleTargetsW1);
+                     makeBlockMove(game, possibleTargetsR1);
                      // block it
 
                    }

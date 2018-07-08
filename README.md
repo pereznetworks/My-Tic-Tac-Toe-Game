@@ -1,33 +1,5 @@
 # TD-Project4: TIC-TAC-TOE
 
-# TODO:
-
-        BUG FIX:
-
-           computerPlay(), makeWinMove and makeBlockMove functions
-
-           The browser crash bug started after adding an additional if/else branch to  my computerPlay()'s decision-tree.  
-
-           This is where a 2 bugs may occurring
-
-           in move or turn 4..
-           causing the game to fill in 2 boxes..
-           once as the computer the other the opponent
-           causing a draw or a winner to be declared too early
-
-           in any turn..
-           causing an infinite-loop
-
-        UI tweak
-
-            switch the Player X and Player O name input....
-            most humans playing the game like to read from left to right.
-            Since X normally takes the first turn...
-              the player X name input 'feels' better placed on the left.
-              with player O on the right.
-
-        Finish documentation
-
 # Project Expectations:  
 
     No plugins are used. All javascript, game.js, is written by me.
@@ -123,13 +95,13 @@
          More on the computer player below under # Extra Credits.
 
     The game ends when ...
-    one player has three of their symbols in a row....
+
+     When one player has three of their symbols in a row....
       either horizontally, vertically or diagonally
 
-    The game will end when all boxes are filled..
-      and there is no possibility for 3 in row.
+     When all boxes are filled, with no winner
 
-    When the game ends, the board disappears and the finish screen appears.
+     When the game ends, the board disappears and the finish screen appears.
 
 # Finish Screen - Game end:
 
@@ -214,206 +186,20 @@
         when 'play again' is clicked the player names persist
         and the players can continue to play each other
 
-# TicTacToe program flow:
+# In future versions....
 
-     tictactoe is an IIFE module
+    I could give the players a choice ...
+     of a colors and symbols to use in the game.
 
-              start-screen
-                startGame
-                  setupNewGame
-                  playGame
+    I could also provide a choice to play a series of games
+      2 out of 3, 4 out of 5, etc.
 
-              board-screen
-                playGame
-                  takeTurn
-                    trackFilledBoxes
-                    detectIfWinner
-                    isGameOver
-                      finishGame
-                        show finish-screen
-                if computerPlayer
-                  analyzeGameBoard
-                    findTargetBox
-                  makeWinMove or makeBlockMove
-                    takeTurn
-                      trackFilledBoxes
-                      detectIfWinner
-                      isGameOver
-                        finishGame
-                          show finish-screen
+    I could also, add code so the computer player 'learns'.
+    by saving the state of the gameBoardState table
+     at the end of each game, lose or win.
+     Then add code to analyze the saved game...
+      to reveal which move at which turn can be taken...
+      to win, or not lose, that scenario in the future.
 
-              finish-screen
-                  finishGame
-                    if 'play again'
-                      setupNewGame
-                       if reset
-                          emptyArray
-                            on filledBoxes and gameBoardState
-                            if computer player,
-                              on playerFilled and opponentFilled
-                      playGame
-                        show board-screen
-                    if 'new game, different players'
-                      setupNewGame
-                        show start-screen
-
-
-# Game-State and the Computer-Player
-
-     Game play is handles the mostly by playGame().
-        and the takeTurn() method.
-
-          With each turn, gamePlay(), calls takeTurn(),
-
-          gamePlay()
-
-           A: calls takeTurn()
-
-              takeTurn()
-                1: calls trackFilledBoxes(),
-                trackFilledBoxes() updates gameBoardState table,
-                with state of each box
-                 and state of the winning-row the box is in.
-
-                2: 'fills-in' the players selected box with X or O.
-
-                3: calls detectIfWinner() to update game.isWinner
-                  if there is a winner or a tie
-
-           B: calls isGameOver()
-                1: to check the game.isWinner variable
-                   if it is set to "keep playing",
-                   or if there is a tie or winner.
-
-                   game.isGameOver()
-                    calls finishGame() if there is a tie or a winner.
-
-            C: Otherwise, gamePlay() continues.
-
-      So the state of the game-board is tracked in ...
-          game.gameBoardState table array.
-
-       The gameBoardState table is a bit complex.
-       By tracking more information here..
-          I can use simpler methods in the rest of code.
-
-          The gameBoardState table is made up of the possible winning-rows,
-           or rows of 3, vertically, horizontally, diagonally,
-           that could result in a win.
-
-          Each winning-row is an array of 4 elements.
-
-          The first 3, are the boxes.
-
-          The fourth element of each winning-row is a string,
-            which represents the state of that winning-row.
-            The state of each winning-row can be empty, or blocked.
-
-            In addition, in the winning-row's fourth element,
-            is also used to track which player has boxes in that row,
-            how many boxes are filled by that player.
-
-            So the winning-row state could then be set to
-             X-r1, X-r2 or O-r1 or O-r2.
-            Once a winning-row is completed by one player,
-             this fourth element is set to X-winner or O-winner.
-
-           As for the boxes,
-            the first 3 elements of each winning-row each are arrays
-             each containing 2 elements, [ [integer],['state'] ].
-
-             The 0 element of each box array is...
-              the number of that box on the tictactoe board
-              counting from 0, top-left corner, left to right.
-
-             The [1] element of each box array is the 'state' of each box,
-              E for empty.
-              And X or O, depending on which player fills that box.
-
-      The Computer Player
-
-          if the computer player is playing...
-          and there is not yet winner or a tie..
-           takeTurn() calls computerPlay() after the human's turn is done.
-
-          Instead of..
-           calculating all the different moves possible in a game
-           I went a somewhat simpler route.
-
-          The computerPlay() methods uses 3 different levels of methods.
-            In the computerPlay() method,
-            The computerPlay()'s if/else decision-tree is turn-based.
-              It is used to...
-               based on turn or move number,
-                if computer has 2 in a row, complete it to win
-                or look block 2 in a row,
-                if no 2 in a row, then
-                  look for targets to block future 2 in a row
-                    or even a fork
-                  look to get 2 in a row
-
-           Assuming, for each turn,
-            how many boxes the opponent could have filled,
-            and then how soon opponent could have 2 boxes in a row
-
-          I can use the game.gameBoardState to...
-          look at which wins are possible,
-          given the boxes that have been filled,
-          and how many turns remain.
-
-          The computerPlay() method, calls the analyzeGameBoard() method,
-           passing a value of what state of winning-rows to check for,
-           whether to look for winning rows that have...
-            1, 'r1', or 2, 'r2', boxes filled in.
-
-          The analyzeGameBoard() functions calls findTargetBox(),
-           which reads the gameBoardState table-array,
-           filtering on winning-rows have a 'r1' or 'r2'
-
-           The gameBoardState table array is updated after each move by the trackFilledBoxes() method.
-
-          The analyzeGameBoard(), returns an object, possibleTargets,
-           it has 2 arrays.
-           Each array is set of numbers,
-            representing which empty TicTacToe boxes are targets...
-            for a block of a winning row...
-            or completion of a winning row.  
-
-          Back in the computerPlay() method,
-            2 functions, makeWinMove or makeBlockMove are called
-             depending on whether blocks or wins are available.
-
-             The makeWinMove and makeBlockMove are passed ...
-             the arrays from the possibleTargets object.
-
-             When there is more then one block or win possibility,
-              a random number generator is used to ...
-              pick from the possible win or block targets.
-
-          In a future versions....
-
-              I could make the tictactoe module, a plugin,
-                completely independent of specific html nodes
-
-              I could give the players a choice ...
-               of a colors and symbols to use in the game.
-
-              I could also provide a choice to play a series of games
-                2 out of 3, 4 out of 5, etc.
-
-              I could add some code to 'rank' the target boxes...
-              by using a move-tree
-              for the possible win or block targets only.
-
-              I could also, add code so the computer player 'learns'.
-              by saving the state of the gameBoardState table
-               at the end of each game, lose or win.
-
-               Then add code to analyze the game...
-                to reveal which move at which turn can be taken...
-                to win, or not lose, that scenario in the future.
-
-              By implementing min-max algorithm,
-               or other game-based algorithms,
-               I could make the TicTacToe into just one game-mode
-               then add other game-modes, chess, checkers. etc..
+    By implementing min-max algorithm,
+     I could make the TicTacToe computer player 'smarter'

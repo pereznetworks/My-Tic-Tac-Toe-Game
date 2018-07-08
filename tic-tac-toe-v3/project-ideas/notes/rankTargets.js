@@ -3,7 +3,7 @@
 // filtering-out possible targets
   // when neither opponent or computer have 2 in a row
 
-// calculas : (using possibleTargets and winRowsProgress)
+// calculas : (using possibleTargets and gameBoardState)
   // complete w2 for a win
   // if no w2's for a win, (opponent missed a block)
      // then look block opponent w2
@@ -28,68 +28,107 @@ given :
 
   possibleTargets.w1s.blocks  //[1,2,2,3,5,6,6,7]
 
-// game.winRowsProgress.forEach(iArray, indexofiArray),
-  // iArray.forEach(item, itemIndex)
-      // if ( iArray[3] = O-w1 ),
-        // pChoice = null;
-        // unblocked = null;
-        // item.forEach(box, boxIndex)
-         // if (box[1] = 'E' && !pChoice )
-            // pChoice = box[0]
-         // else
-            // unblocked = box[0]
-         // game.winRowsProgress.forEach(iArray, indexofiArray)
-           // iArray.forEach(item, itemIndex)
-            // unblockedNum = 0
-            // item.forEach(box, boxIndex)
-              // if unblocked = box
-                // then unblockedNum ++
-            // if unblockedNum > 1
-            // verifiedTargetBoxes.push(pChoice)
+    // following function only works for some scenarios
+    const rankTargets = function(game, possible2InRowTargets){
 
-    // GIVEN COMPUTER PLAYER IS O,
-      // MUST DO SAME FOR EACH empty box in each O-w1 in winRowsProgress
+      const verifiedTargetBoxes = [];
+
+       possible2InRowTargets.forEach(function(targetBox, targetBoxIndex){
+          game.gameBoardState.forEach(function(rowArray, indexofRowArray){
+            if ( rowArray[3] == `p${game.computer.player}-r1` ){
+              rowArray.forEach(function(boxArray, indexofBoxArray){
+
+                if (indexofBoxArray < 3){
+
+                    let unblocked = 0;
+                    let unblockedNum = 0;
+                    let targetBoxRowArrayIndex = 0;
+
+                     if (boxArray[0] == targetBox ){
+                        targetBoxRowArrayIndex = indexofRowArray;
+                     }
+
+                     game.gameBoardState[targetBoxRowArrayIndex].forEach(function(boxArray, boxArrayIndex){
+                       if (boxArrayIndex < 3){
+                          boxArray.forEach(function(item, index){
+                            if (item[0] !== targetBox && item[1] === 'E'){
+
+                               unblocked = boxArray[0];
+
+                               game.gameBoardState.forEach(function(rowArray, indexofRowArray){
+                                  if ( rowArray[3] = `p${game.computer.opponent}-r1` ){
+                                    if (indexofRowArray < 3){
+
+                                       rowArray.forEach(function(boxArray, indexofBoxArray){
+                                            if (unblocked == boxArray[0]){
+                                               unblockedNum++;
+                                            }
+                                       });
+                                    }
+                                  }
+                               });
+
+                               if (unblockedNum <= 1){
+                                    verifiedTargetBoxes.push(targetBox);
+                               }
+
+                            }
+                          });
+                       }
+
+                     });
+
+                }
+
+              });
+            }
+          });
+        });
+
+        return verifiedTargetBoxes;
+    };
 
 
-winRowsProgress[0][0][0,X] // X filledbox
-winRowsProgress[0][1][1,E] // empty       // possible block if 1, unblocked if 7
-winRowsProgress[0][2][2,E] // empty       // possible block if 2, unblocked if 6
-winRowsProgress[O][3] = X-w1
 
-winRowsProgress[1][0][3,E]  // empty      // possible w2,
-winRowsProgress[1][1][4,O]  // O filledbox
-winRowsProgress[1][2][5,E]  // empty      // possible w2,
-winRowsProgress[1][3] = 0-w1
+gameBoardState[0][0][0,X] // X filledbox
+gameBoardState[0][1][1,E] // empty       // possible block if 1, unblocked if 7
+gameBoardState[0][2][2,E] // empty       // possible block if 2, unblocked if 6
+gameBoardState[O][3] = X-w1
 
-winRowsProgress[2][0][6,E]  // empty      // possible block if 6, unblocked if 2
-winRowsProgress[2][1][7,E]  // empty      // possible block if 7, unblocked if 1
-winRowsProgress[2][2][8,X]  // X filledbox
-winRowsProgress[2][3] = X-w1
+gameBoardState[1][0][3,E]  // empty      // possible w2,
+gameBoardState[1][1][4,O]  // O filledbox
+gameBoardState[1][2][5,E]  // empty      // possible w2,
+gameBoardState[1][3] = 0-w1
 
-winRowsProgress[3][0][0,X]  // X filledbox
-winRowsProgress[3][1][3,E]  // empty      // possible block if 3, unblocked if 5
-winRowsProgress[3][2][6,E]  // empty      // possible block if 6, unblocked if 2
-winRowsProgress[3][3] = X-w1
+gameBoardState[2][0][6,E]  // empty      // possible block if 6, unblocked if 2
+gameBoardState[2][1][7,E]  // empty      // possible block if 7, unblocked if 1
+gameBoardState[2][2][8,X]  // X filledbox
+gameBoardState[2][3] = X-w1
 
-winRowsProgress[4][0][1,E]  // empty      // possible w2
-winRowsProgress[4][1][4,0]  // O filledbox
-winRowsProgress[4][2][7,E]  // empty      // possible w2
-winRowsProgress[4][3] = O-w1
+gameBoardState[3][0][0,X]  // X filledbox
+gameBoardState[3][1][3,E]  // empty      // possible block if 3, unblocked if 5
+gameBoardState[3][2][6,E]  // empty      // possible block if 6, unblocked if 2
+gameBoardState[3][3] = X-w1
 
-winRowsProgress[5][0][2,E]  // empty      // possible block if 2, unblocked if 6
-winRowsProgress[5][1][5,E]                // possible block if 5, unblocked if 3
-winRowsProgress[5][2][8,X]  // X filledbox
-winRowsProgress[5][3] = X-w1
+gameBoardState[4][0][1,E]  // empty      // possible w2
+gameBoardState[4][1][4,0]  // O filledbox
+gameBoardState[4][2][7,E]  // empty      // possible w2
+gameBoardState[4][3] = O-w1
 
-winRowsProgress[6][0][0,X]  // X filledbox
-winRowsProgress[6][1][4,O]  // O filledbox
-winRowsProgress[6][2][8,X]  // X filledbox
-winRowsProgress[6][3] = blocked
+gameBoardState[5][0][2,E]  // empty      // possible block if 2, unblocked if 6
+gameBoardState[5][1][5,E]                // possible block if 5, unblocked if 3
+gameBoardState[5][2][8,X]  // X filledbox
+gameBoardState[5][3] = X-w1
 
-winRowsProgress[7][0][2,E]  // empty      // possible w2
-winRowsProgress[7][1][4,O]  // O filledbox
-winRowsProgress[7][2][6,E]  // empty      // possible w2
-winRowsProgress[7][3] = O-w1
+gameBoardState[6][0][0,X]  // X filledbox
+gameBoardState[6][1][4,O]  // O filledbox
+gameBoardState[6][2][8,X]  // X filledbox
+gameBoardState[6][3] = blocked
+
+gameBoardState[7][0][2,E]  // empty      // possible w2
+gameBoardState[7][1][4,O]  // O filledbox
+gameBoardState[7][2][6,E]  // empty      // possible w2
+gameBoardState[7][3] = O-w1
 
 result:
 
