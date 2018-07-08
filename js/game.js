@@ -484,8 +484,11 @@ var tictactoe = (function (exports){
                   // itrate through target boxes,
                      if(centerItem == ptItem){
                        // select center box if empty
+                       if (ptItem !== targetBoxes[targetBoxes.length - 1 ]){
+                        // if not a duplicate
                         targetBoxes.push(ptItem);
-                        // add to targetBoxes to played
+                        // to add that box as target box for a r1 or r2
+                        }
                        }
                  }); // end for center box
                }); // end for possibleWinners.center
@@ -498,8 +501,11 @@ var tictactoe = (function (exports){
                     // itrate through target boxes,
                        if(cornerItem == ptItem){
                          // select target that is a corner box from computer r1 to for a r2
+                         if (ptItem !== targetBoxes[targetBoxes.length - 1 ]){
+                          // if not a duplicate
                           targetBoxes.push(ptItem);
-                          // add to targets to play for a block
+                          // to add that box as target box for a r1 or r2
+                          }
                         }
                     }); // end for each corner box
                   }); // end for possibleWinners.corners
@@ -509,8 +515,11 @@ var tictactoe = (function (exports){
                      // itrate through target boxes,
                         if(sideItem == ptItem){
                             // select target that is a side box from computer r1 to for a r2
-                            targetBoxes.push(ptItem);
-                            // to play that target box for a block
+                            if (ptItem !== targetBoxes[targetBoxes.length - 1 ]){
+                             // if not a duplicate
+                             targetBoxes.push(ptItem);
+                             // to add that box as target box for a r1 or r2
+                             }
                           }
                     }); // end for each center box
                   }); // end for possibleWinners.sides
@@ -545,8 +554,11 @@ var tictactoe = (function (exports){
                   // itrate through target boxes,
                      if(centerItem == ptItem){
                        // select center box if empty
-                          targetBoxes.push(ptItem);
-                          // add to targetBoxes to played
+                          if (ptItem !== targetBoxes[targetBoxes.length - 1 ]){
+                           // if not a duplicate
+                           targetBoxes.push(ptItem);
+                           // to add that box as target box for a r1 or r2
+                           }
                        }
                  }); // end for center box
                }); // end forEach possibleWinners.center
@@ -557,8 +569,11 @@ var tictactoe = (function (exports){
                     // itrate through target boxes,
                        if(cornerItem == ptItem){
                          // select target that is a corner box from computer r1 to for a r2
-                           targetBoxes.push(ptItem);
-                           // add to targetBoxes to played
+                         if (ptItem !== targetBoxes[targetBoxes.length - 1 ]){
+                          // if not a duplicate
+                          targetBoxes.push(ptItem);
+                          // to add that box as target box for a r1 or r2
+                          }
                          }
                     }); // end for each corner box
                   }); // end forEach possibleWinners.corners
@@ -568,14 +583,18 @@ var tictactoe = (function (exports){
                      // itrate through target boxes,
                         if(sideItem == ptItem){
                           // select target that is a side box from computer r1 to for a r2
-                           targetBoxes.push(ptItem);
-                            // to play that target box for a r1 or r2
+                           if (ptItem !== targetBoxes[targetBoxes.length - 1 ]){
+                            // if not a duplicate
+                            targetBoxes.push(ptItem);
+                            // to add that box as target box for a r1 or r2
+                            }
                           }
                     }); // end for each side box
                   }); // end for possibleWinners.sides
                 } // end if (targetBoxes.length == 0)
 
-               if (targetBoxes > 1){
+
+               if (targetBoxes.length > 1){
                  // from possible targets, randomly choose one
                  const randomBoxNumber = Math.floor(Math.random() * targetBoxes.length);
                  const targetBoxNo = targetBoxes[randomBoxNumber];

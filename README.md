@@ -6,6 +6,9 @@
     I modified the provided index.html, styles.css a little.
     I added a game.css as well.
 
+    TicTacToe is a IIFE module.
+    It exports all variables, object and methods as part on variable, TicTacToe.
+
 # Start Screen - Game start
 
     When the page loads, the startup screen appears.
@@ -19,6 +22,8 @@
     EXTRA CREDIT # 1
 
         Player Names.
+
+        Player X name input appears on left, Player O name input on the right.
 
         The game will not begin if both players name inputs are blank.
 
@@ -48,6 +53,8 @@
 
     EXTRA CREDIT # 2
         The names of each player appear with X and O player labels.
+        Player X's label appears on the right.
+        Player O's label appears on the left.
 
     The current or active player is indicated by...
     -- the label the symbol O or X is highlighted for the current player.
@@ -74,25 +81,7 @@
 
         If there's only 1 player name, the computer plays the nameless player.
 
-        When it's the computer player's turn...
-
-        a setTimeout of 800 milliseconds is used ...
-        to allow for the activation of computer player's player-label ...
-
-        This slows the game a little, but makes it easier...
-        for the human to realize that the computer is taking it's turn.
-
-        While the computer is taking it's turn...
-
-         the mouse-hover and mouse-click events are disabled
-         ...on the Tictactoe boxes.
-
-         This is so the human player will not click a box by mistake.
-
-         The mouse-hover and mouse-click event on the Tictactoe boxes
-          are enabled again when it's the human's turn.
-
-         More on the computer player below under # Extra Credits.
+        More on the computer player below under # Extra Credits.
 
     The game ends when ...
 
@@ -142,27 +131,30 @@
           If only one player name is entered;
           the player name that is blank is played by the computer.
 
-          When it's the computer player's turn,
-          a setTimeout of 800 milliseconds is used...
-           so the computer player's player-label activation can occur.
-           This makes it easier for the human player to realize ...
-            that the computer is taking it's turn.
+          at beginning of computer's turn
+           a setTimeout of 800 milliseconds is used ...
+           to allow for the activation of computer player's player-label ...
 
-          While the computer is taking it's turn,
-           mouse-hover and mouse-click events on the Tictactoe boxes...
-            are disabled.
+          after the computer's turn, a 400 millisecond setTimeout is used
+            so that the human player can see the box filled..
+            before game is over or before it's the humans turn again.
 
-            This is so the human player will not click a box by mistake.
+            While the computer is taking it's turn...
 
-            The mouse-hover and mouse-click events on the Tictactoe boxes`
-             are enabled when it's the human's turn.
+             the mouse-hover and mouse-click events are disabled
+             ...on the Tictactoe boxes.
+
+             This is so the human player will not click a box by mistake.
+
+             The mouse-hover and mouse-click event on the Tictactoe boxes
+              are enabled again when it's the human's turn.
 
           The computer player will play to win...
            but will also play to bitter end, even if a draw.
 
            I added both logic and randomness to the computer player.
             The computer will play to win, if possible..
-            The computer will block the human from winning.
+            The computer will try to block the human from winning.
             But the computer will not always respond that same way...
              to the same scenario.
 
@@ -174,8 +166,8 @@
            appear to win or lose 'naturally'.
            without purely 'programmed responses'.
 
-           Since this gives the human player a chance to win...
-            it's more fun for the human player.  
+           It also gives the human player a chance to win...
+            which is more fun for the human player.  
 
   4:  When a player wins...
         that player’s name is displayed in the finish-win screen.
@@ -189,7 +181,7 @@
 # In future versions....
 
     I could give the players a choice ...
-     of a colors and symbols to use in the game.
+     of colors and symbols to use in the game.
 
     I could also provide a choice to play a series of games
       2 out of 3, 4 out of 5, etc.
