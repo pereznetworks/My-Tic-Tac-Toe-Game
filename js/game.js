@@ -591,7 +591,7 @@ var tictactoe = (function (exports){
             if (game.isTurn === game.computer.player) {
                 // increment moveNo,
                 game.computer.moveNo += 1;
-                // decide on best move
+                // decide on best move, breif delay so human player can notice visual affects
                 setTimeout(decideMove, 800, game);
             } // end if game.isTurn
 
