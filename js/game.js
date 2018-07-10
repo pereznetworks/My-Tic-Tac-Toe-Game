@@ -1,4 +1,4 @@
-"use strict";
+//"use strict";
 
 var tictactoe = (function (exports){
 
@@ -42,7 +42,7 @@ var tictactoe = (function (exports){
         }; // end exports object
 
           exports.computer = {
-              turnComplete: false,
+              turnIsComplete: false,
               moveNo: 0,
               player: '',
               opponent: '',
@@ -220,7 +220,8 @@ var tictactoe = (function (exports){
               // if computer is playing O or X, and if it's computer player's turn ....
               if (game.isTurn === game.computer.player){
                 // wait a bit so human can see box filled in
-                setTimeout(game.isGameOver, 200, game);
+                game.isGameOver(game);
+                // setTimeout(game.isGameOver, 200, game);
               } else {
                 // else if only humans are playing no need for setTimeout
                 game.isGameOver(game);
@@ -234,67 +235,144 @@ var tictactoe = (function (exports){
               game.finishGame(game);
             } else { // (game.isWinner = 'keep playing') : game is NOT over...
               if (game.isTurn == game.playerO){  // then set isTurn to other player
-              game.isTurn = game.playerX;
-              game.$liPlayerO.attr('class', 'players');
-              game.$liPlayerX.attr('class', 'players active');
-            } else if (game.isTurn == game.playerX){
-              game.isTurn = game.playerO;
-              game.$liPlayerX.attr('class', 'players');
-              game.$liPlayerO.attr('class', 'players active');
-            }
+                game.isTurn = game.playerX;
+                game.$liPlayerO.attr('class', 'players');
+                game.$liPlayerX.attr('class', 'players active');
+              } else if (game.isTurn == game.playerX){
+                game.isTurn = game.playerO;
+                game.$liPlayerX.attr('class', 'players');
+                game.$liPlayerO.attr('class', 'players active');
+              }
+              game.playGame(game);
             }
           };  // end isGameOver()
 
+          exports.ifComputerVsHuman = function(game, $cpLabel, $humanLabel){
+
+            // class name of active player label
+            const playerLabelActiveClassName = 'players active';
+
+            // setting up eventListener using a custom event
+            // to trigger computerPlay() method
+             const $ifComputersTurn = function(){
+               let cpLabelCurrentClassName = $cpLabel[0].className;
+               if (playerLabelActiveClassName === cpLabelCurrentClassName) {
+                  $cpLabel.trigger('itsComputersTurn');
+                  console.log('its computers Turn', cpLabelCurrentClassName );
+               } else {
+                 console.log('its NOT computer turn', cpLabelCurrentClassName);
+               }
+
+             };
+             setInterval($ifComputersTurn, 200);
+
+             $cpLabel.bind('itsComputersTurn', game.computer.computerPlay(game));
+
+             // setting up eventListener using a custom event
+             // to trigger humansPlaying() method
+              const $ifHumansTurn = function(){
+                let humanLabelCurrentClassName = $humanLabel[0].className;
+                if (playerLabelActiveClassName === humanLabelCurrentClassName) {
+                   $humanLabel.trigger('itsHumansTurn');
+                }
+              };
+              setInterval($ifHumansTurn, 200);
+
+              $humanLabel.bind('itsHumansTurn', game.humanPlaying(game));
+
+          };  // end ifComputerIsPlaying() method
+
+          exports.humanPlaying = function(game){
+              // event handler for hover affect on tictactoe boxes
+              game.$boxes.each(function(index, item){
+                  $(this).hover(  // when the mouse hovers over a box...
+                    function(){ // execute this function
+                      // if box is not selected, (or is empty)
+                      if (this.attributes[0].value === "box"){
+                        // if it's playerO's turn ..
+                        if (game.isTurn === game.playerO && game.playerOComputer == false) {
+                          // playerO's symbol appears...
+                          this.style.backgroundImage = "url('img/o.svg')";
+                          this.style.backgroundColor = '#FFA000';
+                        } else if (game.isTurn === game.playerX && game.playerXComputer == false){
+                          // else playerX's symbol appears...
+                          this.style.backgroundImage = "url('img/x.svg')";
+                          this.style.backgroundColor = '#3688C3';
+                        } // end if game.isTurn
+                      } // end if this.attributes[0].value === "box"
+                    },// end hover if class 'box', (is not yet selected)
+                     function(){
+                      // "X" or "O" disappears when mouse moves away from box
+                      if (this.attributes[0].value === "box"){
+                          this.style.backgroundImage = "";
+                          this.style.backgroundColor = "";
+                        } // end if active player
+                    }
+                  ); // end hover event handler
+
+                  $(this).click(function(){
+                    if (item.attributes[0].value === "box"){ // if not filled in yet
+                        // store box number that was clicked
+                        game.filledBoxes.push(index);
+                        // fill in chosen box with X or O depending on game.isTurn ...
+                        game.takeTurn(index, item, game);
+                        // if either below is true, start computer player
+                    } // end if (if box not filled in yet)
+                  }); // end box click event handler
+
+              }); // end for each tictactoe box
+          }; // end onlyHumansPlaying() funbction
+
           exports.playGame = function(game){
 
-            if (game.isTurn = game.computer.player){
-              game.computer.computerPlay(game);
-            } // end if (computer is playing and game is NOT over)
+              if(game.playerOComputer == false && game.playerXComputer == false){
 
-            // for each box on tictactoe board
-                if (game.isTurn !== game.computer.player){
+                // class name of active player label
+                const playerLabelActiveClassName = 'players active';
 
-                  // 'O' or 'X' appears to follow player's mouse around tictactoe game board
-                  game.$boxes.each(function(index, item){
-                      $(this).hover(  // when the mouse hovers over a box...
-                        function(){ // execute this function
-                          // if box is not selected, (or is empty)
-                          if (this.attributes[0].value === "box"){
-                            // if it's playerO's turn ..
-                            if (game.isTurn === game.playerO && game.playerOComputer == false) {
-                              // playerO's symbol appears...
-                              this.style.backgroundImage = "url('img/o.svg')";
-                              this.style.backgroundColor = '#FFA000';
-                            } else if (game.isTurn === game.playerX && game.playerXComputer == false){
-                              // else playerX's symbol appears...
-                              this.style.backgroundImage = "url('img/x.svg')";
-                              this.style.backgroundColor = '#3688C3';
-                            } // end if game.isTurn
-                          } // end if this.attributes[0].value === "box"
-                        },// end hover if class 'box', (is not yet selected)
-                         function(){
-                          // "X" or "O" disappears when mouse moves away from box
-                          if (this.attributes[0].value === "box"){
-                              this.style.backgroundImage = "";
-                              this.style.backgroundColor = "";
-                            } // end if active player
-                        }
-                      );
-                  }); // end mouse hover event
+                // setting up eventListener using a custom event
+                // for playerX, to trigger
+                 const $itsPlayerXTurn = function(game){
+                   let playerLabelCurrentClassName = game.$liPlayerX[0].className;
+                   if (playerLabelActiveClassName === playerLabelCurrentClassName) {
+                     game.$liPlayerX.trigger('itsPlayerXTurn');
+                   }
+                 };
+                 setInterval($itsPlayerXTurn, 200, game);
 
-                  game.$boxes.each(function(index, item){
-                    $(this).click(function(){
-                      if (item.attributes[0].value === "box"){ // if not filled in yet
-                          // store box number that was clicked
-                          game.filledBoxes.push(index);
-                          // fill in chosen box with X or O depending on game.isTurn ...
-                          game.takeTurn(index, item, game);
-                          // if either below is true, start computer player
-                      } // end if (if box not filled in yet)
-                    }); // end box click event handler
-                  }); // end forEach tictactoe boxes
+                 game.$liPlayerX.bind('itsPlayerXTurn', game.humanPlaying(game));
 
-                } // end if (it's not computer player's turn)
+                 // setting up eventListener using a custom event
+                 // for player 0
+                 // to trigger computerPlay() method
+                  const $itsPlayerOTurn = function(game){
+                    let playerLabelCurrentClassName = game.$liPlayerO[0].className;
+                    if (playerLabelActiveClassName === playerLabelCurrentClassName) {
+                      game.$liPlayerO.trigger('itsPlayerOTurn');
+                    }
+                  };
+                  setInterval($itsPlayerOTurn, 200, game);
+
+                  game.$liPlayerO.bind('itsPlayerOTurn', game.humanPlaying(game));
+
+              } // end if computer not playing
+
+              let $cpLabel = '';
+
+              // select the player label that will be "active" when the computer will take it's turn
+              if (game.playerOComputer == true  ){
+
+                 //$cpLabel = game.$liPlayerO;
+                 //$humanLabel = game.$liPlayerX;
+                 game.ifComputerVsHuman(game, game.$liPlayerO, game.$liPlayerX );
+
+              } else if (game.playerXComputer == true){
+
+                 //$humanLabel = game.$liPlayerX;
+                 //$cpLabel = game.$liPlayerO;
+                 game.ifComputerVsHuman(game, game.$liPlayerX, game.$liPlayerO );
+
+              }
 
           }; // end playGame() method
 
@@ -375,6 +453,7 @@ var tictactoe = (function (exports){
                 game.$playerONameLabel[0].textContent = 'the computer';
                 game.playerOName = 'the computer';
                 game.playerOComputer = true;
+
 
               } else if (!game.playerXName) {
                 // if playerX name input is blank setup computer to play X
@@ -626,12 +705,13 @@ var tictactoe = (function (exports){
                 game.computer.moveNo += 1;
                 // decide on best move, breif delay so human player can notice visual affects
                 setTimeout(decideMove, 800, game);
+                game.computer.turnIsComplete = true;
             } // end if game.isTurn
 
           }; //end computerPlay()
 
           exports.computer.turnComplete = function(game){
-            if (game.computerTurnComplete) {
+            if (game.computer.turnIsComplete) {
               game.isTurn = game.computer.opponent;
             }
           };
