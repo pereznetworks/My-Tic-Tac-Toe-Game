@@ -220,8 +220,7 @@ var tictactoe = (function (exports){
               // if computer is playing O or X, and if it's computer player's turn ....
               if (game.isTurn === game.computer.player){
                 // wait a bit so human can see box filled in
-                game.isGameOver(game);
-                // setTimeout(game.isGameOver, 200, game);
+                setTimeout(game.isGameOver, 200, game);
               } else {
                 // else if only humans are playing no need for setTimeout
                 game.isGameOver(game);
