@@ -266,7 +266,7 @@ var tictactoe = (function (exports){
                   $cpLabel.trigger('itsComputersTurn');
                }
              };
-             setInterval($ifComputersTurn, 200);
+             setInterval($ifComputersTurn, 100);
 
              $cpLabel.bind('itsComputersTurn', game.computer.computerPlay(game));
 
@@ -278,7 +278,7 @@ var tictactoe = (function (exports){
                    $humanLabel.trigger('itsHumansTurn');
                 }
               };
-              setInterval($ifHumansTurn, 200);
+              setInterval($ifHumansTurn, 100);
 
               $humanLabel.bind('itsHumansTurn', game.humanPlaying(game));
 
@@ -399,8 +399,9 @@ var tictactoe = (function (exports){
             $('#resetGame').click(function(){
 
               game.needReset = true;
-              game.setupNewGame(game);
-              game.playGame(game);
+              // game.setupNewGame(game, true);
+              // game.playGame(game);
+              game.startGame(game);
 
             });
 
@@ -411,13 +412,29 @@ var tictactoe = (function (exports){
               game.needReset = true;
               game.playerOName = '';
               game.playerXName = '';
-              game.setupNewGame(game);
+              //game.setupNewGame(game, true, true);
+              game.startGame(game);
+
             });
           }; // end finishGame() method
 
-          exports.setupNewGame = function(game){
+          exports.setupNewGame = function(game, needReset, setNewPlayers){
 
-            if (game.needReset) { // make sure board is cleared for new game
+            if (needReset) { // make sure board is cleared for new game
+
+              // unbinding custom eventsListeners
+              if (game.playerOComputer == false && game.playerXComputer == false){
+                $('#player1').unbind("itsHumansTurn");
+                $('#player2').unbind("itsHumansTurn");
+              } else {
+                if (game.computer.player == 'X'){
+                  $('#player2').unbind("itsComputersTurn");
+                  $('#player1').unbind("itsHumansTurn");
+                } else if (game.computer.player == 'O'){
+                  $('#player1').unbind("itsComputersTurn");
+                  $('#player2').unbind("itsHumansTurn");
+                }
+              }
 
               //reset styling of boxes to original or 'empty'
               $('.boxes').children().attr('class', 'box');
@@ -439,6 +456,22 @@ var tictactoe = (function (exports){
 
               // make sure each array for O and X filled are empty
               game.filledBoxes = game.emptyArray(game.filledBoxes);
+
+              game.$boardElmnt.show(); // reset game board
+              game.$boardElmnt = $('#board');  // reselect emptied game board element
+              game.isTurn = this.playerX; // make sure isTurn to X player
+
+              // visually activate player X's label and de-activate player O label
+              game.$liPlayerO.attr('class', 'players');
+              game.$liPlayerX.attr('class', 'players active');
+              // hide start and finish screens
+              game.$startElmnt.hide();
+              game.$finishElmnt.hide();
+              // start game
+              game.isWinner = 'keep playing';
+              // game.playGame(game);
+              // resetting which turn number
+              game.computer.moveNo = 0;
 
               // now that game is reset, set needReset to false
               game.needReset = false;
@@ -465,28 +498,13 @@ var tictactoe = (function (exports){
                 game.playerXComputer = true;
               }
 
+              game.$startElmnt.hide();
+              game.$boardElmnt.show();
+
             } // end if(game.needReset)
 
 
-              if (!game.setNewPlayers){
-                // if NOT setting new players,
-                game.$boardElmnt.show(); // reset game board
-                game.$boardElmnt = $('#board');  // reselect emptied game board element
-                game.isTurn = this.playerX; // make sure isTurn to X player
-
-                // visually activate player X's label and de-activate player O label
-                game.$liPlayerO.attr('class', 'players');
-                game.$liPlayerX.attr('class', 'players active');
-                // hide start and finish screens
-                game.$startElmnt.hide();
-                game.$finishElmnt.hide();
-                // start game
-                game.isWinner = 'keep playing';
-                game.playGame(game);
-                // resetting which turn number
-                game.computer.moveNo = 0;
-
-              } else { // else if setting new players
+              if (setNewPlayers){ // if setting new players
                 // hide game board and finish screen
                 game.$boardElmnt.hide();
                 game.$finishElmnt.hide();
@@ -502,11 +520,22 @@ var tictactoe = (function (exports){
           }; // end setupNewGame()
 
           exports.startGame = function(){
+            const game = this;
             // startGame called by start screen 'start' button
-              // first game with new players, needReset can be set to false
-              this.needReset = false;
-              //setup a new game
-              this.setupNewGame(this);
+              // and finsh screen 'play again' and 'new game, different players' buttons
+              if (!game.needReset && !game.setNewPlayers){
+                //setup first a new game..
+                game.setupNewGame(game);
+                game.playGame(game);
+              } else if (game.needReset && !game.setNewPlayers) {
+                // just playing again...
+                game.setupNewGame(game, true);
+                game.playGame(game);
+              } else if (game.needReset && game.setNewPlayers) {
+                // new game, new players..
+                game.setupNewGame(game, true, true);
+                game.playGame(game);
+              }
           }; // end startGame() method
 
           exports.computer.computerPlay = function(game){
@@ -519,20 +548,6 @@ var tictactoe = (function (exports){
               // 1 in a row, r1
               // 2 in a row, r2
 
-              // if (game.computer.moveNo == 1){
-              //     // then computer is playing X and this the 1st move of the game
-              //
-              //     let targetBoxes = [0,2,4,6,8];
-              //     const randomBoxNumber = Math.floor(Math.random() * targetBoxes.length);
-              //     const targetBoxNo = targetBoxes[randomBoxNumber];
-              //     // store box being filled in
-              //     game.filledBoxes.push(targetBoxNo);
-              //     // then call takeTurn, to play that box
-              //     game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-              //     return 1;
-              //
-              // } else {
-
                 let possibleTargets = '';
                 possibleTargets = game.computer.analyzeGameBoard(game, 'r2', 'r2');
                 // which empty boxes are targets to block opponent from completing 3 in a row
@@ -541,13 +556,13 @@ var tictactoe = (function (exports){
                 if (possibleTargets.possibleWins[0].length > 0){
                   // if target for computer to complete 3 in a row
                     makeWinMove(game, possibleTargets);
-                    return 1;
+                    return null;
                     // play it, for a win
 
                 } else if(possibleTargets.possibleBlocks[0].length > 0){
                   // else if target to block opponent from completing 3 in a row
                    makeBlockMove(game, possibleTargets);
-                   return 1;
+                   return null;
                    // block it
 
                 } else {
@@ -560,13 +575,13 @@ var tictactoe = (function (exports){
                    if (possibleTargetsR1.possibleWins[0].length > 0){
                      // if target for computer to get 2 in a row
                        makeWinMove(game, possibleTargetsR1);
-                       return 1;
+                       return null;
                        // play it
 
                     } else if(possibleTargetsR1.possibleBlocks[0].length > 0){ // if opponent has a r2
                       // else if target to block opponent from getting 2 in a row
                        makeBlockMove(game, possibleTargetsR1);
-                       return 1;
+                       return null;
                        // block it
 
                     } else {
@@ -576,6 +591,7 @@ var tictactoe = (function (exports){
                      lastEmptyBox = game.computer.analyzeGameBoard(game, 'blocked', 'blocked');
                      if(lastEmptyBox.possibleBlocks[0].length > 0){
                        makeBlockMove(game, lastEmptyBox);
+                       return null;
                      } else {
                        let targetBoxes = [0,2,4,6,8];
                        const randomBoxNumber = Math.floor(Math.random() * targetBoxes.length);
@@ -584,7 +600,7 @@ var tictactoe = (function (exports){
                        game.filledBoxes.push(targetBoxNo);
                        // then call takeTurn, to play that box
                        game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-                       return 1;
+                       return null;
                      }
 
                    } // end if/else possibleTargetsR1
@@ -654,6 +670,7 @@ var tictactoe = (function (exports){
                  game.filledBoxes.push(targetBoxNo);
                  // then call takeTurn, to play that box
                  game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+                 return null;
                  //
                } else { // else if only one possible empty box is a target for a block
                   const targetBoxNo = targetBoxes[0];
@@ -661,6 +678,7 @@ var tictactoe = (function (exports){
                   game.filledBoxes.push(targetBoxNo);
                   //then call takeTurn, to play that empty box
                   game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+                  return null;
                 } // end if multiple targets
 
               }; // end makeBlockMove function
@@ -722,12 +740,14 @@ var tictactoe = (function (exports){
                  game.filledBoxes.push(targetBoxNo);
                  // then call takeTurn, to play that box
                  game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+                 return null;
                 } else { // only 1 empty box is a possible target for a winning move
                     const targetBoxNo = targetBoxes[0];
                     // store box being filled in
                     game.filledBoxes.push(targetBoxNo);
                     // call takeTurn to play that box
                     game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+                    return null;
                 } // end if (multiple targets)
               }; // end makeWinMove function;
 
@@ -735,10 +755,10 @@ var tictactoe = (function (exports){
             if (game.isTurn === game.computer.player) {
                 // increment moveNo,
                 game.computer.moveNo += 1;
-                // decide on best move, breif delay so human player can notice visual affects
+                // decide on best move, brief delay so human player can notice visual affects
                 setTimeout(decideMove, 800, game);
                 //game.computer.turnComplete(game, true);
-                return 1;
+                return null;
             } // end if game.isTurn
 
           }; //end computerPlay()
