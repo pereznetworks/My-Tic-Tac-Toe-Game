@@ -266,7 +266,7 @@ var tictactoe = (function (exports){
                   $cpLabel.trigger('itsComputersTurn');
                }
              };
-             setInterval($ifComputersTurn, 100);
+             //setInterval($ifComputersTurn, 100);
 
              $cpLabel.bind('itsComputersTurn', game.computer.computerPlay(game));
 
@@ -278,7 +278,7 @@ var tictactoe = (function (exports){
                    $humanLabel.trigger('itsHumansTurn');
                 }
               };
-              setInterval($ifHumansTurn, 100);
+              //setInterval($ifHumansTurn, 100);
 
               $humanLabel.bind('itsHumansTurn', game.humanPlaying(game));
 
@@ -340,7 +340,7 @@ var tictactoe = (function (exports){
                      game.$liPlayerX.trigger('itsPlayerXTurn');
                    }
                  };
-                 setInterval($itsPlayerXTurn, 200, game);
+                 //setInterval($itsPlayerXTurn, 200, game);
 
                  game.$liPlayerX.bind('itsPlayerXTurn', game.humanPlaying(game));
 
@@ -353,7 +353,7 @@ var tictactoe = (function (exports){
                       game.$liPlayerO.trigger('itsPlayerOTurn');
                     }
                   };
-                  setInterval($itsPlayerOTurn, 200, game);
+                  //setInterval($itsPlayerOTurn, 1000, game);
 
                   game.$liPlayerO.bind('itsPlayerOTurn', game.humanPlaying(game));
 
