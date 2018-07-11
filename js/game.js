@@ -222,15 +222,21 @@ var tictactoe = (function (exports){
               itemNoOfSelectedBox.setAttribute('class', game.filledInClassNameforActivePlayer);
               // return state of game, winner, tie or 'keep playing'
               game.winner = game.detectIfWinner(game);
-
-              // if computer is playing O or X, and if it's computer player's turn ....
-              if (game.isTurn === game.computer.player){
-                // wait a bit so human can see box filled in
-                game.isGameOver(game);
+              // changing isTurn to end player's turn,
+              // so if computer is playing, computer will not fill-in more boxes
+              // but whose turn just finished, is preserved
+              if (game.isTurn = 'X'){
+                game.isTurn = 'EX';
               } else {
-                // else if only humans are playing no need for setTimeout
-                game.isGameOver(game);
+                game.isTurn = 'EO';
               }
+              // temporarily disabling the tictactoe boxes from click and hover event handlers
+              // so human player can't fill-in more boxes either
+              game.$boxes.each(function(index, item){
+                $(this).off();
+              });
+              // check if game is over
+              game.isGameOver(game);
 
           }; // end takeTurn()
 
@@ -238,41 +244,27 @@ var tictactoe = (function (exports){
             // after each turn is taken, do we have a winner ...or is game a draw
             if (game.isWinner === 'playerX' || game.isWinner === 'playerO' || game.isWinner === 'draw' ) {
 
-              game.isTurn = 'E';
               setTimeout(game.finishGame, 500, game);
 
-            } else { // (game.isWinner = 'keep playing') : game is NOT over...
+            } else { // else game is NOT over...
 
-              if (game.isTurn == game.playerO){  // then set isTurn to other player
-                game.isTurn = game.playerX;
-                game.$liPlayerO.attr('class', 'players');
-                game.$liPlayerX.attr('class', 'players active');
-                // playerOActiveTrigger = false;
-                // if (game.playerOComputer == true){
-                //   game.computer.humanPlayerActiveTriggered = false;
-                //   //game.humanPlaying(game)
-                // } else if (game.playerXComputer == true){
-                //   game.computer.computerPlayerActiveTriggered = false;
-                //   //game.computer.computerPlay(game);
-                // } else {
-                //   //game.humanPlaying(game)
-              } else if (game.isTurn == game.playerX){
-                game.isTurn = game.playerO;
-                game.$liPlayerX.attr('class', 'players');
-                game.$liPlayerO.attr('class', 'players active');
-                // game.playerXActiveTrigger = false;
-                // if (game.playerXComputer == true){
-                //   game.computer.humanPlayerActiveTriggered = false;
-                //   //game.humanPlaying(game);
-                // } else if (game.playerOComputer == true){
-                //   game.computer.computerPlayerActiveTriggered = false;
-                //   //game.computer.computerPlay(game);
-                // } else {
-                //   //game.humanPlaying(game);
-                // }
+              // toggle who is active player
+              if ( game.$liPlayerO[0].className == 'players active' ){
+                // setting isTurn to complete computer's turn, but so we still know whose turn just finished
+                game.isTurn = 'X';
+                game.$liPlayerO[0].className = 'players';
+                game.$liPlayerX[0].className = 'players active';
+
+
+              } else if (game.$liPlayerX[0].className == 'players active'){
+                /// setting isTurn to complete computer's turn, but so we still know whose turn just finished
+                game.isTurn = 'O';
+                game.$liPlayerX[0].className = 'players';
+                game.$liPlayerO[0].className = 'players active';
+
               }
 
-              game.playGame(game);
+              setTimeout(game.playGame, 500, game);
             }
           };  // end isGameOver()
 
@@ -328,6 +320,8 @@ var tictactoe = (function (exports){
           }; // end playGame() method
 
           exports.finishGame = function(game){
+
+            game.isTurn = 'E';
             // show winner, or draw
             let finishGameText = '';
             if (game.isWinner === 'playerX'){
@@ -427,6 +421,13 @@ var tictactoe = (function (exports){
 
             } else { // if this is not a reset, but the FIRST game...
 
+              // visually activate player X's label and de-activate player O label
+              game.$liPlayerO.attr('class', 'players');
+              game.$liPlayerX.attr('class', 'players active');
+              // hide start screen, show game board screen
+              game.$startElmnt.hide();
+              game.$boardElmnt.show();
+
               if (!game.playerOName) {  // if one of the player inputs is blank
                 // if player O name input blank, then setup computer to play O
                 game.computer.player = game.playerO;
@@ -445,9 +446,6 @@ var tictactoe = (function (exports){
                 game.playerXName = 'the computer';
                 game.playerXComputer = true;
               }
-
-              game.$startElmnt.hide();
-              game.$boardElmnt.show();
 
             } // end if(game.needReset)
 
