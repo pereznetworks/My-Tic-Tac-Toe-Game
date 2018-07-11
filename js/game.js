@@ -315,7 +315,7 @@ var tictactoe = (function (exports){
             if (game.isTurn !== game.computer.player){
               game.humanPlaying(game);
             } else {
-              game.computer.computerPlay(game);
+              setTimeout(game.computer.computerPlay, 500, game);
             }
 
           }; // end playGame() method
@@ -498,7 +498,7 @@ var tictactoe = (function (exports){
 
                 if (possibleTargetsR1.possibleWins[0].length > 0){
                   // if target for computer to get 2 in a row
-                    var targetBoxNo =makeWinMove(game, possibleTargetsR1);
+                    var targetBoxNo = makeWinMove(game, possibleTargetsR1);
                     // play it
                     return targetBoxNo;
 
