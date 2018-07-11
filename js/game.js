@@ -238,7 +238,8 @@ var tictactoe = (function (exports){
             // after each turn is taken, do we have a winner ...or is game a draw
             if (game.isWinner === 'playerX' || game.isWinner === 'playerO' || game.isWinner === 'draw' ) {
 
-              game.finishGame(game);
+              game.isTurn = 'E';
+              setTimeout(game.finishGame, 500, game);
 
             } else { // (game.isWinner = 'keep playing') : game is NOT over...
 
