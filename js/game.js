@@ -4,7 +4,7 @@ var tictactoe = (function (exports){
 
         var exports = {
             needReset: false,
-            setNewPlayers: false,
+            resetPlayers: false,
             playerO: 'O',
             playerX: 'X',
             playerOName: '',
@@ -233,7 +233,8 @@ var tictactoe = (function (exports){
               // temporarily disabling the tictactoe boxes from click and hover event handlers
               // so human player can't fill-in more boxes either
               game.$boxes.each(function(index, item){
-                $(this).off();
+                $(item).off('hover');
+                $(item).off('click');
               });
               // check if game is over
               game.isGameOver(game);
@@ -351,7 +352,7 @@ var tictactoe = (function (exports){
             // if 'new game, different players', reset game, reset player names, back to start screen
             $('#newPlayers').click(function(){
 
-              game.setNewPlayers = true;
+              game.resetPlayers = true;
               game.needReset = true;
               game.playerOName = '';
               game.playerXName = '';
@@ -361,23 +362,9 @@ var tictactoe = (function (exports){
             });
           }; // end finishGame() method
 
-          exports.setupNewGame = function(game, needReset, setNewPlayers){
+          exports.setupNewGame = function(game){
 
-            if (needReset) { // make sure board is cleared for new game
-
-              // unbinding custom eventsListeners
-              if (game.playerOComputer == false && game.playerXComputer == false){
-                $('#player1').unbind("itsHumansTurn");
-                $('#player2').unbind("itsHumansTurn");
-              } else {
-                if (game.computer.player == 'X'){
-                  $('#player2').unbind("itsComputersTurn");
-                  $('#player1').unbind("itsHumansTurn");
-                } else if (game.computer.player == 'O'){
-                  $('#player1').unbind("itsComputersTurn");
-                  $('#player2').unbind("itsHumansTurn");
-                }
-              }
+            if (game.needReset) { // make sure board is cleared for new game
 
               //reset styling of boxes to original or 'empty'
               $('.boxes').children().attr('class', 'box');
@@ -385,7 +372,7 @@ var tictactoe = (function (exports){
               game.$boxes.each(function(){  // just to be sure...
                 this.style.backgroundColor = '';
                 this.style.backgroundImage = '';
-              }); // reset each box background Color and Image style to 'empty'
+              }); // reset each box background Color and Image style to ''
 
               game.gameBoardState.forEach(function(winRowArray, indexWinRowArray){
 
@@ -395,7 +382,7 @@ var tictactoe = (function (exports){
                     }
                   });
                   winRowArray[3] = 'none';
-              }); //reset array used track progress of winning rows
+              }); //reset array used track state of the game board
 
               // make sure each array for O and X filled are empty
               game.filledBoxes = game.emptyArray(game.filledBoxes);
@@ -410,16 +397,17 @@ var tictactoe = (function (exports){
               // hide start and finish screens
               game.$startElmnt.hide();
               game.$finishElmnt.hide();
-              // start game
+
+              // reset isWinner
               game.isWinner = 'keep playing';
-              // game.playGame(game);
+
               // resetting which turn number
               game.computer.moveNo = 0;
 
               // now that game is reset, set needReset to false
               game.needReset = false;
 
-            } else { // if this is not a reset, but the FIRST game...
+            } else if (!game.needReset && !game.resetPlayers) { // then this is the FIRST game...
 
               // visually activate player X's label and de-activate player O label
               game.$liPlayerO.attr('class', 'players');
@@ -429,6 +417,7 @@ var tictactoe = (function (exports){
               game.$boardElmnt.show();
 
               if (!game.playerOName) {  // if one of the player inputs is blank
+
                 // if player O name input blank, then setup computer to play O
                 game.computer.player = game.playerO;
                 game.computer.cpBoxFilledClass = 'box box-filled-1';
@@ -450,36 +439,43 @@ var tictactoe = (function (exports){
             } // end if(game.needReset)
 
 
-              if (setNewPlayers){ // if setting new players
+              if (game.resetPlayers){ // if setting up for new players
+
+                // reset players, human and computer, and player names
+                game.playerOName = null;
+                game.playerXName = null;
+                game.computer.player = '';
+                game.computer.opponent = '';
+                game.playerOComputer = false;
+                game.playerXComputer = false;
+                $('#playerO')[0].value = '';
+                $('#playerX')[0].value = '';
+                $('#player1Name')[0].textContent = '';
+                $('#player2Name')[0].textContent = '';
                 // hide game board and finish screen
                 game.$boardElmnt.hide();
                 game.$finishElmnt.hide();
-                // reset player names
-                $('#playerO')[0].value = '';
-                $('#playerX')[0].value = '';
-
-                game.$startElmnt.show(); // show start screen
-                game.setNewPlayers = false; // reset flag to false
+                // show start screen
+                game.$startElmnt.show();
+                // reset flag to false
+                game.resetPlayers = false;
 
               } // end if (!game.setNewPlayers)
 
           }; // end setupNewGame()
 
-          exports.startGame = function(){
-            const game = this;
+          exports.startGame = function(game){
+
             // startGame called by start screen 'start' button
               // and finsh screen 'play again' and 'new game, different players' buttons
-              if (!game.needReset && !game.setNewPlayers){
-                //setup first a new game..
-                game.setupNewGame(game);
-                game.playGame(game);
-              } else if (game.needReset && !game.setNewPlayers) {
-                // just playing again...
+              if (game.needReset && game.resetPlayers) {
+                // then we're resetting the game, and resetting players,
+                // setupNewGame then shws the start screen
                 game.setupNewGame(game, true);
-                game.playGame(game);
-              } else if (game.needReset && game.setNewPlayers) {
-                // new game, new players..
-                game.setupNewGame(game, true, true);
+              } else {
+                // else either playing the first game or need a game reset
+                game.setupNewGame(game);
+                // after which run playGame()
                 game.playGame(game);
               }
           }; // end startGame() method
@@ -933,7 +929,7 @@ var tictactoe = (function (exports){
                 exports.$playerONameLabel = $('#player1Name');
                 exports.$playerXNameLabel = $('#player2Name');
 
-                exports.startGame();
+                exports.startGame(exports);
               }
 
             });
