@@ -91,7 +91,9 @@
 
 # Finish Screen - Game end:
 
-    When there is a winner, a timeout of 800 milliseconds is used to make sure then human player will notice the winning row or that the game is indeed a tie.
+    When there is a winner, a timeout of 800 milliseconds is used...
+     to make sure then human player will notice the winning row... 
+     or that the game is indeed a tie.
 
     On the finish screen...
 
