@@ -315,7 +315,7 @@ var tictactoe = (function (exports){
             if (game.isTurn !== game.computer.player){
               game.humanPlaying(game);
             } else {
-              setTimeout(game.computer.computerPlay, 500, game);
+              setTimeout(game.computer.computerPlay, 800, game);
             }
 
           }; // end playGame() method
