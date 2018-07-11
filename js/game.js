@@ -1,4 +1,4 @@
-//"use strict";
+"use strict";
 
 var tictactoe = (function (exports){
 
@@ -70,8 +70,9 @@ var tictactoe = (function (exports){
 
               // as the game progresses, track who fills each box
               // who has a potential winning row, which rows are blocked
-              // r1 = 1 box in a winning row, r2 = 1 boxes in a winning row
-              // if the active player has just gotten a 3 in a row, or a winner
+              // r1 = 1 box in a winning row, r2 = 2 boxes in a winning row
+               // another mothod, detectIfWinner(), sets, a row as a X-winner, or O-winner
+                // if the active player has just gotten a 3 in a row
 
               game.gameBoardState.forEach(function(itemArray, itemArrayIndex){
                   // each item is an itemArray has 4 items,
@@ -119,7 +120,6 @@ var tictactoe = (function (exports){
           exports.emptyArray = function(arrayToEmpty){
 
             // utility to empty all arrays used during a game
-            // seems there should be a better way to do this...
 
             let origArrayLength = arrayToEmpty.length;
             for (var i = origArrayLength; i > 0; i--){
@@ -131,8 +131,12 @@ var tictactoe = (function (exports){
 
           exports.findTargetBox = function(game, computerORplayer, noBoxesInRow){
 
-            // called by computerPlayer() as part of choosing best move,
-            // find empty box in computer or players's winning row
+            // called by after by analyzeGameBoard(), after each turn by computerPlayer()
+            // as part of choosing a move,
+            // find empty boxes in computer.players's or computer.opponent's row
+
+            // an player has a row, if only that player has filled boxes in that row
+            // if both players have a box filled in a row, then that row is "blocked"
 
             // required paramters:
             // game object
@@ -141,10 +145,9 @@ var tictactoe = (function (exports){
                // for '-r2' for 2 in a row
                // or '-r1' for 1 in a row
 
-
-            const isTargetBox = 'E';  // any empty, 'E', box is a target for block or a  win
+            const isTargetBox = 'E';  // any empty box is a "targetBox"
             const targets = [];  // array for target boxes
-            let rowStatus = '';
+            let rowStatus = ''; // variable, used set status of row find empty boxes in
 
             if (noBoxesInRow == 'blocked' ){
               rowStatus = 'blocked';
@@ -153,13 +156,14 @@ var tictactoe = (function (exports){
             }
 
             game.gameBoardState.forEach(function(rowItem, rowIndex){
-                // does computer or player have 1 or 2 boxes in any row
+                // look for rows with given "rowStatus"
                  if (rowItem[3] == rowStatus){
-                   // iterate through that row,
+                   // iterate through each box array in that row,
                     rowItem.forEach(function(rowItemArray, rowItemIndex){
-                    // find empty box
+                    // find empty box,
+                      // element [1] in a box array is the status of that box
                       if (rowItemArray[1] == isTargetBox){
-                         // choose box represented by rowItemArray[0]
+                         // store the number of the box, element [0]
                          targets.push(rowItemArray[0]);
                        }  // end if == isTargetBox
                   }); // end forEach rowItem
@@ -172,6 +176,9 @@ var tictactoe = (function (exports){
 
           exports.detectIfWinner = function(game){
 
+            // this method is executed after each player's turn
+
+            // counter for number of blocked rows
             let blockedRows = 0;
 
             // count blocked rows
@@ -181,32 +188,38 @@ var tictactoe = (function (exports){
               }
             });  // end forEach to count blocked rows
 
-            // test if any player has a winning row
+            // test if any active player has a winning row
             if (game.isTurn === 'X') {
 
+              // iterate each winning row
               game.gameBoardState.forEach(function(winRowItem, winRowIndex){
-                // iterate each item of possible winning rows
+                // does player X, have 3 in this row
                 if (winRowItem[3] === 'X-winner'){
+                    // if yes, then we have a winner
                     game.isWinner = 'playerX';
                  }
                });
             } else if (game.isTurn === 'O'){
 
+              // iterate each winning row
               game.gameBoardState.forEach(function(winRowItem, winRowIndex){
-                // iterate each item of possible winning rows
+                // does player O, have 3 in this row
                 if (winRowItem[3] === 'O-winner')
+                // if yes, then we have a winner
                     game.isWinner = 'playerO';
               });
             }
 
+            // if all rows blocked, and all boxes have been filled, then game is a draw
             if (blockedRows == 8 && game.filledBoxes.length == 9){
-                  // if all rows blocked, and all boxes have been filled, then game is a draw
                 game.isWinner = "draw";
               } // end if blocked rows = 8
 
           }; // end detectIfWinner() method
 
           exports.takeTurn = function(indexNoOfSelectedBox, itemNoOfSelectedBox, game){
+
+            // after human player or computer player chosen which box to fill-in....
 
             if (game.isTurn === 'X'){
               // active player is X, so use css box-filled-in class name for X
@@ -216,14 +229,14 @@ var tictactoe = (function (exports){
               game.filledInClassNameforActivePlayer = game.filledInClassNameforO;
             }
 
-              // keep track of filled boxes
+              // keep track of box that player has chosen to fill
               game.trackFilledBoxes(game, indexNoOfSelectedBox, game.isTurn);
-              // change class name of box, to trigger css to fill-in box for X or O
+              // trigger css to fill-in box for X or O, using class name variable set
               itemNoOfSelectedBox.setAttribute('class', game.filledInClassNameforActivePlayer);
-              // return state of game, winner, tie or 'keep playing'
+              // check state of game, winner, tie or 'keep playing'
               game.winner = game.detectIfWinner(game);
-              // changing isTurn to end player's turn,
-              // so if computer is playing, computer will not fill-in more boxes
+              // changing isTurn from X or O, to end player's turn,
+              // so if computer is playing, computer will not keep filling in more boxes
               // but whose turn just finished, is preserved
               if (game.isTurn = 'X'){
                 game.isTurn = 'EX';
@@ -245,26 +258,22 @@ var tictactoe = (function (exports){
             // after each turn is taken, do we have a winner ...or is game a draw
             if (game.isWinner === 'playerX' || game.isWinner === 'playerO' || game.isWinner === 'draw' ) {
 
+              // if yes, wait 800 milliseconds, so human player can see last box filled in before finish screen displayed
               setTimeout(game.finishGame, 500, game);
 
             } else { // else game is NOT over...
 
               // toggle who is active player
               if ( game.$liPlayerO[0].className == 'players active' ){
-                // setting isTurn to complete computer's turn, but so we still know whose turn just finished
                 game.isTurn = 'X';
                 game.$liPlayerO[0].className = 'players';
                 game.$liPlayerX[0].className = 'players active';
-
-
               } else if (game.$liPlayerX[0].className == 'players active'){
-                /// setting isTurn to complete computer's turn, but so we still know whose turn just finished
                 game.isTurn = 'O';
                 game.$liPlayerX[0].className = 'players';
                 game.$liPlayerO[0].className = 'players active';
-
               }
-
+              // wait 500 milliseconds so human player can see active player label activate before turn is over
               setTimeout(game.playGame, 500, game);
             }
           };  // end isGameOver()
@@ -303,7 +312,6 @@ var tictactoe = (function (exports){
                         game.filledBoxes.push(index);
                         // fill in chosen box with X or O depending on game.isTurn ...
                         game.takeTurn(index, item, game);
-                        // if either below is true, start computer player
                     } // end if (if box not filled in yet)
                   }); // end box click event handler
 
@@ -312,9 +320,13 @@ var tictactoe = (function (exports){
 
           exports.playGame = function(game){
 
+            // simple method, to toogle between human and computer players, if needed
             if (game.isTurn !== game.computer.player){
               game.humanPlaying(game);
             } else {
+              // on the computer player's turn, especially when playing X,
+              // then wait 800 milliseconds to human player gets to see visual UI changes
+              // game board appear, player X activate, computer choose a box, etc..
               setTimeout(game.computer.computerPlay, 800, game);
             }
 
@@ -339,24 +351,17 @@ var tictactoe = (function (exports){
             game.$boardElmnt.hide();
             game.$finishElmnt.show();
 
-            // if 'play again' button clicked, just reset game, show empty tictactoe board
+            // if 'play again' button clicked, set needReset game flag true and start game
             $('#resetGame').click(function(){
-
               game.needReset = true;
-              // game.setupNewGame(game, true);
-              // game.playGame(game);
               game.startGame(game);
-
             });
 
-            // if 'new game, different players', reset game, reset player names, back to start screen
+            // if 'new game, different players', set needReset game flag, set resetPlayers flag to true, then start game
             $('#newPlayers').click(function(){
 
               game.resetPlayers = true;
               game.needReset = true;
-              game.playerOName = '';
-              game.playerXName = '';
-              //game.setupNewGame(game, true, true);
               game.startGame(game);
 
             });
@@ -364,16 +369,17 @@ var tictactoe = (function (exports){
 
           exports.setupNewGame = function(game){
 
-            if (game.needReset) { // make sure board is cleared for new game
+            if (game.needReset) { // make sure game board is cleared to play again
 
-              //reset styling of boxes to original or 'empty'
+              //reset styling of boxes to 'empty'
               $('.boxes').children().attr('class', 'box');
 
               game.$boxes.each(function(){  // just to be sure...
                 this.style.backgroundColor = '';
                 this.style.backgroundImage = '';
-              }); // reset each box background Color and Image style to ''
+              }); // reset each box background Color and Image style
 
+              //reset array used track state of the game board
               game.gameBoardState.forEach(function(winRowArray, indexWinRowArray){
 
                   winRowArray.forEach(function(itemArray, indexOfItemArray){
@@ -382,26 +388,25 @@ var tictactoe = (function (exports){
                     }
                   });
                   winRowArray[3] = 'none';
-              }); //reset array used track state of the game board
+              });
 
-              // make sure each array for O and X filled are empty
+              // make sure each array for filled boxes are empty
               game.filledBoxes = game.emptyArray(game.filledBoxes);
 
-              game.$boardElmnt.show(); // reset game board
-              game.$boardElmnt = $('#board');  // reselect emptied game board element
+              game.$boardElmnt.show(); // show game board
               game.isTurn = this.playerX; // make sure isTurn to X player
 
               // visually activate player X's label and de-activate player O label
               game.$liPlayerO.attr('class', 'players');
               game.$liPlayerX.attr('class', 'players active');
-              // hide start and finish screens
+              // just in case, hide start and finish screens
               game.$startElmnt.hide();
               game.$finishElmnt.hide();
 
               // reset isWinner
               game.isWinner = 'keep playing';
 
-              // resetting which turn number
+              // resetting which turn number, in case computer is playing
               game.computer.moveNo = 0;
 
               // now that game is reset, set needReset to false
@@ -416,9 +421,9 @@ var tictactoe = (function (exports){
               game.$startElmnt.hide();
               game.$boardElmnt.show();
 
-              if (!game.playerOName) {  // if one of the player inputs is blank
+              if (!game.playerOName) {  // if player O name input is blank
 
-                // if player O name input blank, then setup computer to play O
+                // then setup computer to play O
                 game.computer.player = game.playerO;
                 game.computer.cpBoxFilledClass = 'box box-filled-1';
                 game.computer.opponent = game.playerX;
@@ -426,8 +431,9 @@ var tictactoe = (function (exports){
                 game.playerOName = 'the computer';
                 game.playerOComputer = true;
 
-              } else if (!game.playerXName) {
-                // if playerX name input is blank setup computer to play X
+              } else if (!game.playerXName) { // if player X name input is blank
+
+                // then setup computer to play X
                 game.computer.player = game.playerX;
                 game.computer.cpBoxFilledClass = 'box box-filled-2';
                 game.computer.opponent = game.playerO;
@@ -466,11 +472,10 @@ var tictactoe = (function (exports){
 
           exports.startGame = function(game){
 
-            // startGame called by start screen 'start' button
-              // and finsh screen 'play again' and 'new game, different players' buttons
+            // startGame called by start screen's 'start' button
               if (game.needReset && game.resetPlayers) {
-                // then we're resetting the game, and resetting players,
-                // setupNewGame then shws the start screen
+                // then we're resetting to play again, and resetting players,
+                // setupNewGame then shows the start screen
                 game.setupNewGame(game, true);
               } else {
                 // else either playing the first game or need a game reset
@@ -482,6 +487,8 @@ var tictactoe = (function (exports){
 
           exports.computer.computerPlay = function(game){
 
+            // function excuting a turn-based decision tree,
+            // that analyzes that state of the game board
             var decideMove = function(game, moveNo){
 
               // decide on move to make,
@@ -703,6 +710,8 @@ var tictactoe = (function (exports){
 
             }; // end decideMove()
 
+            // funciton that executes a desicion-tree to rank possible targets..
+            // to make a block a opponent from winning, or getting 2-in-row or
             var makeBlockMove = function(game, possibleTargets){
 
                const targetBoxes = [];
@@ -774,6 +783,8 @@ var tictactoe = (function (exports){
 
               }; // end makeBlockMove function
 
+            // funciton that executes a desicion-tree to rank possible targets..
+            // for computer to win, or get 2-in-row
             var makeWinMove = function(game, possibleTargets){
 
                const targetBoxes = [];
@@ -846,31 +857,19 @@ var tictactoe = (function (exports){
             if (game.isTurn === game.computer.player) {
                 // increment moveNo,
                 game.computer.moveNo += 1;
-                // decide on best move, brief delay so human player can notice visual affects
+                // decide on best move
                 var targetBoxNo = decideMove(game, game.computer.moveNo);
-                //game.computer.turnComplete(game, true);
+                // returns used to make sure functions and method exit, so only call to takeTurn() is allowed
                 return targetBoxNo;
 
             } // end if game.isTurn
 
           }; //end computerPlay()
 
-          exports.computer.turnComplete = function(game, turnIsComplete){
-            if (turnIsComplete) {
-              game.isTurn = game.computer.opponent;
-
-              if (game.playerOComputer = true){
-                game.computer.computerPlayerActiveTriggered = false;
-              } else if (game.playerXComputer = true){
-                game.computer.computerPlayerActiveTriggered = false;
-              }
-            }
-          };
-
           exports.computer.analyzeGameBoard = function(game, opponentWno, computerWno){
 
             // function to 'analyze' game board
-            // new set of possibleTargets each time computer 'analyzes' gameBoard
+            // get new set of possibleTargets each time computer 'analyzes' gameBoard
             const possibleTargets = {
               possibleBlocks:[],
               possibleWins:[]
@@ -878,6 +877,11 @@ var tictactoe = (function (exports){
 
             // checking for computer's and player's possible winning rows
             // and which of the boxes in these rows are 'targets', or are empty
+
+            // opponentWno : state of opponent rows to check for
+              // rows with 1 box filled or 2 boxes filled
+            // computerWno : state of computer player's rows to check for;
+              // rows with 1 box filled or 2 boxes filled
 
             if(opponentWno) {
               possibleTargets.possibleBlocks.push(game.findTargetBox(game, game.computer.opponent, opponentWno));
@@ -887,6 +891,7 @@ var tictactoe = (function (exports){
             }
 
             return possibleTargets;
+
           }; // end analyzeGameBoard() function
 
           $(document).ready(function() {
@@ -936,6 +941,6 @@ var tictactoe = (function (exports){
 
           });
 
-          return exports   // returning the entire object and it's methods
+          return exports   // returning all export object and it's methods
 
 }(tictactoe || { } ));
