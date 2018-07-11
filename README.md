@@ -19,32 +19,6 @@
     The game starts with player X, and the X player label is active.
     When active the box is highlighted with the player X's BLUE color.
 
-    EXTRA CREDIT # 1
-
-        Player Names.
-
-        Player X name input appears on left, Player O name input on the right.
-
-        The start screen will not switch to the game board screen, if both players name inputs are blank.
-
-        On clicking 'start game', if both players name are blank...
-          the player X name input is highlighted
-          with an placeholder prompting for at least 1 player name.
-
-        At least 1 player name must be entered in player X or O.
-        The player names are then presented with X and O label
-        The name of the player who wins is presented on the finish-win screen.
-
-        EXTRA CREDIT # 3
-
-          If only 1 player name is entered...
-            the computer plays the player with no name.
-
-            So the computer can play both X or O, but the UI assumes...
-            most humans will want to play the game as X, with first turn.
-
-            More on the computer player below under # Extra Credits.
-
 # Board Screen - Game play:
 
     The game play following these rules:
@@ -100,10 +74,6 @@
       The word "Winner" appears ...
       and the screen is that players color, Blue for X and Orange for O.
 
-    EXTRA CREDIT #4:  
-
-        The name of the player who wins, is also shown.
-
     If it's tie, there was no winner...
      the screen is green and the phrase "It's a tie" appears.
 
@@ -124,18 +94,46 @@
 
 # Extra Credits
 
-  1: On the start screen, humans are prompted to
-     add at least one name before the game starts.
+  EXTRA CREDIT # 1
 
-  2: The player’s name/s are displayed on the game board screen...
-     along with the X or O player label
+      Player Names.
 
-     Also, from the finish screen, when 'play again' is clicked...
+      Player X name input appears on left, Player O name input on the right.
+
+      The start screen will not switch to the game board screen, if both players name inputs are blank.
+
+      On clicking 'start game', if both players name are blank...
+        the player X name input is highlighted
+        with an placeholder prompting for at least 1 player name.
+
+      At least 1 player name must be entered in player X or O.
+      The player names are then presented with X and O label
+      The name of the player who wins is presented on the finish-win screen.
+
+  EXTRA CREDIT # 2:
+
+      Display player's name during game play.
+
+      The player’s name/s are displayed on the game board screen...
+      along with the X or O player label
+
+      Also, from the finish screen, when 'play again' is clicked...
       the player names persist
       these appear on the game board again
       and the same players continue to play the game.
 
-  3: The computer player...
+  EXTRA CREDIT # 3
+
+      If only 1 player name is entered...
+      the computer plays the player with no name.
+
+      Since the Player X name input still gets focus on html page load...
+      the UI assumes that ....
+      most humans will want to play the game as X.
+
+      However, the computer can play both X or O,
+
+      The computer player...
 
           If only one player name is entered;
           the player name that is blank is played by the computer.
@@ -148,7 +146,7 @@
             so that the human player can see the box filled..
             before game is over or before it's the humans turn again.
 
-            While the computer is taking it's turn...
+          While the computer is taking it's turn...
 
              the mouse-hover and mouse-click events are disabled
              ...on the Tictactoe boxes.
@@ -178,8 +176,9 @@
            It also gives the human player a chance to win...
             which is more fun for the human player.  
 
+  EXTRA CREDIT # 4:
 
-  4:  The winning player’s name is displayed in the finish-win screen.
+        The winning player’s name is displayed in the finish-win screen.
 
         When a player wins...
               that player’s name is displayed in the finish-win screen.
