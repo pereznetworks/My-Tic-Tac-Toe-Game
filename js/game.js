@@ -11,7 +11,6 @@ var tictactoe = (function (exports){
             playerXName: '',
             playerOComputer: false,
             playerXComputer: false,
-            computerTurnComplete: false,
             isTurn: 'X',
             isWinner: 'keep playing',
             filledBoxes: [],
@@ -227,7 +226,7 @@ var tictactoe = (function (exports){
               // if computer is playing O or X, and if it's computer player's turn ....
               if (game.isTurn === game.computer.player){
                 // wait a bit so human can see box filled in
-                setTimeout(game.isGameOver, 200, game);
+                game.isGameOver(game);
               } else {
                 // else if only humans are playing no need for setTimeout
                 game.isGameOver(game);
@@ -238,51 +237,43 @@ var tictactoe = (function (exports){
           exports.isGameOver = function(game){
             // after each turn is taken, do we have a winner ...or is game a draw
             if (game.isWinner === 'playerX' || game.isWinner === 'playerO' || game.isWinner === 'draw' ) {
+
               game.finishGame(game);
+
             } else { // (game.isWinner = 'keep playing') : game is NOT over...
+
               if (game.isTurn == game.playerO){  // then set isTurn to other player
                 game.isTurn = game.playerX;
                 game.$liPlayerO.attr('class', 'players');
                 game.$liPlayerX.attr('class', 'players active');
+                // playerOActiveTrigger = false;
+                // if (game.playerOComputer == true){
+                //   game.computer.humanPlayerActiveTriggered = false;
+                //   //game.humanPlaying(game)
+                // } else if (game.playerXComputer == true){
+                //   game.computer.computerPlayerActiveTriggered = false;
+                //   //game.computer.computerPlay(game);
+                // } else {
+                //   //game.humanPlaying(game)
               } else if (game.isTurn == game.playerX){
                 game.isTurn = game.playerO;
                 game.$liPlayerX.attr('class', 'players');
                 game.$liPlayerO.attr('class', 'players active');
+                // game.playerXActiveTrigger = false;
+                // if (game.playerXComputer == true){
+                //   game.computer.humanPlayerActiveTriggered = false;
+                //   //game.humanPlaying(game);
+                // } else if (game.playerOComputer == true){
+                //   game.computer.computerPlayerActiveTriggered = false;
+                //   //game.computer.computerPlay(game);
+                // } else {
+                //   //game.humanPlaying(game);
+                // }
               }
+
               game.playGame(game);
             }
           };  // end isGameOver()
-
-          exports.ifComputerVsHuman = function(game, $cpLabel, $humanLabel){
-
-            // class name of active player label
-            const playerLabelActiveClassName = 'players active';
-
-            // setting up eventListener using a custom event
-            // to trigger computerPlay() method
-             const $ifComputersTurn = function(){
-               let cpLabelCurrentClassName = $cpLabel[0].className;
-               if (playerLabelActiveClassName === cpLabelCurrentClassName) {
-                  $cpLabel.trigger('itsComputersTurn');
-               }
-             };
-             //setInterval($ifComputersTurn, 100);
-
-             $cpLabel.bind('itsComputersTurn', game.computer.computerPlay(game));
-
-             // setting up eventListener using a custom event
-             // to trigger humansPlaying() method
-              const $ifHumansTurn = function(){
-                let humanLabelCurrentClassName = $humanLabel[0].className;
-                if (playerLabelActiveClassName === humanLabelCurrentClassName) {
-                   $humanLabel.trigger('itsHumansTurn');
-                }
-              };
-              //setInterval($ifHumansTurn, 100);
-
-              $humanLabel.bind('itsHumansTurn', game.humanPlaying(game));
-
-          };  // end ifComputerIsPlaying() method
 
           exports.humanPlaying = function(game){
               // event handler for hover affect on tictactoe boxes
@@ -327,54 +318,11 @@ var tictactoe = (function (exports){
 
           exports.playGame = function(game){
 
-              if(game.playerOComputer == false && game.playerXComputer == false){
-
-                // class name of active player label
-                const playerLabelActiveClassName = 'players active';
-
-                // setting up eventListener using a custom event
-                // for playerX, to trigger
-                 const $itsPlayerXTurn = function(game){
-                   let playerLabelCurrentClassName = game.$liPlayerX[0].className;
-                   if (playerLabelActiveClassName === playerLabelCurrentClassName) {
-                     game.$liPlayerX.trigger('itsPlayerXTurn');
-                   }
-                 };
-                 //setInterval($itsPlayerXTurn, 200, game);
-
-                 game.$liPlayerX.bind('itsPlayerXTurn', game.humanPlaying(game));
-
-                 // setting up eventListener using a custom event
-                 // for player 0
-                 // to trigger computerPlay() method
-                  const $itsPlayerOTurn = function(game){
-                    let playerLabelCurrentClassName = game.$liPlayerO[0].className;
-                    if (playerLabelActiveClassName === playerLabelCurrentClassName) {
-                      game.$liPlayerO.trigger('itsPlayerOTurn');
-                    }
-                  };
-                  //setInterval($itsPlayerOTurn, 1000, game);
-
-                  game.$liPlayerO.bind('itsPlayerOTurn', game.humanPlaying(game));
-
-              } // end if computer not playing
-
-              let $cpLabel = '';
-
-              // select the player label that will be "active" when the computer will take it's turn
-              if (game.playerOComputer == true  ){
-
-                 //$cpLabel = game.$liPlayerO;
-                 //$humanLabel = game.$liPlayerX;
-                 game.ifComputerVsHuman(game, game.$liPlayerO, game.$liPlayerX );
-
-              } else if (game.playerXComputer == true){
-
-                 //$humanLabel = game.$liPlayerX;
-                 //$cpLabel = game.$liPlayerO;
-                 game.ifComputerVsHuman(game, game.$liPlayerX, game.$liPlayerO );
-
-              }
+            if (game.isTurn !== game.computer.player){
+              game.humanPlaying(game);
+            } else {
+              game.computer.computerPlay(game);
+            }
 
           }; // end playGame() method
 
@@ -487,7 +435,6 @@ var tictactoe = (function (exports){
                 game.playerOName = 'the computer';
                 game.playerOComputer = true;
 
-
               } else if (!game.playerXName) {
                 // if playerX name input is blank setup computer to play X
                 game.computer.player = game.playerX;
@@ -540,13 +487,46 @@ var tictactoe = (function (exports){
 
           exports.computer.computerPlay = function(game){
 
-            const decideMove = function(game){
+            var decideMove = function(game, moveNo){
 
               // decide on move to make,
               // test for targets to block 3 or 2 in row by opponent
               // test for targets to get 3 or 2 in row
               // 1 in a row, r1
               // 2 in a row, r2
+
+              if (moveNo == 1 ){
+                let possibleTargetsR1 = '';
+                possibleTargetsR1 = game.computer.analyzeGameBoard(game, 'r1', 'r1');
+                // which empty boxes are targets to block opponent from getting 2 in a row
+                // and which are targets to get 2 in a row
+
+                if (possibleTargetsR1.possibleWins[0].length > 0){
+                  // if target for computer to get 2 in a row
+                    var targetBoxNo =makeWinMove(game, possibleTargetsR1);
+                    // play it
+                    return targetBoxNo;
+
+                 } else if(possibleTargetsR1.possibleBlocks[0].length > 0){ // if opponent has a r2
+                   // else if target to block opponent from getting 2 in a row
+                    var targetBoxNo = makeBlockMove(game, possibleTargetsR1);
+                    // block it
+                    return targetBoxNo;
+
+                 } else {
+
+                   let targetBoxes = [0,2,4,6,8];
+                   const randomBoxNumber = Math.floor(Math.random() * targetBoxes.length);
+                   const targetBoxNo = targetBoxes[randomBoxNumber];
+                   // store box being filled in
+                   game.filledBoxes.push(targetBoxNo);
+                   // then call takeTurn, to play that box
+                   game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
+                   return targetBoxNo;
+
+                 }// end if possibleTargetsR1
+
+              } else if (moveNo == 2) {
 
                 let possibleTargets = '';
                 possibleTargets = game.computer.analyzeGameBoard(game, 'r2', 'r2');
@@ -555,15 +535,15 @@ var tictactoe = (function (exports){
 
                 if (possibleTargets.possibleWins[0].length > 0){
                   // if target for computer to complete 3 in a row
-                    makeWinMove(game, possibleTargets);
-                    return null;
+                   var targetBoxNo = makeWinMove(game, possibleTargets);
                     // play it, for a win
+                    return targetBoxNo;
 
                 } else if(possibleTargets.possibleBlocks[0].length > 0){
                   // else if target to block opponent from completing 3 in a row
-                   makeBlockMove(game, possibleTargets);
-                   return null;
+                    var targetBoxNo = makeBlockMove(game, possibleTargets);
                    // block it
+                   return targetBoxNo;
 
                 } else {
 
@@ -574,15 +554,141 @@ var tictactoe = (function (exports){
 
                    if (possibleTargetsR1.possibleWins[0].length > 0){
                      // if target for computer to get 2 in a row
-                       makeWinMove(game, possibleTargetsR1);
-                       return null;
+                       var targetBoxNo =makeWinMove(game, possibleTargetsR1);
                        // play it
+                       return targetBoxNo;
 
                     } else if(possibleTargetsR1.possibleBlocks[0].length > 0){ // if opponent has a r2
                       // else if target to block opponent from getting 2 in a row
-                       makeBlockMove(game, possibleTargetsR1);
-                       return null;
+                       var targetBoxNo = makeBlockMove(game, possibleTargetsR1);
                        // block it
+                       return targetBoxNo;
+
+                    }
+
+                  }// end if possibleTargets
+
+              } else if (moveNo == 3){
+
+                let possibleTargets = '';
+                possibleTargets = game.computer.analyzeGameBoard(game, 'r2', 'r2');
+                // which empty boxes are targets to block opponent from completing 3 in a row
+                // and which empty boxes are targets for computyer to complete 2 in a row
+
+                if (possibleTargets.possibleWins[0].length > 0){
+                  // if target for computer to complete 3 in a row
+                   var targetBoxNo = makeWinMove(game, possibleTargets);
+                    // play it, for a win
+                    return targetBoxNo;
+
+                } else if(possibleTargets.possibleBlocks[0].length > 0){
+                  // else if target to block opponent from completing 3 in a row
+                    var targetBoxNo = makeBlockMove(game, possibleTargets);
+                   // block it
+                   return targetBoxNo;
+
+                } else {
+
+                   let possibleTargetsR1 = '';
+                   possibleTargetsR1 = game.computer.analyzeGameBoard(game, 'r1', 'r1');
+                   // which empty boxes are targets to block opponent from getting 2 in a row
+                   // and which are targets to get 2 in a row
+
+                   if (possibleTargetsR1.possibleWins[0].length > 0){
+                     // if target for computer to get 2 in a row
+                       var targetBoxNo =makeWinMove(game, possibleTargetsR1);
+                       // play it
+                       return targetBoxNo;
+
+                    } else if(possibleTargetsR1.possibleBlocks[0].length > 0){ // if opponent has a r2
+                      // else if target to block opponent from getting 2 in a row
+                       var targetBoxNo = makeBlockMove(game, possibleTargetsR1);
+                       // block it
+                       return targetBoxNo;
+
+                    } // end if (possibleTargetsR1)
+
+                  }  // end if (possibleTargets)
+
+              } else if (moveNo == 4){
+
+                let possibleTargets = '';
+                possibleTargets = game.computer.analyzeGameBoard(game, 'r2', 'r2');
+                // which empty boxes are targets to block opponent from completing 3 in a row
+                // and which empty boxes are targets for computyer to complete 2 in a row
+
+                if (possibleTargets.possibleWins[0].length > 0){
+                  // if target for computer to complete 3 in a row
+                   var targetBoxNo = makeWinMove(game, possibleTargets);
+                    // play it, for a win
+                    return targetBoxNo;
+
+                } else if(possibleTargets.possibleBlocks[0].length > 0){
+                  // else if target to block opponent from completing 3 in a row
+                    var targetBoxNo = makeBlockMove(game, possibleTargets);
+                   // block it
+                   return targetBoxNo;
+
+                } else {
+
+                   let possibleTargetsR1 = '';
+                   possibleTargetsR1 = game.computer.analyzeGameBoard(game, 'r1', 'r1');
+                   // which empty boxes are targets to block opponent from getting 2 in a row
+                   // and which are targets to get 2 in a row
+
+                   if (possibleTargetsR1.possibleWins[0].length > 0){
+                     // if target for computer to get 2 in a row
+                       var targetBoxNo =makeWinMove(game, possibleTargetsR1);
+                       // play it
+                       return targetBoxNo;
+
+                    } else if(possibleTargetsR1.possibleBlocks[0].length > 0){ // if opponent has a r2
+                      // else if target to block opponent from getting 2 in a row
+                       var targetBoxNo = makeBlockMove(game, possibleTargetsR1);
+                       // block it
+                       return targetBoxNo;
+
+                    } // end if (possibleTargetsR1)
+
+                } // end if (possibleTargets)
+
+              } else if (moveNo == 5){
+
+                let possibleTargets = '';
+                possibleTargets = game.computer.analyzeGameBoard(game, 'r2', 'r2');
+                // which empty boxes are targets to block opponent from completing 3 in a row
+                // and which empty boxes are targets for computyer to complete 2 in a row
+
+                if (possibleTargets.possibleWins[0].length > 0){
+                  // if target for computer to complete 3 in a row
+                   var targetBoxNo = makeWinMove(game, possibleTargets);
+                    // play it, for a win
+                    return targetBoxNo;
+
+                } else if(possibleTargets.possibleBlocks[0].length > 0){
+                  // else if target to block opponent from completing 3 in a row
+                    var targetBoxNo = makeBlockMove(game, possibleTargets);
+                   // block it
+                   return targetBoxNo;
+
+                } else {
+
+                   let possibleTargetsR1 = '';
+                   possibleTargetsR1 = game.computer.analyzeGameBoard(game, 'r1', 'r1');
+                   // which empty boxes are targets to block opponent from getting 2 in a row
+                   // and which are targets to get 2 in a row
+
+                   if (possibleTargetsR1.possibleWins[0].length > 0){
+                     // if target for computer to get 2 in a row
+                       var targetBoxNo =makeWinMove(game, possibleTargetsR1);
+                       // play it
+                       return targetBoxNo;
+
+                    } else if(possibleTargetsR1.possibleBlocks[0].length > 0){ // if opponent has a r2
+                      // else if target to block opponent from getting 2 in a row
+                       var targetBoxNo = makeBlockMove(game, possibleTargetsR1);
+                       // block it
+                       return targetBoxNo;
 
                     } else {
 
@@ -590,29 +696,19 @@ var tictactoe = (function (exports){
                      let lastEmptyBox = '';
                      lastEmptyBox = game.computer.analyzeGameBoard(game, 'blocked', 'blocked');
                      if(lastEmptyBox.possibleBlocks[0].length > 0){
-                       makeBlockMove(game, lastEmptyBox);
-                       return null;
-                     } else {
-                       let targetBoxes = [0,2,4,6,8];
-                       const randomBoxNumber = Math.floor(Math.random() * targetBoxes.length);
-                       const targetBoxNo = targetBoxes[randomBoxNumber];
-                       // store box being filled in
-                       game.filledBoxes.push(targetBoxNo);
-                       // then call takeTurn, to play that box
-                       game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-                       return null;
-                     }
+                       return makeBlockMove(game, lastEmptyBox);
 
-                   } // end if/else possibleTargetsR1
+                     } // end if (lastEmptyBox)
 
-                 } // end if/else win or block possibletargets
+                   } // end if (possibleTargetsR1)
 
-              //} // end if/else first move of game
+                } // end if (possibleTargets)
 
+              } // end if (moveNo)
 
             }; // end decideMove()
 
-            const makeBlockMove = function(game, possibleTargets){
+            var makeBlockMove = function(game, possibleTargets){
 
                const targetBoxes = [];
                game.computer.possibleWinners.center.forEach(function(centerItem, centerIndex){
@@ -670,7 +766,7 @@ var tictactoe = (function (exports){
                  game.filledBoxes.push(targetBoxNo);
                  // then call takeTurn, to play that box
                  game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-                 return null;
+                 return targetBoxNo;
                  //
                } else { // else if only one possible empty box is a target for a block
                   const targetBoxNo = targetBoxes[0];
@@ -678,12 +774,12 @@ var tictactoe = (function (exports){
                   game.filledBoxes.push(targetBoxNo);
                   //then call takeTurn, to play that empty box
                   game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-                  return null;
+                  return targetBoxNo;
                 } // end if multiple targets
 
               }; // end makeBlockMove function
 
-            const makeWinMove = function(game, possibleTargets){
+            var makeWinMove = function(game, possibleTargets){
 
                const targetBoxes = [];
 
@@ -740,14 +836,14 @@ var tictactoe = (function (exports){
                  game.filledBoxes.push(targetBoxNo);
                  // then call takeTurn, to play that box
                  game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-                 return null;
+                 return targetBoxNo;
                 } else { // only 1 empty box is a possible target for a winning move
                     const targetBoxNo = targetBoxes[0];
                     // store box being filled in
                     game.filledBoxes.push(targetBoxNo);
                     // call takeTurn to play that box
                     game.takeTurn(targetBoxNo, game.$boxes[targetBoxNo], game);
-                    return null;
+                    return targetBoxNo;
                 } // end if (multiple targets)
               }; // end makeWinMove function;
 
@@ -756,9 +852,10 @@ var tictactoe = (function (exports){
                 // increment moveNo,
                 game.computer.moveNo += 1;
                 // decide on best move, brief delay so human player can notice visual affects
-                setTimeout(decideMove, 800, game);
+                var targetBoxNo = decideMove(game, game.computer.moveNo);
                 //game.computer.turnComplete(game, true);
-                return null;
+                return targetBoxNo;
+
             } // end if game.isTurn
 
           }; //end computerPlay()
@@ -766,6 +863,12 @@ var tictactoe = (function (exports){
           exports.computer.turnComplete = function(game, turnIsComplete){
             if (turnIsComplete) {
               game.isTurn = game.computer.opponent;
+
+              if (game.playerOComputer = true){
+                game.computer.computerPlayerActiveTriggered = false;
+              } else if (game.playerXComputer = true){
+                game.computer.computerPlayerActiveTriggered = false;
+              }
             }
           };
 
