@@ -2,22 +2,22 @@
 
 # Project Expectations:  
 
-    No plugins are used. All javascript, game.js, is written by me.
+    No plugins are used. All javascript in game.js, is written by me.
     I modified the provided index.html, styles.css a little.
-    I added a game.css as well.
+    I added styles in a game.css file as well.
 
     TicTacToe is a IIFE module.
-    It exports all variables, object and methods as part on variable, TicTacToe.
+    It exports all variables, objects and methods as part one variable, TicTacToe.
 
 # Start Screen - Game start
 
-    When the page loads, the startup screen appears.
+    When the html page loads, the startup screen appears.
 
     When the player clicks the start button, the start screen disappears.
     Then the game board appears, and the game begins.
 
     The game starts with player X, and the X player label is active.
-    When active the box is highlighted with the player's color.
+    When active the box is highlighted with the player X's BLUE color.
 
     EXTRA CREDIT # 1
 
@@ -25,7 +25,7 @@
 
         Player X name input appears on left, Player O name input on the right.
 
-        The game will not begin if both players name inputs are blank.
+        The start screen will not switch to the game board screen, if both players name inputs are blank.
 
         On clicking 'start game', if both players name are blank...
           the player X name input is highlighted
@@ -33,7 +33,7 @@
 
         At least 1 player name must be entered in player X or O.
         The player names are then presented with X and O label
-        The name of the player who wins is presented on finish-win screen.
+        The name of the player who wins is presented on the finish-win screen.
 
         EXTRA CREDIT # 3
 
@@ -53,8 +53,9 @@
 
     EXTRA CREDIT # 2
         The names of each player appear with X and O player labels.
-        Player X's label appears on the right.
-        Player O's label appears on the left.
+
+    Player X's label appears on the right.
+    Player O's label appears on the left.
 
     The current or active player is indicated by...
     -- the label the symbol O or X is highlighted for the current player.
@@ -63,25 +64,21 @@
     Their symbol, the X or O, appears temporarily.
     Their symbol follows the player's mouse around the board.
 
-    Players can only click one empty box per turn.
+    Players can only click only one empty box per turn.
     When the player clicks on an empty square ...
     their image is permanently placed in the box, marking it as occupied.
 
     Once a box is chosen, or clicked...
-     the players turn ends and the other players turn begins.
+     that player's turn ends and the other player's turn begins.
 
-    On each turn, the player's label,
-     get it's respective 'active' background color...
-     changes from grey to the active color for X or O.
+    On each turn, the active player's label is toggled,
+     each get it's respective 'active' background color...
+     changes from grey to the active color for X or O, ...
+     and back again when inactive.
 
      There is no opportunity to go back ...
-      Nor deselect a box nor do a turn over again.
-
-    EXTRA CREDIT # 3
-
-        If there's only 1 player name, the computer plays the nameless player.
-
-        More on the computer player below under # Extra Credits.
+      nor to deselect a box
+      nor to do a turn over again.
 
     The game ends when ...
 
@@ -94,6 +91,8 @@
 
 # Finish Screen - Game end:
 
+    When there is a winner, a timeout of 800 milliseconds is used to make sure then human player will notice the winning row or that the game is indeed a tie.
+
     On the finish screen...
 
       The word "Winner" appears ...
@@ -103,26 +102,27 @@
 
         The name of the player who wins, is also shown.
 
-    If it's tie, no winner...
+    If it's tie, there was no winner...
      the screen is green and the phrase "It's a tie" appears.
 
-    2 choices are presented on the finish-screen...
+    2 buttons, or choices, are presented on the finish-screen...
 
-      When the "Play Again!" button is clicked a game reset occurs.
-        A game reset is: internal values are reset to default starting values.
+      When the "Play Again!" button is clicked...
+       a game reset occurs.
+        a game reset is: internal values are reset to starting values.
         The game board appears again, empty.
-        The same player names persist and a new game begins.
+        The same player names persist and same players keep playing.
 
         When the "New Game, with different players" button is clicked...
          a game reset also occurs, however...
           The player names are reset to blank and..
           The normal start screen appears..
-            with blank player name inputs,
+            with player name inputs blank,
             and the 'start game' button
 
 # Extra Credits
 
-  1: On the start screen, the user is prompted to add their name before the game starts
+  1: On the start screen, humans are prompted to add at least one name before the game starts.
 
   2: The player’s name/s are displayed on the board screen during game play
 
@@ -135,7 +135,7 @@
            a setTimeout of 800 milliseconds is used ...
            to allow for the activation of computer player's player-label ...
 
-          after the computer's turn, a 400 millisecond setTimeout is used
+          after the computer's turn, a 500 millisecond setTimeout is used
             so that the human player can see the box filled..
             before game is over or before it's the humans turn again.
 
@@ -159,8 +159,8 @@
              to the same scenario.
 
           When there is more then one block or win possibility...
-           a random number generator is used to...
-            pick from the possible win or block targets.
+           a random number generator is used...
+            to pick from the possible win or block targets.
 
           This makes the computer player...
            appear to win or lose 'naturally'.
@@ -169,7 +169,9 @@
            It also gives the human player a chance to win...
             which is more fun for the human player.  
 
+
   4:  When a player wins...
+
         that player’s name is displayed in the finish-win screen.
 
         When a player wins...
