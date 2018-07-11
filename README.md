@@ -92,7 +92,7 @@
 # Finish Screen - Game end:
 
     When there is a winner, a timeout of 800 milliseconds is used...
-     to make sure then human player will notice the winning row... 
+     to make sure then human player will notice the winning row...
      or that the game is indeed a tie.
 
     On the finish screen...
@@ -124,11 +124,18 @@
 
 # Extra Credits
 
-  1: On the start screen, humans are prompted to add at least one name before the game starts.
+  1: On the start screen, humans are prompted to
+     add at least one name before the game starts.
 
-  2: The player’s name/s are displayed on the board screen during game play
+  2: The player’s name/s are displayed on the game board screen...
+     along with the X or O player label
 
-  3: A computer player has been implemented.
+     Also, from the finish screen, when 'play again' is clicked...
+      the player names persist
+      these appear on the game board again
+      and the same players continue to play the game.
+
+  3: The computer player...
 
           If only one player name is entered;
           the player name that is blank is played by the computer.
@@ -172,15 +179,10 @@
             which is more fun for the human player.  
 
 
-  4:  When a player wins...
-
-        that player’s name is displayed in the finish-win screen.
+  4:  The winning player’s name is displayed in the finish-win screen.
 
         When a player wins...
               that player’s name is displayed in the finish-win screen.
-
-        when 'play again' is clicked the player names persist
-        and the players can continue to play each other
 
 # In future versions....
 
