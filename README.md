@@ -1,5 +1,7 @@
 # TD-Project4: TIC-TAC-TOE
 
+part of TeamTreehouse, Tech Degree, Full Stack JavaScript, Unit 4
+
 # Project Expectations:  
 
     No plugins are used. All javascript in game.js, is written by me.
