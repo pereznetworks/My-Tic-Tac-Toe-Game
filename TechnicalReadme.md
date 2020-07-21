@@ -179,3 +179,5 @@
 
   - When a player wins...
   that player’s name is displayed in the finish-win screen.
+
+#### [Project Home](README.md)
