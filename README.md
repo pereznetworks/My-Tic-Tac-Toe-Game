@@ -32,7 +32,7 @@
 
 ## In future releases....
 
-  - Add a native mobile device version 
+  - Add a native mobile device version
 
   - Give players a choice of colors and symbols, avatars, to use in the game.
 
@@ -48,5 +48,5 @@
         - to win, or not lose, that scenario in the future.
     - full implementation of a min-max or other algorithm,
 
-## Technical Readme
+## TLDR:
   - [A very lengthy and comprehensive technical walk through is available here](TechnicalReadme.md)
