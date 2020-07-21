@@ -24,7 +24,7 @@
   - Computer Player will seem to win or lose naturally
     - Logic and randomness programmed
     - Computer can win, if human player really screws up
-    - Computer Player will not always play the same series moves given the same game board scenario
+    - Computer Player will not always play the same series of moves given the same game board scenario
 
 ## In future versions....
 
