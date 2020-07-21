@@ -9,6 +9,10 @@
   - TicTacToe is a IIFE module.
     - It exports the entire game code, all variables, objects and methods into one variable, TicTacToe.
 
+## Play the Game here
+
+  - https://pereznetworks.github.io/TD-Project4/
+  
 ## A Basic Multi-player Tic-Tac-Toe Game
 
   - A Human can
