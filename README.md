@@ -33,6 +33,7 @@
 ## In future releases....
 
   - Add a native mobile device version
+    - at least 1 of these will be react-native
 
   - Give players a choice of colors and symbols, avatars, to use in the game.
 
