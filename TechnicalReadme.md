@@ -58,7 +58,7 @@
 
 ### No Undo of moves *for now*
 
-  -There is no opportunity to go back ...
+  - There is no opportunity to go back ...
   - nor to deselect a box
   - nor to do a turn over again.
 
