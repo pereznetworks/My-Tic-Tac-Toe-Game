@@ -4,7 +4,7 @@
 
   - All code in game.js, games.css is original.
     - No plugins are used.
-    - I modified in the provided index.html, styles.css a little
+    - I modified the provided index.html, styles.css a little
 
   - TicTacToe is a IIFE module.
     - It exports the entire game code, all variables, objects and methods into one variable, TicTacToe.
