@@ -14,7 +14,7 @@
   - A Human can
     - play against another human or computer player
     - play either X or O
-    - can play as many games as you want
+    - can play as many games as desired
       - or reset with new player names
 
   - For Game to start
