@@ -48,5 +48,5 @@
         - to win, or not lose, that scenario in the future.
     - full implementation of a min-max or other algorithm,
 
-## TLDR:
+#### TLDR *=)*
   - [A very lengthy and comprehensive technical walk through is available here](TechnicalReadme.md)
