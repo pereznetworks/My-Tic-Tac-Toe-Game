@@ -21,6 +21,11 @@
     - at least 1 player name has to be entered
     - computer plays unnamed player
 
+  - Computer Player will seem to win or lose naturally
+    - Logic and randomness programmed
+    - Computer can win, if human player really screws up
+    - Computer Player will not always play the same series moves given the same game board scenario
+
 ## In future versions....
 
   - Give players a choice of colors and symbols, avatars, to use in the game.
@@ -29,12 +34,12 @@
     - 2 out of 3, 4 out of 5, etc.
     - and keep track of wins/losses
 
-  - add AI
-    - so the computer player 'learns'.
-    - by saving the state of the gameBoardState table at the end of each game, lose or win.
-    - add code to analyze the saved game...
-      - to reveal which move at which turn can be taken...
-      - to win, or not lose, that scenario in the future.
+  - Add AI, (make the computer player smarter)
+    - mske it appear that the computer player 'learns'.
+      - by saving the state of the gameBoardState table at the end of each game, lose or win.
+      - add code to analyze the saved game...
+        - to reveal which move at which turn can be taken...
+        - to win, or not lose, that scenario in the future.
     - full implementation of a min-max or other algorithm,
 
 ## Technical Readme
