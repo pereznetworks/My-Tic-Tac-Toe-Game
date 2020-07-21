@@ -12,7 +12,7 @@
 ## Play the Game here
 
   - https://pereznetworks.github.io/TD-Project4/
-  
+
 ## A Basic Multi-player Tic-Tac-Toe Game
 
   - A Human can
@@ -30,7 +30,9 @@
     - Computer can win, if human player really screws up
     - Computer Player will not always play the same series of moves given the same game board scenario
 
-## In future versions....
+## In future releases....
+
+  - Add a native mobile device version 
 
   - Give players a choice of colors and symbols, avatars, to use in the game.
 
