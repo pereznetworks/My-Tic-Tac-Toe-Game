@@ -11,8 +11,8 @@
 
 ## Play the Game here
 
-  - https://pereznetworks.github.io/TD-Project4/
-
+  - https://pereznetworks.github.io/My-Tic-Tac-Toe-Game
+  
 ## A Basic Multi-player Tic-Tac-Toe Game
 
   - A Human can
