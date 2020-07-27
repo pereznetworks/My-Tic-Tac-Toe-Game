@@ -42,11 +42,8 @@
     - and keep track of wins/losses
 
   - Add AI, (make the computer player smarter)
-    - make it appear that the computer player learns, by saving the state of the gameBoardState table at the end of each game, lose or win.
-     - then add code to analyze the saved game...
-      - to reveal which move at which turn can be taken...
-      - to win, or not lose, that scenario in the future.
-    - full implementation of a min-max or other algorithm,
+    - invent my own code that does analysis and learns
+    - try a full implementation of a min-max or other algorithm,
 
 #### TLDR *=)*
   - [A very lengthy and comprehensive technical walk through is available here](TechnicalReadme.md)
