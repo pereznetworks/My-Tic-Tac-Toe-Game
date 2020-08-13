@@ -1,66 +1,163 @@
 <!DOCTYPE html>
+
+<!-- development version, using bootstrap@4.1.3
+     - comments, spacing and line returns for reference and readability  -->
+
+<!-- adjustment needed for nav a href links to sections of page,
+     - section headings need to be offset,
+     - otherwise when following link, browser lands just below the heading of each section
+     - wrapped h1 section heading in a div, for about section, used additional .mb-5 class
+     - there should be a more bootstrap-enabled method to adjust this
+     - need to test the cross-browser-compatibility of this work-around -->
+
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Tic Tac Toe</title>
-	<link rel="shortcut icon" href="#" />
-	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="css/normalize.css">
-	<link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="css/game.css">
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-	<script src="js/game.js"></script>
-</head>
-<body>
-	<div class="board" id="board" style="display:none;">
-	  <header>
-	    <h1>Tic Tac Toe</h1>
-	    <ul>
-				<li class="players" id="player2">
-					<svg xmlns="http://www.w3.org/2000/svg" width="42" height="43" viewBox="0 0 42 43" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-718.000000, -60.000000)" fill="#000000"><g transform="translate(739.500000, 81.500000) rotate(-45.000000) translate(-739.500000, -81.500000) translate(712.000000, 54.000000)"><path d="M30 30.1L30 52.5C30 53.6 29.1 54.5 28 54.5L25.5 54.5C24.4 54.5 23.5 53.6 23.5 52.5L23.5 30.1 2 30.1C0.9 30.1 0 29.2 0 28.1L0 25.6C0 24.5 0.9 23.6 2 23.6L23.5 23.6 23.5 2.1C23.5 1 24.4 0.1 25.5 0.1L28 0.1C29.1 0.1 30 1 30 2.1L30 23.6 52.4 23.6C53.5 23.6 54.4 24.5 54.4 25.6L54.4 28.1C54.4 29.2 53.5 30.1 52.4 30.1L30 30.1Z"/></g></g></g></svg>
-					<span class="playerName" id="player2Name"></span>
-				</li>
-	      <li class="players" id="player1">
-	        <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-200.000000, -60.000000)" fill="#000000"><g transform="translate(200.000000, 60.000000)"><path d="M21 36.6L21 36.6C29.6 36.6 36.6 29.6 36.6 21 36.6 12.4 29.6 5.4 21 5.4 12.4 5.4 5.4 12.4 5.4 21 5.4 29.6 12.4 36.6 21 36.6L21 36.6ZM21 42L21 42C9.4 42 0 32.6 0 21 0 9.4 9.4 0 21 0 32.6 0 42 9.4 42 21 42 32.6 32.6 42 21 42L21 42Z"/></g></g></g></svg>
-					<span class="playerName" id="player1Name"></span>
-	      </li>
-	    </ul>
-	  </header>
-	  <ul class="boxes">
-	    <li class="box"></li>
-	    <li class="box"></li>
-	    <li class="box"></li>
-	    <li class="box"></li>
-	    <li class="box"></li>
-	    <li class="box"></li>
-	    <li class="box"></li>
-	    <li class="box"></li>
-	    <li class="box"></li>
-	  </ul>
-	</div>
-	<div class="screen screen-start" id="start">
-	  <header>
-	    <h1>Tic Tac Toe</h1>
-			<div id="playerNames">
-				<p id="pghX">
-					<label id="labelX" for="playerX">Name for Player X</label>
-					<input type="text" id="playerX" placeHolder="enter name or computer plays">
-				</p>
-				<p id="pghO">
-					<label id="labelO" for="playerO">Name for Player O</label>
-					<input type="text" id="playerO" placeHolder="enter name or computer plays">
-				</p>
-			</div>
-	    <a href="#" class="button">Start game</a>
-	  </header>
-	</div>
-	<div class="screen screen-win" id="finish" style="display:none;">
-	  <header>
-	    <h1>Tic Tac Toe</h1>
-	    <p id='message' class="message"></p>
-	    <p id='pgh-msg'><a href="#board" id="resetGame" class="button">Play Again!</a></p>
-			<p id='pgh-msg'><a href="#start" id="newPlayers" class="button">New Game, with Different Players</a></p>
-	  </header>
-	</div>
-</body>
+
+  <head>
+    <title>Daniel's App Forge</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+      >
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link
+      rel="stylesheet"
+      href="css/custom.css"
+      >
+  </head>
+
+  <body id="home" data-spy="scroll" data-target=".navbar" data-offset="100">
+  <!-- containers, rows and col's ? : yes, were using a grid layout -->
+
+  <!-- navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <!-- navbar navbar-expand{-sm|-md|-lg|-xl}: required for responsive collapsing and color scheme classes  -->
+    <!-- navbar-dark bg-primary: style and color-scheme -->
+    <!-- fixed-top: fixes the navbar to the top of the page -->
+
+    <div class="container">
+
+      <a class="navbar-brand order-1 mr-0"
+          href="http://dap-dev.herokuapp.com"
+          target="_blank" >more by Daniel's App Works</a>
+          <!-- navbar-brand : 'branding' adds additional component to navbar, can be an icon-img, href link or both   -->
+          <!-- order-1 : ordering starts at 0, places nav-brand after navbar-toogler/nav component -->
+
+      <!-- depending on the size of the viewport/screen, navbar will use the nav div or the toggler button -->
+      <!-- when is determinded by nav tag's class navbar-expand-lg  -->
+      <button class="navbar-toggler"
+               type="button" data-toggle="collapse"
+               data-target="#navbarNavAltMarkup"
+               aria-controls="navbarNavAltMarkup"
+               aria-expanded="false"
+               aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- when displaying drop-menu use the following div, otherwise collapse into navbar-toggler button -->
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" href="https://pereznetworks.github.io/">Home</a>
+          <a class="nav-item nav-link" href="https://pereznetworks.github.io/WeatherX-A-Universal-Multi-platform-App">WeatherX App</a>
+          <a class="nav-item nav-link" href="https://pereznetworks.github.io/My-Random-Quotes-Web-App">Random Qoutes app</a>
+          <a class="nav-item nav-link" href="https://pereznetworks.github.io/My-Tic-Tac-Toe-Game">Tic Tac Toe game</a>
+        </div>
+      </div>
+
+    </div>
+
+  </nav>
+  <!-- /navbar -->
+
+  <!-- jumbotron : a large banner-like section -->
+  <div class="jumbotron jumbotron-fluid bg-info text-white mb-0">
+    <div class="container text-sm-center pt-5">
+      <h1 class="display-3">Tic Tac Toe</h1>
+      <p class="lead">Play Tic Tac Toe, with a freind or against the computer</p>
+      <div class="btn-group mt-4" role="group" aria-label="Callout buttons">
+        <!-- .btn-group and role="group", make the buttons line up back to back, as 1 continuous button -->
+        <p><a class="link" href="./theApp/index.html">play Tic Tac Toe</a></p>
+      </div>
+    </div>
+  </div><!-- /jumbotron -->
+
+    <div id="about" class="container pt-4">
+     <!-- container, is centered on screen, width adjusts based on pre-set media query break-points  -->
+     <!-- pt: padding top, 4: 1.5 em  -->
+
+    <!-- row for 'Daniel's Capstone Project'  -->
+    <div class="row">
+
+      <div  class="col-lg order-lg-2">
+        <!-- col-lg, lg screens and smaller get lg columns, xtra-lg screens get 3 equal width columns  -->
+        <!-- order-lg-1 class, re-orders from left to right, for lg screens only  -->
+
+        <h3 class="mb-4">about Tic Tac Toe</h3>
+        <!-- mb: margin bottom, 4: 1.5 em  -->
+
+        <!-- <img class="mb-4 img-fluid rounded d-none d-sm-block" src="img/pdx.jpg" alt="Portland"> -->
+        <!-- img class: resize based on column width, rounder corners -->
+        <!-- d-none d-sm-block: display image for all but small and xs screens -->
+
+        <p>my Tic Tac Toe is the basic game we all know and love</p>
+        <p></p>
+        <p>Play with a friend or against a comptuer opponent</p>
+        <p></p>
+        <p>Be careful...</p>
+        <p></p>
+        <p>The computer player wont let you win.</p>
+        <p></p>
+        <p>You will have play to win</p>
+        <p></p>
+        <p>The Game celebrates your victory</p>
+        <p></p>
+        <p>but also rubs it in, when you lose</p>
+        <p></p>
+        <p>Keep playing to see who wins, best of 3</p>
+        <p></p>
+        <p><a target='_blank' href="https://github.com/pereznetworks/My-Tic-Tac-Toe-Game">GitHub Repo for my Tic Tac Toe</a> </p>
+      </div>
+
+      <div class="col-lg order-lg-1">
+        <h3 class="mb-4">New Feautres coming soon...</h3>
+        <p></p>
+        <p>scorebaord, to you can see 'best of' tracking</p>
+        <p></p>
+        <p>options for different avatars and game-play symbols</p>
+        <p></p>
+        <p>add various game board themes</p>
+        <p></p>
+        <p>add game-levels for increasingly smarter computer opponent</p>
+        <p></p>
+        <p>Port to React, then a Mobile Device Universal App, using <a target='_blank' href="https://reactnative.dev/">React-Native</a></p>
+      </div>
+
+      <div class="col-lg order-lg-3">
+        <h3 class="mb-4">Will be using the following...</h3>
+        <div class="list-group">
+          <a href="#" class="list-group-item list-group-item-action"><strong>Sequelize</strong>: promise-based Node.js ORM, for Postgres dbs, among others</a>
+          <a href="#" class="list-group-item list-group-item-action"><strong>PostgreSQL</strong>: A open-source relational database</a>
+          <a href="#" class="list-group-item list-group-item-action"><strong>Express.js</strong>: A Web Server Framework for Node.js</a>
+          <a href="#" class="list-group-item list-group-item-action"><strong>React.js</strong>: A JavaScript library for building interfaces</a>
+          <a href="#" class="list-group-item list-group-item-action"><strong>Node.js</strong>: JavaScript runtime environment built on Chromes' V8 Javascript Enginer</a>
+          <a href="#" class="list-group-item list-group-item-action"><strong>Server-side React</strong>: for pre-compiled and more secure React Apps </a>
+        </div>
+       </div>
+
+    </div>
+    <!-- /about -->
+
+    <!-- footer -->
+    <div class="row py-3">
+      <div class="col text-md-right">
+        <a target="_blank" href="https://pereznetworks.github.io/"><small>&copy; Daniel Perez and Open Sourced Libraries</small></a>
+      </div>
+    </div><!-- /footer -->
+
+  </div><!-- /.container -->
+
+    </body>
 </html>
