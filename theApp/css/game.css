@@ -14,7 +14,7 @@
     #start #pghO {
       margin-left: .5em;
       display:inline;
-      width: 50%;
+      width: 100%;
       height: 50px;
     }
 
@@ -41,7 +41,7 @@
 #start #pghX {
   margin-right: .5em;
   display:inline;
-  width: 50%;
+  width: 100%;
   height: 50px;
 }
 
