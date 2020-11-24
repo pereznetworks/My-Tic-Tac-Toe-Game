@@ -3,17 +3,20 @@
 }
 
 #playerNames{
-  width: 100%;
-  margin-top: 3em;
-  margin-bottom: 3em;
-  align-items: center;
-}
-#start #pghO {
-  margin-left: .5em;
-  display:inline;
   width: 50%;
-  height: 50px;
+  right: 20%;
+  left:20%;
+  margin-top: .5em;
+  margin-bottom: .5em;
 }
+
+    #start #pghO {
+      margin-left: .5em;
+      display:inline;
+      width: 50%;
+      height: 50px;
+    }
+
     #start #labelO{
       font-size: .8em;
       padding: .5em;
