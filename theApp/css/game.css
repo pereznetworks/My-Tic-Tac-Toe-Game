@@ -1,3 +1,7 @@
+body {
+  /* font-size: 24px; */
+}
+
 #board, #finish {
   display:none;
 }
@@ -69,6 +73,11 @@
   font-size: 4em;
 }
 
+@media (max-width: 720px) {
+  body {
+    font-size: 24px;
+  }
+}
 /* @media (max-width: 720px ) {
 
   #playerNames{
