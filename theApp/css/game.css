@@ -65,7 +65,7 @@
   font-size: 4em;
 }
 
-@media screen and (max-width: 720px ) {
+@media (max-width: 720px ) {
 
   #playerNames{
     width: 100%;
