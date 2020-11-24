@@ -3,11 +3,11 @@
 }
 
 #playerNames{
-  width: 50%;
+  display: grid;
   right: 20%;
-  left:20%;
+  left: 20%;
   margin-top: .5em;
-  margin-bottom: .5em;
+  margin-bottom: 2em;
 }
 
     #start #pghO {
@@ -71,11 +71,11 @@
 @media (max-width: 720px ) {
 
   #playerNames{
-    width: 100%;
+    display: grid;
     right: 20%;
-    left:20%;
+    left: 20%;
     margin-top: .5em;
-    margin-bottom: .5em;
+    margin-bottom: 2em;
   }
 
   #start #pghO {
