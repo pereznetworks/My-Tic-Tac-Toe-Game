@@ -71,7 +71,7 @@
 @media (max-width: 720px ) {
 
   #playerNames{
-    width: 50%;
+    width: 100%;
     right: 20%;
     left:20%;
     margin-top: .5em;
