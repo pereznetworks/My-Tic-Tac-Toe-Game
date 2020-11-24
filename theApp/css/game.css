@@ -69,7 +69,7 @@
   font-size: 4em;
 }
 
-@media (max-width: 720px ) {
+/* @media (max-width: 720px ) {
 
   #playerNames{
     display: grid;
@@ -114,4 +114,4 @@
     width: 150px;
     height: 10px:
   }
-}
+} */
