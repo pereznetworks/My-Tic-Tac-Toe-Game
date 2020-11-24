@@ -4,6 +4,7 @@
 
 #playerNames{
   display: grid;
+  width: 100%;
   right: 20%;
   left: 20%;
   margin-top: .5em;
@@ -72,8 +73,7 @@
 
   #playerNames{
     display: grid;
-    right: 20%;
-    left: 20%;
+    width: 100%;
     margin-top: .5em;
     margin-bottom: 2em;
   }
