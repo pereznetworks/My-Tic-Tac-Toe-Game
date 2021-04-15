@@ -2,7 +2,7 @@
 body {
   background: #fff;
   font-family: "Montserrat", sans-serif;
-  font-size: 24px;
+  font-size: 16px;
 }
 
 ul {
@@ -23,9 +23,10 @@ h1 {
 
 .button {
   background: #fff;
-  border-radius: 4px;
+  border-radius: 1em;
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
-  padding: 1.25em 3em;
+  padding: 1em;
+  margin: 2em;
   text-decoration: none;
   -webkit-transition: 0.25s ease;
   transition: 0.25s ease; }
@@ -50,8 +51,7 @@ h1 {
   .screen-start {
     background: #54D17A; }
     .screen-start h1 {
-      padding-bottom: 1em;
-      font-size: 6em; }
+      font-size: 4em; }
     .screen-start .button {
       color: #54D17A; }
     .screen-start h1 + .button {
