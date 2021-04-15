@@ -72,47 +72,16 @@
 
  @media (max-width: 420px ) {
 
-  #playerNames{
-    display: grid;
-    width: 100%;
-    margin-top: .5em;
-    margin-bottom: 2em;
-  }
+   .start .pghX {
+     margin: 2em 0;
+   }
 
-  #start #pghO {
-    margin: 0;
-    display:list-item;
-    width: 100%;
-  }
-  #start #pghX {
-    margin: 0;
-    display:list-item;
-    width: 100%;
-  }
-  #start #labelO{
-    font-size: .8em;
-    padding: .5em;
-    color: green;
-    background-color: #FFF;
-    width: auto;
-    height: 10px:
-  }
-  #start #labelX{
-    font-size: .8em;
-    padding: .5em;
-    color: green;
-    background-color: #FFF;
-    width: auto;
-    height: 10px:
-  }
+   .start .pghO {
+     margin: 2em 0;
+   }
 
-  #playerX {
-    width: 150px;
-    height: 10px:
-  }
+   .screen header {
+     top: 40%;
+   }
 
-  #playerO  {
-    width: 150px;
-    height: 10px:
-  }
-} 
+ }
