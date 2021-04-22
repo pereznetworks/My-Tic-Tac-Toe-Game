@@ -16,7 +16,7 @@
 }
 
   #start #pghO {
-    margin-left: 1.5em;
+    /* margin-left: 1.5em; */
     display:inline;
     width: 100%;
     height: 2em;
@@ -46,7 +46,7 @@
     }
 
   #start #pghX {
-    margin-left: 1.5em;
+    /* margin-left: 1.5em; */
     display:inline;
     width: 100%;
     height: 6em;
@@ -91,13 +91,13 @@
    width: 100%;
    /* right: 20%;
    left: 20%; */
-   width: 90%;
-   margin-top: 2em;
-   margin-bottom: 2em;
+   width: auto;
+   margin-top: 5%;
+   margin-bottom: 10%;
  }
 
    #start #pghO {
-     margin-left: .5em;
+     /* margin-left: .5em; */
      display:inline;
      width: 100%;
      height: 1.6em;
@@ -109,26 +109,28 @@
        background-color: #FFF;
        color: #54D17A;
        transition: 0.25s ease;
-       width: 20px;
+       width: auto;
        height: 20px;
        border-radius: 4px;
      }
 
      #start #playerO  {
-       font-size: .8em;
-       color: #54D17A;
-       padding: .6em;
-       width: 200px;
-       height: 10px;
-       border-radius: 4px;
-       margin: 20px 0;
-     }
+      display: block;
+      font-size: .8em;
+      text-align: center;
+      color: #54D17A;
+      padding: .6em;
+      /* width: auto; */
+      height: auto;width: 30%;
+      border-radius: 4px;
+      margin: 1em auto;
+      }
 
    #start #pghX {
-     margin-left: .5em;
+     /* margin-left: .5em; */
      display:inline;
      width: 100%;
-     height: 1.6em;
+     height: auto;
    }
 
    #start #labelX{
@@ -137,22 +139,19 @@
      background-color: #FFF;
      color: #54D17A;
      transition: 0.25s ease;
-     width: 20px;
+     width: auto;
      height: 20px;
      border-radius: 4px;
    }
 
      #playerX {
+       display: block;
        font-size: .8em;
+       text-align: center;
        color: #54D17A;
        padding: .6em;
-       width: 200px;
-       height: 10px;
+       height: auto;
+       width: 30%;
        border-radius: 4px;
-       margin: 20px 0;
+       margin: 1em auto;
      }
-
- #message {
-   font-size: 4em;
- }
-}
