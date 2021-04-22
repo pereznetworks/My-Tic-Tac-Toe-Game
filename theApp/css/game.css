@@ -4,19 +4,23 @@
 }
 
 #playerNames{
+  font-size: 3em;
   display: grid;
   width: 100%;
-  right: 20%;
-  left: 20%;
-  margin-top: .5em;
+  /* right: 20%;
+  left: 20%; */
+  width: 90%;
+  /* margin-top: 1em; */
+  /* margin-left: 10%; */
   margin-bottom: 2em;
+  height: 14em;
 }
 
   #start #pghO {
-    margin-left: .5em;
+    margin-left: 1.5em;
     display:inline;
     width: 100%;
-    height: 2em;
+    height: 6em;
   }
 
     #start #labelO{
@@ -26,24 +30,28 @@
       color: #54D17A;
       transition: 0.25s ease;
       width: 20px;
-      height: 10px;
+      height: 20px;
       border-radius: 4px;
+      margin: 1.2em 0;
+      /* align-self: center; */
     }
 
     #start #playerO  {
       font-size: .8em;
       color: #54D17A;
       padding: .6em;
-      width: 200px;
-      height: 10px;
+      width: 80%;
+      height: 1em;
       border-radius: 4px;
+      margin: 1.2em 0;
     }
 
   #start #pghX {
-    margin-left: .5em;
+    margin-left: 1.5em;
     display:inline;
     width: 100%;
-    height: 2em;
+    height: 6em;
+    margin-top: 2em;
   }
 
   #start #labelX{
@@ -53,35 +61,99 @@
     color: #54D17A;
     transition: 0.25s ease;
     width: 20px;
-    height: 10px;
+    height: 20px;
     border-radius: 4px;
+    margin: 1.2em 0;
   }
 
     #playerX {
       font-size: .8em;
       color: #54D17A;
       padding: .6em;
-      width: 200px;
-      height: 10px;
+      width: 80%;
+      height: 1em;
       border-radius: 4px;
+      margin: 1.2em 0;
     }
 
 #message {
   font-size: 4em;
 }
 
- @media (max-width: 420px ) {
+@media only screen and (min-width: 560px) {
 
-   .start .pghX {
-     margin: 2em 0;
-   }
-
-   .start .pghO {
-     margin: 2em 0;
-   }
-
-   .screen header {
-     top: 40%;
-   }
-
+ #board, #finish {
+   display:none;
  }
+
+ #playerNames{
+   display: grid;
+   width: 100%;
+   /* right: 20%;
+   left: 20%; */
+   width: 50%;
+   margin-top: 2em;
+   margin-left: 20%;
+   margin-bottom: 2em;
+ }
+
+   #start #pghO {
+     margin-left: .5em;
+     display:inline;
+     width: 100%;
+     height: 6em;
+   }
+
+     #start #labelO{
+       font-size: .8em;
+       padding: .5em;
+       background-color: #FFF;
+       color: #54D17A;
+       transition: 0.25s ease;
+       width: 20px;
+       height: 20px;
+       border-radius: 4px;
+     }
+
+     #start #playerO  {
+       font-size: .8em;
+       color: #54D17A;
+       padding: .6em;
+       width: 200px;
+       height: 10px;
+       border-radius: 4px;
+       margin: 20px 0;
+     }
+
+   #start #pghX {
+     margin-left: .5em;
+     display:inline;
+     width: 100%;
+     height: 6em;
+   }
+
+   #start #labelX{
+     font-size: .8em;
+     padding: .5em;
+     background-color: #FFF;
+     color: #54D17A;
+     transition: 0.25s ease;
+     width: 20px;
+     height: 20px;
+     border-radius: 4px;
+   }
+
+     #playerX {
+       font-size: .8em;
+       color: #54D17A;
+       padding: .6em;
+       width: 200px;
+       height: 10px;
+       border-radius: 4px;
+       margin: 20px 0;
+     }
+
+ #message {
+   font-size: 4em;
+ }
+}
