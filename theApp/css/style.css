@@ -55,7 +55,8 @@ h1 {
     transform: translatey(-50%);
     }
   .screen h1 {
-    color: #fff; }
+    color: #fff;
+    height: 30%;}
   .screen-start {
     background: #54D17A; }
     .screen-start h1 {
@@ -218,7 +219,8 @@ h1 {
       -webkit-transform: translatey(-50%);
       transform: translatey(-50%); }
     .screen h1 {
-      color: #fff; }
+      color: #fff;
+      margin-bottom: 1em;}
     .screen-start {
       background: #54D17A; }
       .screen-start h1 {
