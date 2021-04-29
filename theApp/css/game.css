@@ -1,14 +1,21 @@
 
+/* Mobile first */
+/* for smartphone screens portrait mode */
+
 #board, #finish {
   display:none;
 }
 
 #playerNames{
-  font-size: 1em;
   display: block;
-  width: 30%;
   margin: 1em auto;
-  height: 60%;
+  font-size: 4vw;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 90vw;
+  height: 40%;
+  transform: translate(-50%, -50%);
 }
 
   #start #pghO {
@@ -73,4 +80,171 @@
 
 #message {
   font-size: 4em;
+}
+
+/* for smartphones in landscape mode */
+@media only screen and (min-width:560px) and (max-height:420px) and (orientation: landscape){
+
+  #playerNames{
+    font-size: 1.5vw;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 80vw;
+    transform: translate(-50%, -50%);
+   }
+
+  #start #pghO {
+    margin: .8em auto
+  }
+
+  #start #playerO {
+    width: 50%;
+  }
+
+  #start #pghX {
+    margin: .8em auto
+  }
+
+  #start #playerX {
+    width: 50%;
+  }
+
+}
+
+/* for screens 720px x 720px or greater */
+@media only screen and (min-width:500px) and (min-height:500px) and (orientation: portrait){
+
+  #playerNames{
+    font-size: 2.5vw;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 80vw;
+    transform: translate(-50%, -50%);
+   }
+
+  #start #pghO {
+    margin: .8em auto
+  }
+
+  #start #playerO {
+    width: 50%;
+  }
+
+  #start #pghX {
+    margin: .8em auto
+  }
+
+  #start #playerX {
+    width: 50%;
+  }
+}
+
+/* for screens 717px x 514px and landscape : Galaxy Fold */
+@media only screen and (width:717px) and (height:512px) and (orientation: landscape){
+
+  #playerNames{
+    font-size: 1.5vw;
+    position: fixed;
+    top: 55%;
+    left: 50%;
+    width: 80vw;
+    transform: translate(-50%, -50%);
+   }
+
+  #start #pghO {
+    margin: auto
+  }
+
+  #start #playerO {
+    width: 50%;
+  }
+
+  #start #pghX {
+    margin: auto
+  }
+
+  #start #playerX {
+    width: 50%;
+  }
+
+}
+/* for screens 720px x 540px and landscape : Surface Pro and Galaxy-Fold*/
+@media only screen and (min-width:720px) and (height:540px) and (orientation: landscape){
+
+  #playerNames{
+    font-size: 1.5vw;
+    position: fixed;
+    top: 55%;
+    left: 50%;
+    width: 80vw;
+    transform: translate(-50%, -50%);
+   }
+
+  #start #pghO {
+    margin: auto
+  }
+
+  #start #playerO {
+    width: 50%;
+  }
+
+  #start #pghX {
+    margin: auto
+  }
+
+  #start #playerX {
+    width: 50%;
+  }
+}
+
+/* for screens least 768px x 1024px */
+@media only screen and (min-width:768px) and (max-height:1024px) and (orientation: portrait){
+
+  #playerNames {
+    font-size: 3vw;
+    height: 30%;
+    top: 45%;
+  }
+
+  #start #pghO {
+    margin: 1em auto;
+  }
+
+  #start #pghX {
+    margin: 1em auto;
+  }
+}
+
+/* for screens 1024px width or greater */
+@media only screen and (min-width:1024px) and (min-height:1200px) {
+
+  #playerNames {
+    font-size: 3vw;
+  }
+
+  #start #pghO {
+    margin: 1em auto;
+  }
+
+  #start #pghX {
+    margin: 1em auto;
+  }
+}
+
+/* for screens 1024px width or greater */
+@media only screen and (min-width:1024px) and (orientation: landscape) {
+
+  #playerNames {
+    font-size: 2vw;
+  }
+
+  #start #pghO {
+    margin: auto;
+  }
+
+  #start #pghX {
+    margin: auto;
+  }
 }
