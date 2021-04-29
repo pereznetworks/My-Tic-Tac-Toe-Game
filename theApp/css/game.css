@@ -82,7 +82,7 @@
   font-size: 4em;
 }
 
-/* for smartphones in landscape mode */
+/* for most smartphones in landscape mode */
 @media only screen and (min-width:560px) and (max-height:420px) and (orientation: landscape){
 
   #playerNames{
@@ -112,7 +112,7 @@
 
 }
 
-/* for screens 720px x 720px or greater */
+/* for tablets screens 500px to 720px */
 @media only screen and (min-width:500px) and (min-height:500px) and (orientation: portrait){
 
   #playerNames{
@@ -141,7 +141,7 @@
   }
 }
 
-/* for screens 717px x 514px and landscape : Galaxy Fold */
+/* for screens 717px x 512px and landscape : Galaxy Fold undolded*/
 @media only screen and (width:717px) and (height:512px) and (orientation: landscape){
 
   #playerNames{
@@ -170,7 +170,8 @@
   }
 
 }
-/* for screens 720px x 540px and landscape : Surface Pro and Galaxy-Fold*/
+
+/* for screens 720px x 540px and landscape : Surface Pro */
 @media only screen and (min-width:720px) and (height:540px) and (orientation: landscape){
 
   #playerNames{
@@ -199,7 +200,7 @@
   }
 }
 
-/* for screens least 768px x 1024px */
+/* for larger tablet screens least 768px x 1024px */
 @media only screen and (min-width:768px) and (max-height:1024px) and (orientation: portrait){
 
   #playerNames {
@@ -217,7 +218,7 @@
   }
 }
 
-/* for screens 1024px width or greater */
+/* for "Pro" tablet screens 1024px width or greater */
 @media only screen and (min-width:1024px) and (min-height:1200px) {
 
   #playerNames {
@@ -233,7 +234,7 @@
   }
 }
 
-/* for screens 1024px width or greater */
+/* for "Pro" tablet, laptop and desktop screens 1024px width or greater */
 @media only screen and (min-width:1024px) and (orientation: landscape) {
 
   #playerNames {
