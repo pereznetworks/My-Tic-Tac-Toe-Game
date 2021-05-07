@@ -6,7 +6,7 @@
 body {
   background: #fff;
   font-family: "Montserrat", sans-serif;
-  font-size: 16px;
+  font-size: 1vw;
 }
 
 ul {
@@ -330,14 +330,14 @@ h1 {
 
   .screen-start h1 {
     font-size: 3.5em;
-    top: 10vw;
-    left: 49vw;
+    top: 5vw;
+    left: 50vw;
     height: 15%;
   }
 
   .screen-start .button {
     font-size: 1.4vw;
-    width: 1.4vw;
+    width: 1.6vw;
   }
 
 }
