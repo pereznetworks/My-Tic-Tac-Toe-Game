@@ -9,10 +9,18 @@
   - TicTacToe is a IIFE module.
     - It exports the entire game code, all variables, objects and methods into one variable, TicTacToe.
 
-## Play the Game here
+## Project Site for Tic Tac Toe
 
   - https://pereznetworks.github.io/My-Tic-Tac-Toe-Game
-  
+
+## Release Plane
+
+  - Lots has changes in the last few years, since I created this game
+
+  - So I re-imaging UI
+
+  - The next release version will be a mobile first web app built using react 
+
 ## A Basic Multi-player Tic-Tac-Toe Game
 
   - A Human can
