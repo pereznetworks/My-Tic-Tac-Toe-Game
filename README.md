@@ -17,9 +17,9 @@
 
   - Lots has changes in the last few years, since I created this game
 
-  - So I re-imaging UI
+  - So I am re-imaging UX
 
-  - The next release version will be a mobile first web app built using react 
+  - The next release version will be a mobile first web app built using react
 
 ## A Basic Multi-player Tic-Tac-Toe Game
 
