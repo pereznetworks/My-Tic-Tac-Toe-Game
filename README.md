@@ -11,7 +11,7 @@
 
 ## Project Site for Tic Tac Toe
 
-  - https://pereznetworks.github.io/My-Tic-Tac-Toe-Game
+  - https://pereznetworks.github.io/tictactoe.html
 
 ## Release Plane
 
