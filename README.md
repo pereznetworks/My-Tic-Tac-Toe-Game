@@ -54,4 +54,4 @@
     - try a full implementation of a min-max or other algorithm,
 
 #### TLDR *=)*
-  - [A very lengthy and comprehensive technical walk through is available here](TechnicalReadme.md)
+  - [Code Review of the Orignial game](TechnicalReadme.md)
