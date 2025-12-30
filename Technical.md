@@ -1,5 +1,25 @@
 # Technical Readme for My Tic-Tac-Toe game
-- So this is kind of code review
+  - Originally build as part of TeamTreehouse, Tech Degree, Full Stack JavaScript
+
+    - No plugins.
+    - IIFE module.
+
+## A Basic Multi-player Tic-Tac-Toe Game
+
+  - A Human can
+    - play against another human or computer player
+    - play either X or O
+    - can play as many games as desired
+      - or reset with new player names
+
+  - For Game to start
+    - at least 1 player name has to be entered
+    - computer plays unnamed player
+
+  - Computer Player will seem to win or lose naturally
+    - Logic and randomness programmed
+    - Computer can win, if human player really screws up
+    - Computer Player will not always play the same series of moves given the same game board scenario
 
 # Start Screen - Game start
 
